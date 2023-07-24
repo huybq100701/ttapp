@@ -3,7 +3,7 @@ import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Lottie from 'lottie-react-native';
 import { useNavigation } from '@react-navigation/native';
-import { removeItem } from '../src/utils/asyncStorage';
+import { removeItem } from '../utils/asyncStorage';
 
 const { width, height } = Dimensions.get('window');
 
@@ -23,9 +23,7 @@ export default function HomeScreen() {
                 <Text style={styles.text}>Home Page</Text>
             </View>
 
-            <View style={styles.lottie}>
-                <Lottie source={require('../../assets/animations/food.gif')} autoPlay loop />
-            </View>
+            
         </View>
     );
 }
