@@ -35,7 +35,7 @@ export default function OnboardingScreen() {
                     backgroundColor: '#FFCC99',
                     image: (
                         <View style={styles.lottie}>
-                            <Lottie source={require('../assets/animations/food.gif')} autoPlay loop />
+                            <Lottie source={require('../assets/animations/food.json')} autoPlay loop />
                         </View>
                     ),
                     title: 'Food Productivity',
