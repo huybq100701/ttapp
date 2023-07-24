@@ -3,7 +3,7 @@ import React from 'react';
 import Onboarding from 'react-native-onboarding-swiper';
 import Lottie from 'lottie-react-native';
 import { useNavigation } from '@react-navigation/native';
-import { setItem } from '../src/utils/asyncStorage';
+import { setItem } from '../utils/asyncStorage';
 
 const { width, height } = Dimensions.get('window');
 
@@ -34,7 +34,7 @@ export default function OnboardingScreen() {
                         backgroundColor: '#FFCC99',
                         image: (
                             <View style={styles.lottie}>
-                                <Lottie source={require('../assets/animations/food.gif')} autoPlay loop />
+                                <Lottie source={require('../assets/animations/food.json')} autoPlay loop />
                             </View>
                         ),
                         title: 'Food Productivity',
@@ -44,7 +44,12 @@ export default function OnboardingScreen() {
                         backgroundColor: '#fef3c7',
                         image: (
                             <View style={styles.lottie}>
-                                <Lottie source={require('../assets/animations/shipping.mp4')} autoPlay loop />
+                                <Lottie
+                                    source={require('../assets/animations/shipping.json')}
+                                    autoPlay
+                                    loop
+                                    style={{ resizeMode: 'contain' }}
+                                />
                             </View>
                         ),
                         title: 'Fast Delivery',
@@ -54,7 +59,7 @@ export default function OnboardingScreen() {
                         backgroundColor: '#FF9966',
                         image: (
                             <View style={styles.lottie}>
-                                <Lottie source={require('../assets/animations/service.gif')} autoPlay loop />
+                                <Lottie source={require('../assets/animations/service.json')} autoPlay loop />
                             </View>
                         ),
                         title: 'Amazing Service',
