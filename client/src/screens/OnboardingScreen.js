@@ -34,7 +34,7 @@ export default function OnboardingScreen() {
                         backgroundColor: '#FFCC99',
                         image: (
                             <View style={styles.lottie}>
-                                <Lottie source={require('../assets/animations/food.json')} autoPlay loop />
+                                <Lottie source={require('../../assets/animations/food.json')} autoPlay loop />
                             </View>
                         ),
                         title: 'Food Productivity',
@@ -45,7 +45,7 @@ export default function OnboardingScreen() {
                         image: (
                             <View style={styles.lottie}>
                                 <Lottie
-                                    source={require('../assets/animations/shipping.json')}
+                                    source={require('../../assets/animations/shipping.json')}
                                     autoPlay
                                     loop
                                     style={{ resizeMode: 'contain' }}
@@ -59,7 +59,7 @@ export default function OnboardingScreen() {
                         backgroundColor: '#FF9966',
                         image: (
                             <View style={styles.lottie}>
-                                <Lottie source={require('../assets/animations/service.json')} autoPlay loop />
+                                <Lottie source={require('../../assets/animations/service.json')} autoPlay loop />
                             </View>
                         ),
                         title: 'Amazing Service',

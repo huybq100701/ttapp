@@ -24,7 +24,7 @@ export default function HomeScreen() {
             </View>
 
             <View style={styles.lottie}>
-                <Lottie source={require('../assets/animations/food.gif')} autoPlay loop />
+                <Lottie source={require('../../assets/animations/food.gif')} autoPlay loop />
             </View>
         </View>
     );
