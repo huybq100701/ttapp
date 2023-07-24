@@ -23,9 +23,7 @@ export default function HomeScreen() {
       <Text style={styles.text}>Home Page</Text>
       </View>
 
-      <View style={styles.lottie}>
-        <Lottie source={require('../assets/animations/food.gif')} autoPlay loop />
-      </View>
+      
       
       
     </View>
