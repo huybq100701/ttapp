@@ -34,8 +34,8 @@ export default function AppNavigation() {
                 <Stack.Navigator initialRouteName="Onboarding">
                     <Stack.Screen name="Onboarding" options={{ headerShown: false }} component={OnboardingScreen} />
                     <Stack.Screen name="Home" options={{ headerShown: false }} component={HomeScreen} />
-                    <Stack.Screen name="Login" options={{headerShown: false}} component={LoginScreen} />
-                    <Stack.Screen name="SignUp" options={{headerShown: false}} component={SignUpScreen} />
+                    <Stack.Screen name="Login" options={{ headerShown: false }} component={LoginScreen} />
+                    <Stack.Screen name="SignUp" options={{ headerShown: false }} component={SignUpScreen} />
                 </Stack.Navigator>
             </NavigationContainer>
         );
@@ -45,8 +45,8 @@ export default function AppNavigation() {
                 <Stack.Navigator initialRouteName="Home">
                     <Stack.Screen name="Onboarding" options={{ headerShown: false }} component={OnboardingScreen} />
                     <Stack.Screen name="Home" options={{ headerShown: false }} component={HomeScreen} />
-                    <Stack.Screen name="Login" options={{headerShown: false}} component={LoginScreen} />
-                    <Stack.Screen name="SignUp" options={{headerShown: false}} component={SignUpScreen} />
+                    <Stack.Screen name="Login" options={{ headerShown: false }} component={LoginScreen} />
+                    <Stack.Screen name="SignUp" options={{ headerShown: false }} component={SignUpScreen} />
                 </Stack.Navigator>
             </NavigationContainer>
         );
