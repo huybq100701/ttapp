@@ -5,7 +5,6 @@ export default function App() {
     return (
         <SafeAreaProvider>
             <AppNavigation /> 
-        </SafeAreaProvider>
-       
+        </SafeAreaProvider>   
     );
 }
