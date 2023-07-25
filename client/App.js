@@ -1,5 +1,10 @@
 import AppNavigation from './src/navigation/appNavigation';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function App() {
-    return <AppNavigation /> ;
+    return (
+        <SafeAreaProvider>
+            <AppNavigation />
+        </SafeAreaProvider>
+    );
 }
