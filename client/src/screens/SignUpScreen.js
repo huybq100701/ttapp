@@ -4,6 +4,7 @@ import { themeColors } from '../theme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeftIcon } from 'react-native-heroicons/solid';
 import { useNavigation } from '@react-navigation/native';
+import { StatusBar } from 'expo-status-bar';
 
 export default function SignUpScreen() {
     const navigation = useNavigation();
