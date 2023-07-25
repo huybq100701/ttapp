@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Image, TextInput, StyleSheet } from 'react-native';
 import { themeColors } from '../theme';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ArrowLeftIcon } from 'react-native-heroicons/solid';
 import { useNavigation } from '@react-navigation/native';
 
@@ -10,14 +10,14 @@ export default function SignUpScreen() {
 
   return (
     <View style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
+      <SafeAreaProvider style={styles.safeArea}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={styles.backButton}
         >
           <ArrowLeftIcon size={20} color="black" />
         </TouchableOpacity>
-      </SafeAreaView>
+      </SafeAreaProvider>
       <View style={styles.imageContainer}>
         <Image
           source={require('../../assets/images/bglogin.jpg')}

@@ -9,15 +9,12 @@ export default function LoginScreen() {
   const navigation = useNavigation();
 
   return (
-    <View style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.backButton}
-        >
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <ArrowLeftIcon size={20} color="black" />
         </TouchableOpacity>
-      </SafeAreaView>
+      </View>
       <View style={styles.imageContainer}>
         <Image
           source={require('../../assets/images/bglogin.jpg')}
@@ -65,7 +62,7 @@ export default function LoginScreen() {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -74,9 +71,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: themeColors.bg,
   },
-  safeArea: {
+  header: {
+    flexDirection: 'row',
     justifyContent: 'flex-start',
-    alignItems: 'flex-start',
     paddingHorizontal: 16,
     paddingTop: 16,
   },
