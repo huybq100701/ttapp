@@ -29,6 +29,8 @@ export default function SignUpScreen() {
                     <TextInput style={styles.input} value="@gmail.com" placeholder="Enter Email" />
                     <Text style={styles.label}>Password</Text>
                     <TextInput style={styles.input} secureTextEntry value="12345" placeholder="Enter Password" />
+                    <Text style={styles.label}>Confirm Password</Text>
+                    <TextInput style={styles.input} secureTextEntry value="12345" placeholder="Enter Confirm Password" /> 
                     <TouchableOpacity style={styles.signUpButton}>
                         <Text style={styles.signUpButtonText}>Sign Up</Text>
                     </TouchableOpacity>

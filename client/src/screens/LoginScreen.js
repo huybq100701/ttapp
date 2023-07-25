@@ -150,14 +150,14 @@ const styles = StyleSheet.create({
         marginBottom: 24,
     },
     label: {
-        marginTop: 15,
+        marginTop: 10,
         color: '#4B5563',
         fontSize: 16,
         fontWeight: 'bold',
         marginLeft: 16,
     },
     input: {
-        paddingVertical: 16,
+        paddingVertical: 10,
         paddingHorizontal: 24,
         backgroundColor: '#F3F4F6',
         color: '#4B5563',
