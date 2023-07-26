@@ -11,7 +11,7 @@ import {
 import Swiper from "react-native-swiper";
 import { icons, images, SIZES, COLORS } from '../constants'
 
-const Home = ({ navigation }) => {
+const HomeScreen = ({ navigation }) => {
 
     const initialCurrentLocation = {
         streetName: "Hanoi",
@@ -574,4 +574,4 @@ const Home = ({ navigation }) => {
       },
     });
     
-    export default Home;
+    export default HomeScreen;
