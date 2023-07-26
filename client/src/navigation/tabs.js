@@ -5,6 +5,7 @@ import Svg, { Path } from 'react-native-svg';
 
 import HomeScreen from '../screens/HomeScreen';
 import UserScreen from '../screens/UserScreen';
+import SearchScreen from '../screens/SearchScreen';
 
 import { COLORS, icons } from '../constants';
 
@@ -93,7 +94,6 @@ const Tabs = () => {
                             source={icons.cutlery}
                             resizeMode="contain"
                             style={{
-                                
                                 width: 25,
                                 height: 25,
                                 tintColor: focused ? COLORS.primary : COLORS.secondary,
@@ -106,7 +106,7 @@ const Tabs = () => {
 
             <Tab.Screen
                 name="Search"
-                component={HomeScreen}
+                component={SearchScreen}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <Image
