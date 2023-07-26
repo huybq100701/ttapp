@@ -10,7 +10,7 @@ export default function UserScreen() {
     const navigation = useNavigation();
     const insets = useSafeAreaInsets();
     const handleSetting = () => {
-        console.log('Bạn đã nhấn vào setting');
+        navigation.navigate('Setting');
     }
 
     return (
@@ -36,21 +36,25 @@ export default function UserScreen() {
                     <Text style={styles.label}>Email:</Text>
                     <Text style={styles.content}>user@user.com</Text>
                 </View>
+                <View style={styles.divider}></View>
                 <View style={styles.infoContainer}>
                     <Text style={styles.label}>Fullname:</Text>
                     <Text style={styles.content}>Nguyễn Văn A</Text>
                 </View>
+                <View style={styles.divider}></View>
                 <View style={styles.infoContainer}>
                     <Text style={styles.label}>Birthday:</Text>
                     <Text style={styles.content}>dd/mm/yyyy</Text>
                 </View>
+                <View style={styles.divider}></View>
                 <View style={styles.infoContainer}>
                     <Text style={styles.label}>Address:</Text>
                     <Text style={styles.content}>Hai Phong, Vietnam</Text>
                 </View>
+                <View style={styles.divider}></View>
                 <View style={styles.infoContainer}>
-                    <Text style={styles.label}>Address:</Text>
-                    <Text style={styles.content}>dd/mm/yyyy</Text>
+                    <Text style={styles.label}>Phone:</Text>
+                    <Text style={styles.content}>0795256013</Text>
                 </View>
             </View>
         </View>
@@ -106,7 +110,7 @@ const styles = StyleSheet.create({
     },
     infoContainer: {
         flexDirection: 'row',
-        paddingVertical: 8,
+        paddingVertical: 16,
         paddingHorizontal: 16,
     },
     label: {
