@@ -174,8 +174,9 @@ const HomeScreen = ({ navigation }) => {
     const [selectedCategory, setSelectedCategory] = React.useState(null)
     const [restaurants, setRestaurants] = React.useState(restaurantData)
     const [currentLocation, setCurrentLocation] = React.useState(initialCurrentLocation)
-
-
+    const handleCart = () => {
+      navigation.navigate('Cart');
+  }
     function onSelectCategory(category) {
         //filter restaurant
         let restaurantList = restaurantData.filter(a => a.categories.includes(category.id))
@@ -233,8 +234,9 @@ const HomeScreen = ({ navigation }) => {
               style={{
                 width: 50,
                 paddingRight: SIZES.padding * 2,
-                justifyContent: 'center'
+                justifyContent: 'center',
               }}
+              onPress={handleCart}
             >
               <Image
                 source={icons.basket}
@@ -307,6 +309,7 @@ const HomeScreen = ({ navigation }) => {
               showsHorizontalScrollIndicator={false}
               keyExtractor={(item) => `${item.id}`}
               renderItem={renderItem}
+              showsVerticalScrollIndicator={false}
               contentContainerStyle={{ paddingVertical: SIZES.padding * 2 }}
             />
           </View>
@@ -528,6 +531,8 @@ const HomeScreen = ({ navigation }) => {
         return (
           <FlatList
             data={restaurants}
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
             keyExtractor={(item) => `${item.id}`}
             renderItem={renderItem}
             contentContainerStyle={{

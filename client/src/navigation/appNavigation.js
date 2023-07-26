@@ -7,6 +7,7 @@ import OnboardingScreen from '../screens/OnboardingScreen.js';
 import LoginScreen from '../screens/LoginScreen.js';
 import SignUpScreen from '../screens/SignUpScreen.js';
 import HomeScreen from '../screens/HomeScreen';
+import CartScreen from '../screens/CartScreen';
 import { getItem } from '../utils/asyncStorage.js';
 
 const Stack = createNativeStackNavigator();
@@ -38,6 +39,7 @@ export default function AppNavigation() {
                     <Stack.Screen name="Home" options={{ headerShown: false }} component={HomeScreen} />
                     <Stack.Screen name="Login" options={{ headerShown: false }} component={LoginScreen} />
                     <Stack.Screen name="SignUp" options={{ headerShown: false }} component={SignUpScreen} />
+                    <Stack.Screen name ="Cart" options={{headerShown: false}} component={CartScreen} />
                 </Stack.Navigator>
             </NavigationContainer>
         );
@@ -50,6 +52,7 @@ export default function AppNavigation() {
                     <Stack.Screen name="Setting" options={{ headerShown: false }} component={SettingScreen} />
                     <Stack.Screen name="Login" options={{ headerShown: false }} component={LoginScreen} />
                     <Stack.Screen name="SignUp" options={{ headerShown: false }} component={SignUpScreen} />
+                    <Stack.Screen name ="Cart" options={{headerShown: false}} component={CartScreen} />
                 </Stack.Navigator>
             </NavigationContainer>
         );
