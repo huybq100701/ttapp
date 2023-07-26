@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import Swiper from "react-native-swiper";
 import { icons, images, SIZES, COLORS } from '../constants'
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const HomeScreen = ({ navigation }) => {
 
@@ -174,9 +175,13 @@ const HomeScreen = ({ navigation }) => {
     const [selectedCategory, setSelectedCategory] = React.useState(null)
     const [restaurants, setRestaurants] = React.useState(restaurantData)
     const [currentLocation, setCurrentLocation] = React.useState(initialCurrentLocation)
+
     const handleCart = () => {
       navigation.navigate('Cart');
   }
+
+    const insets = useSafeAreaInsets();
+
     function onSelectCategory(category) {
         //filter restaurant
         let restaurantList = restaurantData.filter(a => a.categories.includes(category.id))
@@ -544,7 +549,7 @@ const HomeScreen = ({ navigation }) => {
       }
     
       return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={[styles.container, {paddingTop: insets.top}]}>
           {renderHeader()}
           {renderMainCategories()}
           {renderRestaurantSwiper()}
