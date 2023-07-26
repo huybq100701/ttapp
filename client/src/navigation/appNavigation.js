@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from '../screens/HomeScreen.js';
+import Tabs from './tabs';
 import OnboardingScreen from '../screens/OnboardingScreen.js';
 import LoginScreen from '../screens/LoginScreen.js';
 import SignUpScreen from '../screens/SignUpScreen.js';
+import HomeScreen from '../screens/HomeScreen';
 import { getItem } from '../utils/asyncStorage.js';
 
 const Stack = createNativeStackNavigator();
@@ -42,9 +43,9 @@ export default function AppNavigation() {
     } else {
         return (
             <NavigationContainer>
-                <Stack.Navigator initialRouteName="Home">
+                <Stack.Navigator initialRouteName="Tabs">
                     <Stack.Screen name="Onboarding" options={{ headerShown: false }} component={OnboardingScreen} />
-                    <Stack.Screen name="Home" options={{ headerShown: false }} component={HomeScreen} />
+                    <Stack.Screen name="Tabs" options={{ headerShown: false }} component={Tabs} />
                     <Stack.Screen name="Login" options={{ headerShown: false }} component={LoginScreen} />
                     <Stack.Screen name="SignUp" options={{ headerShown: false }} component={SignUpScreen} />
                 </Stack.Navigator>

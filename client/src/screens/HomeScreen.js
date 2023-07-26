@@ -11,7 +11,7 @@ import {
 import Swiper from "react-native-swiper";
 import { icons, images, SIZES, COLORS } from '../constants'
 
-const Home = ({ navigation }) => {
+const HomeScreen = ({ navigation }) => {
 
     const initialCurrentLocation = {
         streetName: "Hanoi",
@@ -255,7 +255,7 @@ const Home = ({ navigation }) => {
             <TouchableOpacity
               style={{
                 padding: SIZES.padding,
-                paddingBottom: SIZES.padding * 2,
+                paddingBottom: SIZES.padding ,
                 backgroundColor: selectedCategory?.id === item.id ? COLORS.primary : COLORS.white,
                 borderRadius: SIZES.radius,
                 alignItems: "center",
@@ -287,7 +287,7 @@ const Home = ({ navigation }) => {
     
               <Text
                 style={{
-                  marginTop: SIZES.padding,
+                 
                   color: selectedCategory?.id === item.id ? COLORS.white : COLORS.black,
                 }}
               >
@@ -574,4 +574,4 @@ const Home = ({ navigation }) => {
       },
     });
     
-    export default Home;
+    export default HomeScreen;

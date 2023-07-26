@@ -12,7 +12,7 @@ export default function UserScreen() {
     const handleSetting = () => {
         console.log('Bạn đã nhấn vào setting');
     }
-
+    
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>
             <StatusBar style={{ backgroundColor: themeColors.bg }} />
