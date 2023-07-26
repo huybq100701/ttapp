@@ -77,6 +77,7 @@ const Tabs = () => {
                     borderTopWidth: 0,
                     backgroundColor: 'transparent',
                     elevation: 0,
+                    marginBottom: 5,                    
                 },
                 headerShown: false,
             }}

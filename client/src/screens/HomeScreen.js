@@ -255,7 +255,7 @@ const HomeScreen = ({ navigation }) => {
             <TouchableOpacity
               style={{
                 padding: SIZES.padding,
-                paddingBottom: SIZES.padding * 2,
+                paddingBottom: SIZES.padding ,
                 backgroundColor: selectedCategory?.id === item.id ? COLORS.primary : COLORS.white,
                 borderRadius: SIZES.radius,
                 alignItems: "center",
@@ -287,7 +287,7 @@ const HomeScreen = ({ navigation }) => {
     
               <Text
                 style={{
-                  marginTop: SIZES.padding,
+                 
                   color: selectedCategory?.id === item.id ? COLORS.white : COLORS.black,
                 }}
               >
