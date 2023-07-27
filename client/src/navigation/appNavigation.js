@@ -10,6 +10,7 @@ import HomeScreen from '../screens/HomeScreen';
 import CartScreen from '../screens/CartScreen';
 import RestaurantScreen from '../screens/RestaurantScreen';
 import FoodScreen from '../screens/FoodScreen';
+import ChangeInfo from '../screens/ChangeInfoScreen';
 import { getItem } from '../utils/asyncStorage.js';
 
 const Stack = createNativeStackNavigator();
@@ -38,12 +39,14 @@ export default function AppNavigation() {
             <NavigationContainer>
                 <Stack.Navigator initialRouteName="Onboarding">
                     <Stack.Screen name="Onboarding" options={{ headerShown: false }} component={OnboardingScreen} />
-                    <Stack.Screen name="Home" options={{ headerShown: false }} component={HomeScreen} />
+                    <Stack.Screen name="Tabs" options={{ headerShown: false }} component={Tabs} />
                     <Stack.Screen name="Login" options={{ headerShown: false }} component={LoginScreen} />
                     <Stack.Screen name="SignUp" options={{ headerShown: false }} component={SignUpScreen} />
                     <Stack.Screen name ="Cart" options={{headerShown: false}} component={CartScreen} />
                     <Stack.Screen name ="Restaurant" options={{headerShown: false}} component={RestaurantScreen} />
                     <Stack.Screen name ="Food" options={{headerShown: false}} component={FoodScreen} />
+                    <Stack.Screen name="Cart" options={{ headerShown: false }} component={CartScreen} />
+                    <Stack.Screen name="ChangeInfo" options={{ headerShown: false }} component={ChangeInfo} />
                 </Stack.Navigator>
             </NavigationContainer>
         );
@@ -59,6 +62,8 @@ export default function AppNavigation() {
                     <Stack.Screen name ="Cart" options={{headerShown: false}} component={CartScreen} />
                     <Stack.Screen name ="Restaurant" options={{headerShown: false}} component={RestaurantScreen} />
                     <Stack.Screen name ="Food" options={{headerShown: false}} component={FoodScreen} />
+                    <Stack.Screen name="Cart" options={{ headerShown: false }} component={CartScreen} />
+                    <Stack.Screen name="ChangeInfo" options={{ headerShown: false }} component={ChangeInfo} />
                 </Stack.Navigator>
             </NavigationContainer>
         );
