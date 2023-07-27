@@ -30,7 +30,7 @@ export default function SignUpScreen() {
                     <Text style={styles.label}>Password</Text>
                     <TextInput style={styles.input} secureTextEntry value="12345" placeholder="Enter Password" />
                     <Text style={styles.label}>Confirm Password</Text>
-                    <TextInput style={styles.input} secureTextEntry value="12345" placeholder="Enter Password" />
+                    <TextInput style={styles.input} secureTextEntry value="12345" placeholder="Enter Confirm Password" /> 
                     <TouchableOpacity style={styles.signUpButton}>
                         <Text style={styles.signUpButtonText}>Sign Up</Text>
                     </TouchableOpacity>
