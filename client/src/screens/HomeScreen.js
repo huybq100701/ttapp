@@ -105,7 +105,16 @@ const HomeScreen = ({ navigation }) => {
                     photo: images.crispy_chicken_burger,
                     description: "Burger with crispy chicken, cheese and lettuce",
                     calories: 200,
-                    price: 10
+                    price: 10,
+                    rating: 4.5,
+                    comment: [
+                      {
+                        userId: 1,
+                        commentText: 'Delicious',
+                        userId: 2,
+                        commentText: 'Delicious'
+                      }
+                    ]
                 },
                 {
                     menuId: 2,
@@ -113,7 +122,16 @@ const HomeScreen = ({ navigation }) => {
                     photo: images.honey_mustard_chicken_burger,
                     description: "Crispy Chicken Burger with Honey Mustard Coleslaw",
                     calories: 250,
-                    price: 15
+                    price: 15,
+                    rating: 4.5,
+                    comment: [
+                      {
+                        userId: 1,
+                        commentText: 'Delicious',
+                        userId: 2,
+                        commentText: 'Delicious'
+                      }
+                    ]
                 },
             ]
         },
