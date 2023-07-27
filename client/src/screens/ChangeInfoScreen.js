@@ -4,50 +4,36 @@ import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeftIcon, CheckIcon } from 'react-native-heroicons/solid';
 import { StatusBar } from 'expo-status-bar';
+import * as MediaLibrary from 'expo-media-library';
 
 import { themeColors } from '../theme';
 
-export default function ChangeInfo() {
-    const arr = [
-        {
-            FullName: 'Nguyen Van A',
-        },
-        {
-            Birth: '1/1/2001',
-        },
-        {
-            Address: 'Ha Noi, Viet Nam',
-        },
-        {
-            Email: 'nva@gmail.com',
-        },
-        {
-            Phone: '0232342354',
-        },
-    ];
-
-    const navigation = useNavigation();
+export default function ChangeInfoScreen({ navigation }) {
     const insets = useSafeAreaInsets();
-    const [isChecked, setIsChecked] = useState(false);
+    const [isUpdatePicture, setIsUpdatePicture] = useState(false);
+    const [isSave, setIsSave] = useState(false);
     const [isEditable, setIsEditable] = useState(false);
     const [fullName, setFullName] = useState('Nguyen Van A');
-    const [birth, setBirth] = useState('1/1//2001');
+    const [birth, setBirth] = useState('1/1/2001');
     const [address, setAddress] = useState('Ha Noi, Viet Nam');
     const [email, setEmail] = useState('nva@gmail.com');
     const [phone, setPhone] = useState('0232342354');
+    const [imageUri, setImageUri] = useState('');
 
     const handleSave = () => {
-        setIsChecked(false);
+        setIsSave(false);
         setIsEditable(false);
     };
 
-    const handleChangeImage = () => {
-        setIsChecked(true);
+    const handleUpdateImage = () => {
+        setIsUpdatePicture(true);
+        navigation.navigate('Camera', { setImageUri: setImageUri });
+        setIsSave(true);
     };
 
     const handleChangeInput = () => {
         setIsEditable(true);
-        setIsChecked(true);
+        setIsSave(true);
     };
 
     return (
@@ -62,16 +48,19 @@ export default function ChangeInfo() {
                 <View style={styles.safeArea}>
                     <TouchableOpacity
                         onPress={handleSave}
-                        style={[styles.saveButton, { backgroundColor: isChecked ? '#F59E0B' : '#E7B172' }]}
+                        style={[styles.saveButton, { backgroundColor: isSave ? '#F59E0B' : '#E7B172' }]}
                     >
-                        <CheckIcon size={20} color={isChecked ? '#000' : '#ddd'} />
+                        <CheckIcon size={20} color={isSave ? '#000' : '#ddd'} />
                     </TouchableOpacity>
                 </View>
             </View>
             <View style={styles.imageContainer}>
-                <Image source={require('../../assets/images/bglogin.jpg')} style={styles.image} />
+                <Image
+                    source={isUpdatePicture ? { uri: imageUri } : require('../../assets/images/bglogin.jpg')}
+                    style={styles.image}
+                />
                 <TouchableOpacity style={styles.changeImage}>
-                    <Text onPress={handleChangeImage} style={styles.textChangeImage}>
+                    <Text onPress={handleUpdateImage} style={styles.textChangeImage}>
                         Update
                     </Text>
                 </TouchableOpacity>
