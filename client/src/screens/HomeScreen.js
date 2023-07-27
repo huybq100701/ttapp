@@ -158,7 +158,16 @@ const HomeScreen = ({ navigation }) => {
                   photo: images.hawaiian_pizza,
                   description: "Canadian bacon, homemade pizza crust, pizza sauce",
                   calories: 250,
-                  price: 15
+                  price: 15,
+                  rating: 4.5,
+                  comment: [
+                    {
+                      userId: 1,
+                      commentText: 'Delicious',
+                      userId: 2,
+                      commentText: 'Delicious'
+                    }
+                  ]
               },
               {
                   menuId: 5,
@@ -166,7 +175,16 @@ const HomeScreen = ({ navigation }) => {
                   photo: images.pizza,
                   description: "Fresh tomatoes, aromatic basil pesto and melted bocconcini",
                   calories: 250,
-                  price: 20
+                  price: 20,
+                  rating: 4.5,
+                  comment: [
+                    {
+                      userId: 1,
+                      commentText: 'Delicious',
+                      userId: 2,
+                      commentText: 'Delicious'
+                    }
+                  ]
               },
               {
                   menuId: 6,
@@ -174,7 +192,16 @@ const HomeScreen = ({ navigation }) => {
                   photo: images.tomato_pasta,
                   description: "Pasta with fresh tomatoes",
                   calories: 100,
-                  price: 10
+                  price: 10,
+                  rating: 4.5,
+                  comment: [
+                    {
+                      userId: 1,
+                      commentText: 'Delicious',
+                      userId: 2,
+                      commentText: 'Delicious'
+                    }
+                  ]
               },
               {
                   menuId: 7,
@@ -182,7 +209,16 @@ const HomeScreen = ({ navigation }) => {
                   photo: images.salad,
                   description: "Finely chopped lettuce, tomatoes, cucumbers",
                   calories: 100,
-                  price: 10
+                  price: 10,
+                  rating: 4.8,
+                  comment: [
+                    {
+                      userId: 1,
+                      commentText: 'Delicious',
+                      userId: 2,
+                      commentText: 'Delicious'
+                    }
+                  ]
               }
           ]
       },
