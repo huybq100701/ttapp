@@ -25,6 +25,12 @@ const RestaurantScreen = ({ route, navigation }) => {
     setCurrentLocation(currentLocation);
   }, [route.params]);
 
+  const handleNavigateToFoodScreen = (menuId) => {
+    const selectedMenu = restaurant?.menu.find((item) => item.menuId === menuId);
+    navigation.navigate('Food', { item: selectedMenu });
+  };
+
+
   function editOrder(action, menuId, price) {
     let orderList = orderItems.slice();
     let item = orderList.find((a) => a.menuId === menuId);
@@ -83,18 +89,15 @@ const RestaurantScreen = ({ route, navigation }) => {
           <TouchableOpacity
             key={item.menuId}
             style={styles.sidebarItem}
-            onPress={() => {
-                navigation.navigate('Food', { menuId: item.menuId, restaurant });
-            }}
+            onPress={() => handleNavigateToFoodScreen(item.menuId)}
           >
             <Image
-            source={item.photo} 
-            style={{ width: 80, height: 80, borderRadius: 10 }}
-            resizeMode="cover"
-          />
+              source={item.photo} 
+              style={{ width: 80, height: 80, borderRadius: 10 }}
+              resizeMode="cover"
+            />
             <Text style={styles.sidebarText}>{item.name}</Text>
             <Text style={styles.sidebarPrice}>${item.price.toFixed(2)}</Text>
-         
           </TouchableOpacity>
         ))}
       </ScrollView>
@@ -447,17 +450,15 @@ const RestaurantScreen = ({ route, navigation }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-    
-        <View style={{ flex: 1 }}>
-          {renderHeader()}
-         
-          <View style={{ flex: 1, flexDirection: 'row' }}>
-            {renderFoodInfo()}
-            {renderSidebar()}
-          </View>
-          {renderOrder()}
+      <View style={{ flex: 1 }}>
+        {renderHeader()}
+        <View style={{ flex: 1, flexDirection: 'row' }}>
+          {renderFoodInfo()}
+          {renderSidebar()}
         </View>
-      </SafeAreaView>
+        {renderOrder()}
+      </View>
+    </SafeAreaView>
     );
 
     };

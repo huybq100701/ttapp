@@ -42,7 +42,6 @@ export default function AppNavigation() {
                     <Stack.Screen name="Tabs" options={{ headerShown: false }} component={Tabs} />
                     <Stack.Screen name="Login" options={{ headerShown: false }} component={LoginScreen} />
                     <Stack.Screen name="SignUp" options={{ headerShown: false }} component={SignUpScreen} />
-                    <Stack.Screen name ="Cart" options={{headerShown: false}} component={CartScreen} />
                     <Stack.Screen name ="Restaurant" options={{headerShown: false}} component={RestaurantScreen} />
                     <Stack.Screen name ="Food" options={{headerShown: false}} component={FoodScreen} />
                     <Stack.Screen name="Cart" options={{ headerShown: false }} component={CartScreen} />
@@ -59,7 +58,6 @@ export default function AppNavigation() {
                     <Stack.Screen name="Setting" options={{ headerShown: false }} component={SettingScreen} />
                     <Stack.Screen name="Login" options={{ headerShown: false }} component={LoginScreen} />
                     <Stack.Screen name="SignUp" options={{ headerShown: false }} component={SignUpScreen} />
-                    <Stack.Screen name ="Cart" options={{headerShown: false}} component={CartScreen} />
                     <Stack.Screen name ="Restaurant" options={{headerShown: false}} component={RestaurantScreen} />
                     <Stack.Screen name ="Food" options={{headerShown: false}} component={FoodScreen} />
                     <Stack.Screen name="Cart" options={{ headerShown: false }} component={CartScreen} />
