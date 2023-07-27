@@ -1,14 +1,15 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Image, TextInput, StyleSheet, Button } from 'react-native';
+import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeftIcon } from 'react-native-heroicons/solid';
 import { themeColors } from '../theme';
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
-import { LinearGradient } from 'expo-linear-gradient';
-export default function FoodScreen() {
+import { icons, images, SIZES, COLORS } from '../constants'
+const FoodScreen = ({ route }) => {
     const navigation = useNavigation();
     const insets = useSafeAreaInsets();
+    const { menuId, name, photo, description, calories, price,rating, comment } = route.params.item;
 
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -19,19 +20,34 @@ export default function FoodScreen() {
                 </TouchableOpacity>
             </View>
             <View style={styles.imageContainer}>
-                <Image source={require('../../assets/images/bglogin.jpg')} style={styles.image} />
+                <Image source={photo} style={styles.image} />
             </View>
             <View style={styles.formContainer}>
-                <View style={styles.form}></View>
+                <View style={styles.form}>
+                    <Text style={styles.label}>Name:</Text>
+                    <Text style={styles.foodName}>{name}</Text>
 
-                <View style={styles.footer}>
-                    <View>
-                        <Text style={{ color: '#CCCCCC' }}>Price</Text>
-                        <Text style={{ color: 'white', fontSize: 20 }}>$4</Text>
+                    <Text style={styles.label}>Description:</Text>
+                    <Text style={styles.description}>{description}</Text>
+
+                    <Text style={styles.label}>Calories:</Text>
+                    <Text style={styles.calories}>{calories.toFixed(2)} cal</Text>
+
+                    <Text style={styles.label}>Price:</Text>
+                    <Text style={styles.price}>${price.toFixed(2)}</Text>
+                    <View style={styles.ratingContainer}>
+                        <Image source={icons.star} style={styles.starIcon} />
+                        <Text style={styles.ratingText}>{rating.toFixed(1)}</Text>
                     </View>
-                    <TouchableOpacity style={styles.add}>
-                        <Text style={styles.addtext}>Add to Cart</Text>
-                    </TouchableOpacity>
+                </View>
+
+                <View style={styles.commentSection}>
+                    <Text style={styles.commentHeader}>Comments:</Text>
+                    {comment.map((item, index) => (
+                        <View key={index} style={styles.comment}>
+                            <Text style={styles.commentText}>User {item.userId}: {item.commentText}</Text>
+                        </View>
+                    ))}
                 </View>
             </View>
         </View>
@@ -72,38 +88,61 @@ const styles = StyleSheet.create({
     },
     form: {
         marginBottom: 24,
+        padding: 16,
     },
     label: {
-        marginTop: 10,
         color: '#4B5563',
         fontSize: 16,
         fontWeight: 'bold',
-        marginLeft: 16,
+        marginTop: 8,
     },
-    footer: {
-        flexDirection: 'row',
-        backgroundColor: '#002200',
-        alignItems: 'center',
-        borderTopLeftRadius: 40,
-        borderTopRightRadius: 40,
-        height: 80,
-        justifyContent: 'space-between',
-        paddingHorizontal: 24,
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
+    foodName: {
+        fontSize: 18,
     },
-    add: {
-        backgroundColor: '#FF6600',
-        borderRadius: 25,
-        width: 170,
-        height: 45,
-        justifyContent: 'center',
-        alignItems: 'center',
+    description: {
+        fontSize: 16,
+        marginTop: 4,
+        color: '#666666',
     },
-    addtext: {
-        fontSize: 17,
-        color: 'white',
+    calories: {
+        fontSize: 16,
+        marginTop: 4,
+    },
+    price: {
+        fontSize: 18,
+        marginTop: 4,
+        fontWeight: 'bold',
+    },
+    ratingContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginTop: 8,
+  },
+  starIcon: {
+      width: 20,
+      height: 20,
+      tintColor: COLORS.primary,
+      marginRight: 4,
+  },
+  ratingText: {
+      fontSize: 16,
+      color: COLORS.primary,
+      fontWeight: 'bold',
+  },
+    commentSection: {
+        marginTop: 16,
+    },
+    commentHeader: {
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    comment: {
+        marginTop: 8,
+    },
+    commentText: {
+        fontSize: 14,
     },
 });
+
+export default FoodScreen;
+

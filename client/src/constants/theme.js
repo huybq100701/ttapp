@@ -16,6 +16,15 @@ export const COLORS = {
     lightGray4: "#F8F8F9",
     transparent: "transparent",
     darkgray: '#898C95',
+    green: "#3fc063",
+    greenGray: "#bee6c8",
+    greenGray2: "#ebf7ee",
+    blue: "#006ee7",
+    blueGray: "#b5d3f2",
+    blueGray2: "#e5effa",
+    red: "#ec4e2c",
+    redGray: "#f5c9c0",
+    redGray2: "#fcedea",
 };
 
 export const SIZES = {

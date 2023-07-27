@@ -96,6 +96,15 @@ const HomeScreen = ({ navigation }) => {
                     description: 'Burger with crispy chicken, cheese and lettuce',
                     calories: 200,
                     price: 10,
+                    rating: 4.5,
+                    comment: [
+                      {
+                        userId: 1,
+                        commentText: 'Delicious',
+                        userId: 2,
+                        commentText: 'Delicious'
+                      }
+                    ]
                 },
                 {
                     menuId: 2,
@@ -104,66 +113,112 @@ const HomeScreen = ({ navigation }) => {
                     description: 'Crispy Chicken Burger with Honey Mustard Coleslaw',
                     calories: 250,
                     price: 15,
+                    rating: 4.5,
+                    comment: [
+                      {
+                        userId: 1,
+                        commentText: 'Delicious',
+                        userId: 2,
+                        commentText: 'Delicious'
+                      }
+                    ]
                 },
             ],
         },
         {
-            id: 2,
-            name: 'Pizza',
-            rating: 4.8,
-            categories: [2, 4, 6],
-            priceRating: expensive,
-            photo: images.pizza_restaurant,
-            duration: '15 - 20 min',
-            location: {
-                latitude: 1.556306570595712,
-                longitude: 110.35504616746915,
-            },
-            courier: {
-                avatar: images.avatar_2,
-                name: 'Jackson',
-            },
-            menu: [
-                {
-                    menuId: 4,
-                    name: 'Hawaiian Pizza',
-                    photo: images.hawaiian_pizza,
-                    description: 'Canadian bacon, homemade pizza crust, pizza sauce',
-                    calories: 250,
-                    price: 15,
-                },
-                {
-                    menuId: 5,
-                    name: 'Tomato & Basil Pizza',
-                    photo: images.pizza,
-                    description: 'Fresh tomatoes, aromatic basil pesto and melted bocconcini',
-                    calories: 250,
-                    price: 20,
-                },
-                {
-                    menuId: 6,
-                    name: 'Tomato Pasta',
-                    photo: images.tomato_pasta,
-                    description: 'Pasta with fresh tomatoes',
-                    calories: 100,
-                    price: 10,
-                },
-                {
-                    menuId: 7,
-                    name: 'Mediterranean Chopped Salad ',
-                    photo: images.salad,
-                    description: 'Finely chopped lettuce, tomatoes, cucumbers',
-                    calories: 100,
-                    price: 10,
-                },
-            ],
-        },
-    ];
+          id: 2,
+          name: "Pizza",
+          rating: 4.8,
+          categories: [2, 4, 6],
+          priceRating: expensive,
+          photo: images.pizza_restaurant,
+          duration: "15 - 20 min",
+          location: {
+              latitude: 1.556306570595712,
+              longitude: 110.35504616746915,
+          },
+          courier: {
+              avatar: images.avatar_2,
+              name: "Jackson"
+          },
+          menu: [
+              {
+                  menuId: 4,
+                  name: "Hawaiian Pizza",
+                  photo: images.hawaiian_pizza,
+                  description: "Canadian bacon, homemade pizza crust, pizza sauce",
+                  calories: 250,
+                  price: 15,
+                  rating: 4.5,
+                  comment: [
+                    {
+                      userId: 1,
+                      commentText: 'Delicious',
+                      userId: 2,
+                      commentText: 'Delicious'
+                    }
+                  ]
+              },
+              {
+                  menuId: 5,
+                  name: "Tomato & Basil Pizza",
+                  photo: images.pizza,
+                  description: "Fresh tomatoes, aromatic basil pesto and melted bocconcini",
+                  calories: 250,
+                  price: 20,
+                  rating: 4.5,
+                  comment: [
+                    {
+                      userId: 1,
+                      commentText: 'Delicious',
+                      userId: 2,
+                      commentText: 'Delicious'
+                    }
+                  ]
+              },
+              {
+                  menuId: 6,
+                  name: "Tomato Pasta",
+                  photo: images.tomato_pasta,
+                  description: "Pasta with fresh tomatoes",
+                  calories: 100,
+                  price: 10,
+                  rating: 4.5,
+                  comment: [
+                    {
+                      userId: 1,
+                      commentText: 'Delicious',
+                      userId: 2,
+                      commentText: 'Delicious'
+                    }
+                  ]
+              },
+              {
+                  menuId: 7,
+                  name: "Mediterranean Chopped Salad ",
+                  photo: images.salad,
+                  description: "Finely chopped lettuce, tomatoes, cucumbers",
+                  calories: 100,
+                  price: 10,
+                  rating: 4.8,
+                  comment: [
+                    {
+                      userId: 1,
+                      commentText: 'Delicious',
+                      userId: 2,
+                      commentText: 'Delicious'
+                    }
+                  ]
+              }
+          ]
+      },
+      
+    ]
 
-    const [categories, setCategories] = React.useState(categoryData);
-    const [selectedCategory, setSelectedCategory] = React.useState(null);
-    const [restaurants, setRestaurants] = React.useState(restaurantData);
-    const [currentLocation, setCurrentLocation] = React.useState(initialCurrentLocation);
+    const [categories, setCategories] = React.useState(categoryData)
+    const [selectedCategory, setSelectedCategory] = React.useState(null)
+    const [restaurants, setRestaurants] = React.useState(restaurantData)
+    const [currentLocation, setCurrentLocation] = React.useState(initialCurrentLocation)
 
     const handleCart = () => {
         navigation.navigate('Cart');
