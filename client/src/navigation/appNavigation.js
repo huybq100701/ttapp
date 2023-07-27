@@ -8,7 +8,8 @@ import LoginScreen from '../screens/LoginScreen.js';
 import SignUpScreen from '../screens/SignUpScreen.js';
 import HomeScreen from '../screens/HomeScreen';
 import CartScreen from '../screens/CartScreen';
-import ChangeInfo from '../screens/ChangeInfoScreen';
+import ChangeInfoScreen from '../screens/ChangeInfoScreen';
+import CameraScreen from '../screens/CameraScreen';
 import { getItem } from '../utils/asyncStorage.js';
 
 const Stack = createNativeStackNavigator();
@@ -41,7 +42,8 @@ export default function AppNavigation() {
                     <Stack.Screen name="Login" options={{ headerShown: false }} component={LoginScreen} />
                     <Stack.Screen name="SignUp" options={{ headerShown: false }} component={SignUpScreen} />
                     <Stack.Screen name="Cart" options={{ headerShown: false }} component={CartScreen} />
-                    <Stack.Screen name="ChangeInfo" options={{ headerShown: false }} component={ChangeInfo} />
+                    <Stack.Screen name="ChangeInfo" options={{ headerShown: false }} component={ChangeInfoScreen} />
+                    <Stack.Screen name="Camera" options={{ headerShown: false }} component={CameraScreen} />
                 </Stack.Navigator>
             </NavigationContainer>
         );
@@ -55,7 +57,8 @@ export default function AppNavigation() {
                     <Stack.Screen name="Login" options={{ headerShown: false }} component={LoginScreen} />
                     <Stack.Screen name="SignUp" options={{ headerShown: false }} component={SignUpScreen} />
                     <Stack.Screen name="Cart" options={{ headerShown: false }} component={CartScreen} />
-                    <Stack.Screen name="ChangeInfo" options={{ headerShown: false }} component={ChangeInfo} />
+                    <Stack.Screen name="ChangeInfo" options={{ headerShown: false }} component={ChangeInfoScreen} />
+                    <Stack.Screen name="Camera" options={{ headerShown: false }} component={CameraScreen} />
                 </Stack.Navigator>
             </NavigationContainer>
         );

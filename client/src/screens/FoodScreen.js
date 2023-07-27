@@ -22,17 +22,15 @@ export default function FoodScreen() {
                 <Image source={require('../../assets/images/bglogin.jpg')} style={styles.image} />
             </View>
             <View style={styles.formContainer}>
-                <View style={styles.form}>
-                    
-                </View>
-                
+                <View style={styles.form}></View>
+
                 <View style={styles.footer}>
-                    <View >
-                        <Text style ={{color: '#CCCCCC'}}>Price</Text>
-                        <Text style ={{color: 'white', fontSize: 20}}>$4</Text>
+                    <View>
+                        <Text style={{ color: '#CCCCCC' }}>Price</Text>
+                        <Text style={{ color: 'white', fontSize: 20 }}>$4</Text>
                     </View>
-                    <TouchableOpacity style = {styles.add}>
-                            <Text style= {styles.addtext}>Add to Cart</Text>
+                    <TouchableOpacity style={styles.add}>
+                        <Text style={styles.addtext}>Add to Cart</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -42,71 +40,70 @@ export default function FoodScreen() {
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: themeColors.bg,
+        flex: 1,
+        backgroundColor: themeColors.bg,
     },
     safeArea: {
-      justifyContent: 'flex-start',
-      alignItems: 'flex-start',
-      paddingHorizontal: 16,
-      paddingTop: 16,
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
+        paddingHorizontal: 16,
+        paddingTop: 16,
     },
     backButton: {
-      backgroundColor: '#F59E0B',
-      padding: 10,
-      borderRadius: 20,
+        backgroundColor: '#F59E0B',
+        padding: 10,
+        borderRadius: 20,
     },
     imageContainer: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: 200,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 200,
     },
     image: {
-      width: 200,
-      height: 200,
+        width: 200,
+        height: 200,
     },
     formContainer: {
-      borderTopLeftRadius: 50,
-      borderTopRightRadius: 50,
-      backgroundColor: 'white',
-      flex: 1,
-      justifyContent: 'space-between', 
+        borderTopLeftRadius: 50,
+        borderTopRightRadius: 50,
+        backgroundColor: 'white',
+        flex: 1,
+        justifyContent: 'space-between',
     },
     form: {
-      marginBottom: 24,
+        marginBottom: 24,
     },
     label: {
-      marginTop: 10,
-      color: '#4B5563',
-      fontSize: 16,
-      fontWeight: 'bold',
-      marginLeft: 16,
+        marginTop: 10,
+        color: '#4B5563',
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginLeft: 16,
     },
     footer: {
-      flexDirection: 'row',
-      backgroundColor: '#002200',
-      alignItems: 'center',
-      borderTopLeftRadius: 40,
-      borderTopRightRadius: 40,
-      height: 80,
-      justifyContent: 'space-between', 
-      paddingHorizontal: 24,
-      position: 'absolute', 
-      bottom: 0, 
-      left: 0, 
-      right: 0,
+        flexDirection: 'row',
+        backgroundColor: '#002200',
+        alignItems: 'center',
+        borderTopLeftRadius: 40,
+        borderTopRightRadius: 40,
+        height: 80,
+        justifyContent: 'space-between',
+        paddingHorizontal: 24,
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
     },
     add: {
-      backgroundColor: '#FF6600',
-      borderRadius: 25,
-      width: 170,
-      height: 45,
-      justifyContent: 'center',
-      alignItems: 'center',
+        backgroundColor: '#FF6600',
+        borderRadius: 25,
+        width: 170,
+        height: 45,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     addtext: {
-      fontSize: 17,
-      color: 'white',
+        fontSize: 17,
+        color: 'white',
     },
-  });
-  
+});
