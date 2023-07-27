@@ -44,6 +44,7 @@ export default function AppNavigation() {
                     <Stack.Screen name="SignUp" options={{ headerShown: false }} component={SignUpScreen} />
                     <Stack.Screen name ="Restaurant" options={{headerShown: false}} component={RestaurantScreen} />
                     <Stack.Screen name ="Food" options={{headerShown: false}} component={FoodScreen} />
+                    <Stack.Screen name ="Cart" options={{headerShown: false}} component={CartScreen} />
                     <Stack.Screen name="ChangeInfo" options={{ headerShown: false }} component={ChangeInfo} />
                 </Stack.Navigator>
             </NavigationContainer>
@@ -59,6 +60,7 @@ export default function AppNavigation() {
                     <Stack.Screen name="SignUp" options={{ headerShown: false }} component={SignUpScreen} />
                     <Stack.Screen name ="Restaurant" options={{headerShown: false}} component={RestaurantScreen} />
                     <Stack.Screen name ="Food" options={{headerShown: false}} component={FoodScreen} />
+                    <Stack.Screen name ="Cart" options={{headerShown: false}} component={CartScreen} />
                     <Stack.Screen name="ChangeInfo" options={{ headerShown: false }} component={ChangeInfo} />
                 </Stack.Navigator>
             </NavigationContainer>
