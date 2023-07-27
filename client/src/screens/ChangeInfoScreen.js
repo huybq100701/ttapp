@@ -30,11 +30,11 @@ export default function ChangeInfo() {
     const insets = useSafeAreaInsets();
     const [isChecked, setIsChecked] = useState(false);
     const [isEditable, setIsEditable] = useState(false);
-    const [infos, setInfos] = useState(arr);
-    const inputRef = useRef();
-    infos.map((info) => {
-        console.log();
-    });
+    const [fullName, setFullName] = useState('Nguyen Van A');
+    const [birth, setBirth] = useState('1/1//2001');
+    const [address, setAddress] = useState('Ha Noi, Viet Nam');
+    const [email, setEmail] = useState('nva@gmail.com');
+    const [phone, setPhone] = useState('0232342354');
 
     const handleSave = () => {
         setIsChecked(false);
@@ -72,61 +72,61 @@ export default function ChangeInfo() {
                 <Image source={require('../../assets/images/bglogin.jpg')} style={styles.image} />
                 <TouchableOpacity style={styles.changeImage}>
                     <Text onPress={handleChangeImage} style={styles.textChangeImage}>
-                        Change
+                        Update
                     </Text>
                 </TouchableOpacity>
             </View>
             <View style={styles.formContainer}>
                 <View style={styles.itemInfo}>
                     <Text style={styles.label}>Full name: </Text>
-                    <TextInput ref={inputRef} style={styles.info} editable={isEditable} value={'Nguyen Van A'} />
-                    <TouchableOpacity style={styles.changeInfo}>
-                        <Text onPress={handleChangeInput} style={styles.textChangeInfo}>
-                            Change
-                        </Text>
-                    </TouchableOpacity>
+                    <TextInput
+                        style={styles.info}
+                        editable={isEditable}
+                        value={fullName}
+                        onChangeText={(e) => setFullName(e)}
+                    />
                 </View>
                 <View style={styles.itemInfo}>
                     <Text style={styles.label}>Birth: </Text>
-                    <TextInput ref={inputRef} style={styles.info} editable={isEditable} value={'1/1/2001'} />
-                    <TouchableOpacity style={styles.changeInfo}>
-                        <Text onPress={handleChangeInput} style={styles.textChangeInfo}>
-                            Change
-                        </Text>
-                    </TouchableOpacity>
+                    <TextInput
+                        style={styles.info}
+                        editable={isEditable}
+                        value={birth}
+                        onChangeText={(e) => setBirth(e)}
+                    />
                 </View>
                 <View style={styles.itemInfo}>
                     <Text style={styles.label}>Address: </Text>
                     <TextInput
-                        ref={inputRef}
                         style={styles.info}
                         editable={isEditable}
-                        value={'Ha Noi, Viet Nam Ha Noi, Viet Nam Ha Noi, Viet Nam'}
+                        value={address}
+                        onChangeText={(e) => setAddress(e)}
                     />
-                    <TouchableOpacity style={styles.changeInfo}>
-                        <Text onPress={handleChangeInput} style={styles.textChangeInfo}>
-                            Change
-                        </Text>
-                    </TouchableOpacity>
                 </View>
                 <View style={styles.itemInfo}>
                     <Text style={styles.label}>Email: </Text>
-                    <TextInput ref={inputRef} style={styles.info} editable={isEditable} value={'nva@gmail.com'} />
-                    <TouchableOpacity style={styles.changeInfo}>
-                        <Text onPress={handleChangeInput} style={styles.textChangeInfo}>
-                            Change
-                        </Text>
-                    </TouchableOpacity>
+                    <TextInput
+                        style={styles.info}
+                        editable={isEditable}
+                        value={email}
+                        onChangeText={(e) => setEmail(e)}
+                    />
                 </View>
                 <View style={styles.itemInfo}>
                     <Text style={styles.label}>Phone: </Text>
-                    <TextInput ref={inputRef} style={styles.info} editable={isEditable} value={'0232342354'} />
-                    <TouchableOpacity style={styles.changeInfo}>
-                        <Text onPress={handleChangeInput} style={styles.textChangeInfo}>
-                            Change
-                        </Text>
-                    </TouchableOpacity>
+                    <TextInput
+                        style={styles.info}
+                        editable={isEditable}
+                        value={phone}
+                        onChangeText={(e) => setPhone(e)}
+                    />
                 </View>
+                <TouchableOpacity style={styles.changeInfo}>
+                    <Text onPress={handleChangeInput} style={styles.textChangeInfo}>
+                        Change
+                    </Text>
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -177,6 +177,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         paddingHorizontal: 18,
         flex: 1,
+        alignItems: 'flex-end',
     },
     itemInfo: {
         flexDirection: 'row',
@@ -188,6 +189,7 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 20,
         width: 95,
+        fontWeight: 'bold',
     },
     info: {
         fontSize: 20,
@@ -195,9 +197,8 @@ const styles = StyleSheet.create({
         marginLeft: 15,
     },
     textChangeInfo: {
-        marginLeft: 10,
-        fontSize: 14,
-        width: 50,
+        marginTop: 180,
+        fontSize: 20,
         color: '#F59E0B',
     },
 });

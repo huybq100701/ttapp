@@ -29,12 +29,12 @@ export default function SettingScreen() {
                 </View>
             </View>
             <View>
-                <TouchableOpacity style={styles.itemSetting}>
-                    <UserIcon size={20} color="black"/>
+                <TouchableOpacity style={styles.itemSetting} onPress={() => navigation.navigate('ChangeInfo')}>
+                    <UserIcon size={20} color="black" />
                     <Text style={styles.itemText}>Change Infomation</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.itemSetting} onPress={handleLogout}>
-                    <ArrowRightOnRectangleIcon size={20} color="black"/>
+                    <ArrowRightOnRectangleIcon size={20} color="black" />
                     <Text style={styles.itemText}>Logout</Text>
                 </TouchableOpacity>
             </View>
@@ -74,10 +74,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#c4dfff',
         borderRadius: 20,
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     itemText: {
         fontSize: 20,
         paddingLeft: 16,
-    }
+    },
 });
