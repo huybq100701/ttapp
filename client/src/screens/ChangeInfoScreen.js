@@ -174,6 +174,8 @@ const styles = StyleSheet.create({
         color: '#F59E0B',
     },
     formContainer: {
+        paddingTop: 20,
+        borderRadius: 32,
         backgroundColor: 'white',
         paddingHorizontal: 18,
         flex: 1,
@@ -197,7 +199,7 @@ const styles = StyleSheet.create({
         marginLeft: 15,
     },
     textChangeInfo: {
-        marginTop: 180,
+        marginTop: 160,
         fontSize: 20,
         color: '#F59E0B',
     },
