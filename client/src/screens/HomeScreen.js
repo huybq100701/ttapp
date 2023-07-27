@@ -20,10 +20,8 @@ export default function HomeScreen() {
                 <TouchableOpacity onPress={handleReset} style={styles.resetButton}>
                     <Text>Reset</Text>
                 </TouchableOpacity>
-                <Text style={styles.text}>Home Page</Text>
+                <Text>Home Screen</Text>
             </View>
-
-            
         </View>
     );
 }
@@ -31,6 +29,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        flexDirection: 'column',
     },
     heading: {
         flexDirection: 'row',
@@ -49,5 +48,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#34d399',
         padding: 10,
         borderRadius: 50,
+    },
+    loginButton: {
+        paddingVertical: 12,
+        backgroundColor: '#F59E0B',
+        borderRadius: 24,
     },
 });
