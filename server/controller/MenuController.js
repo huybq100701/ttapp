@@ -7,7 +7,7 @@ const MenuController = {
             const newMenu = await Menu.create(req.body);
             return res.status(200).json({
                 message: 'Tạo menu thành công',
-                restaurant: newRestaurant,
+                menu: newMenu,
             });
         } catch (error) {
             return res.status(500).json({
@@ -16,6 +16,21 @@ const MenuController = {
             });
         }
     },
+
+    getMenu: async (req, res) => {
+        try {
+            const menu = await Menu.findById(req.params.id);
+            return res.status(200).json({
+                message: 'Lấy menu thành công',
+                menu,
+            });
+        } catch (error) {
+            return res.status(500).json({
+                message: 'Server error',
+                error: error,
+            });
+        }
+    }
 };
 
 module.exports = MenuController;
