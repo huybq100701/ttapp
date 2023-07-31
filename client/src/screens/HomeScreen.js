@@ -222,7 +222,7 @@ const HomeScreen = ({ navigation }) => {
     const [currentLocation, setCurrentLocation] = React.useState(initialCurrentLocation)
     const [hasNotification, setHasNotification] = useState(false);
 
-
+    
     const handleCart = () => {
         navigation.navigate('Cart');
     };
