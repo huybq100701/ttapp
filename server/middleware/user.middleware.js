@@ -9,6 +9,7 @@ const userMiddleware = {
         }
         next();
     },
+
     checkRequiredLogin: async (req, res, next) => {
         const { mail, password } = req.body;
         if (!mail || !password) {
@@ -18,6 +19,7 @@ const userMiddleware = {
         }
         next();
     },
+    
     checkExist: async (req, res, next) => {
         const { mail } = req.body;
         const user = await User.findOne({ mail: mail });

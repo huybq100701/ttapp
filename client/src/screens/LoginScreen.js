@@ -1,16 +1,31 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Image, TextInput, StyleSheet } from 'react-native';
+import axios from 'axios';
+import { View, Text, TouchableOpacity, Image, TextInput, StyleSheet, ToastAndroid } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeftIcon } from 'react-native-heroicons/solid';
 import { themeColors } from '../theme';
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
+import { API_LINK } from '../../default-value';
 
 export default function LoginScreen() {
     const navigation = useNavigation();
     const insets = useSafeAreaInsets();
-    const handleLogin = () => {
-        navigation.navigate('Tabs');
+
+    const [mail, setMail] = React.useState('');
+    const [password, setPassword] = React.useState('');
+
+    const handleLogin = async () => {
+        try {
+            const res = await axios.post(`${API_LINK}/auth/login`, {
+                mail,
+                password,
+            });
+            ToastAndroid.showWithGravity(res.data.message, ToastAndroid.SHORT, ToastAndroid.CENTER);
+            navigation.navigate('Tabs', { screen: 'Home'});
+        } catch (error) {
+            ToastAndroid.showWithGravity(error.response.data.message, ToastAndroid.SHORT, ToastAndroid.CENTER);
+        }
     };
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -26,9 +41,15 @@ export default function LoginScreen() {
             <View style={styles.formContainer}>
                 <View style={styles.form}>
                     <Text style={styles.label}>Email Address</Text>
-                    <TextInput style={styles.input} placeholder="email" value="@gmail.com" />
+                    <TextInput style={styles.input} placeholder="Email" value={mail} onChangeText={setMail} />
                     <Text style={styles.label}>Password</Text>
-                    <TextInput style={styles.input} secureTextEntry placeholder="password" value="12345" />
+                    <TextInput
+                        style={styles.input}
+                        secureTextEntry
+                        placeholder="Password"
+                        value={password}
+                        onChangeText={setPassword}
+                    />
                     <TouchableOpacity style={styles.forgotPassword}>
                         <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
                     </TouchableOpacity>
