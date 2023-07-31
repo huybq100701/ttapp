@@ -23,7 +23,8 @@ export const basket = require("../assets/icons/shopping-basket.png");
 export const star = require("../assets/icons/star.png");
 export const sushi = require("../assets/icons/sushi.png");
 export const user = require("../assets/icons/user.png");
-
+export const notification = require("../assets/icons/notification.png");
+export const notification_with_ping = require("../assets/icons/notification_with_ping.png");
 export default {
     back,
     car,
@@ -50,4 +51,6 @@ export default {
     star,
     sushi,
     user,
+    notification,
+    notification_with_ping,
 }
