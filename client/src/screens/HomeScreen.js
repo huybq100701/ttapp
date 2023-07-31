@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, Image, FlatList } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { icons, images, SIZES, COLORS } from '../constants';
@@ -70,7 +70,7 @@ const HomeScreen = ({ navigation }) => {
     const affordable = 1;
     const fairPrice = 2;
     const expensive = 3;
-
+  
     const restaurantData = [
         {
             id: 1,
@@ -219,9 +219,15 @@ const HomeScreen = ({ navigation }) => {
     const [selectedCategory, setSelectedCategory] = React.useState(null)
     const [restaurants, setRestaurants] = React.useState(restaurantData)
     const [currentLocation, setCurrentLocation] = React.useState(initialCurrentLocation)
+    const [hasNotification, setHasNotification] = useState(false);
 
     const handleCart = () => {
         navigation.navigate('Cart');
+    };
+
+    const handleNotification = () => {
+        setHasNotification(false);
+        navigation.navigate('Notification');
     };
 
     const insets = useSafeAreaInsets();
@@ -243,18 +249,19 @@ const HomeScreen = ({ navigation }) => {
         return '';
     }
 
-    function renderHeader() {
+    const renderHeader = () => {
         return (
             <View style={{ flexDirection: 'row', height: 50 }}>
                 <TouchableOpacity
+                    onPress={handleNotification}
                     style={{
                         width: 50,
-                        paddingLeft: SIZES.padding * 2,
+                        paddingLeft: 16,
                         justifyContent: 'center',
                     }}
                 >
                     <Image
-                        source={icons.nearby}
+                        source={hasNotification ? icons.notification_with_ping : icons.notification}
                         resizeMode="contain"
                         style={{
                             width: 30,
@@ -271,7 +278,7 @@ const HomeScreen = ({ navigation }) => {
                             backgroundColor: COLORS.lightGray3,
                             alignItems: 'center',
                             justifyContent: 'center',
-                            borderRadius: SIZES.radius,
+                            borderRadius: 20,
                         }}
                     >
                         <Text>{currentLocation.streetName}</Text>
@@ -281,7 +288,7 @@ const HomeScreen = ({ navigation }) => {
                 <TouchableOpacity
                     style={{
                         width: 50,
-                        paddingRight: SIZES.padding * 2,
+                        paddingRight: 16,
                         justifyContent: 'center',
                     }}
                     onPress={handleCart}
@@ -297,7 +304,8 @@ const HomeScreen = ({ navigation }) => {
                 </TouchableOpacity>
             </View>
         );
-    }
+    };
+
 
     function renderMainCategories() {
         const renderItem = ({ item }) => {

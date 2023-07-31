@@ -22,6 +22,9 @@ export default function CartScreen() {
         }
     };
 
+    const handleDelivery = () => {
+        navigation.navigate('Delivery');
+    };
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>
             <StatusBar style={{ backgroundColor: themeColors.bg }} />
@@ -53,7 +56,7 @@ export default function CartScreen() {
                 <Text style={styles.totalLabel}>Total:</Text>
                 <Text style={styles.totalAmount}>${4 * quantity}</Text>
             </View>
-            <TouchableOpacity style={styles.payButton}>
+            <TouchableOpacity style={styles.payButton} onPress={handleDelivery}>
                 <LinearGradient colors={['#FF6600', '#F7941D']} start={[0, 0.5]} end={[1, 0.5]} style={styles.gradient}>
                     <Text style={styles.payButtonText}>Pay Now</Text>
                 </LinearGradient>

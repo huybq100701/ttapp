@@ -5,13 +5,14 @@ import Tabs from './tabs';
 import SettingScreen from '../screens/SettingScreen';
 import OnboardingScreen from '../screens/OnboardingScreen.js';
 import LoginScreen from '../screens/LoginScreen.js';
-import SignUpScreen from '../screens/SignUpScreen.js';
+import SignUpScreen from '../screens/SignUpScreen';
 import HomeScreen from '../screens/HomeScreen';
 import CartScreen from '../screens/CartScreen';
 import ChangeInfoScreen from '../screens/ChangeInfoScreen';
 import CameraScreen from '../screens/CameraScreen';
 import RestaurantScreen from '../screens/RestaurantScreen';
 import FoodScreen from '../screens/FoodScreen';
+import DeliveryScreen from '../screens/DeliveryScreen';
 
 import { getItem } from '../utils/asyncStorage.js';
 
@@ -49,6 +50,7 @@ export default function AppNavigation() {
                     <Stack.Screen name="Camera" options={{ headerShown: false }} component={CameraScreen} />
                     <Stack.Screen name ="Restaurant" options={{headerShown: false}} component={RestaurantScreen} />
                     <Stack.Screen name ="Food" options={{headerShown: false}} component={FoodScreen} />
+                    <Stack.Screen name ="Delivery" options={{headerShown: false}} component={DeliveryScreen} />
                 </Stack.Navigator>
             </NavigationContainer>
         );
@@ -66,6 +68,7 @@ export default function AppNavigation() {
                     <Stack.Screen name="Camera" options={{ headerShown: false }} component={CameraScreen} />
                     <Stack.Screen name ="Restaurant" options={{headerShown: false}} component={RestaurantScreen} />
                     <Stack.Screen name ="Food" options={{headerShown: false}} component={FoodScreen} />
+                    <Stack.Screen name ="Delivery" options={{headerShown: false}} component={DeliveryScreen} />
                 </Stack.Navigator>
             </NavigationContainer>
         );
