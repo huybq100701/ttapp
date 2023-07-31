@@ -26,6 +26,9 @@ const DeliveryScreen = ({ navigation }) => {
     },
   };
 
+  const handlePayment = () => {
+    navigation.navigate('PaymentComplete');
+  }
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <View style={styles.deliveryList}>
@@ -94,7 +97,7 @@ const DeliveryScreen = ({ navigation }) => {
       </MapView>
 
       {/* Confirm Delivery Button */}
-      <TouchableOpacity style={styles.confirmButton}>
+      <TouchableOpacity style={styles.confirmButton} onPress={handlePayment}>
         <Text style={styles.confirmButtonText}>Confirm Delivery</Text>
       </TouchableOpacity>
     </View>
