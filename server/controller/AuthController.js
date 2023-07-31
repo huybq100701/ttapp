@@ -10,9 +10,8 @@ const {
 const AuthController = {
     login: async (req, res) => {
         try {
-            const { mail, password } = req.body;
+            const { mail, password } = req.body; 
             const checkUser = await User.findOne({ mail: mail });
-
             if (!checkUser) {
                 return res.status(404).json({
                     message: "Tài khoản không tồn tại",
@@ -26,7 +25,6 @@ const AuthController = {
             }
             await deleteTokenDB(checkUser);
             const token = await spawnToken(checkUser);
-            console.log(1);
             const newToken = await Token.create({
                 userId: checkUser._id,
                 token: token.refreshToken,
