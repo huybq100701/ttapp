@@ -5,7 +5,8 @@ const userSchema = new Schema(
     {
         mail: { type: String, require: true },   
         username: { type: String, require: true },
-        password: { type: String, require: true }
+        password: { type: String, require: true },
+        avatar: { type: String, require: true }
 
     },
     {
