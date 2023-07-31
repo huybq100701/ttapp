@@ -13,8 +13,9 @@ import CameraScreen from '../screens/CameraScreen';
 import RestaurantScreen from '../screens/RestaurantScreen';
 import FoodScreen from '../screens/FoodScreen';
 import DeliveryScreen from '../screens/DeliveryScreen';
-
+import PaymentCompleteScreen from '../screens/PaymentCompleteScreen';
 import { getItem } from '../utils/asyncStorage.js';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -51,6 +52,7 @@ export default function AppNavigation() {
                     <Stack.Screen name ="Restaurant" options={{headerShown: false}} component={RestaurantScreen} />
                     <Stack.Screen name ="Food" options={{headerShown: false}} component={FoodScreen} />
                     <Stack.Screen name ="Delivery" options={{headerShown: false}} component={DeliveryScreen} />
+                    <Stack.Screen name = "PaymentComplete" options={{headerShown: false}} component={PaymentCompleteScreen} />
                 </Stack.Navigator>
             </NavigationContainer>
         );
@@ -69,6 +71,7 @@ export default function AppNavigation() {
                     <Stack.Screen name ="Restaurant" options={{headerShown: false}} component={RestaurantScreen} />
                     <Stack.Screen name ="Food" options={{headerShown: false}} component={FoodScreen} />
                     <Stack.Screen name ="Delivery" options={{headerShown: false}} component={DeliveryScreen} />
+                    <Stack.Screen name = "PaymentComplete" options={{headerShown: false}} component={PaymentCompleteScreen} />
                 </Stack.Navigator>
             </NavigationContainer>
         );
