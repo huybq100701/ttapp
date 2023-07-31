@@ -1,14 +1,38 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Image, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Image, TextInput, StyleSheet, ToastAndroid } from 'react-native';
 import { themeColors } from '../theme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeftIcon } from 'react-native-heroicons/solid';
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
+import { API_LINK } from '../../default-value';
+import axios from 'axios';
 
 export default function SignUpScreen() {
     const navigation = useNavigation();
     const insets = useSafeAreaInsets();
+    const [username, setUsername] = React.useState('');
+    const [mail, setMail] = React.useState('');
+    const [password, setPassword] = React.useState('');
+    const [rePassword, setRePassword] = React.useState('');
+
+    const handlePress = async () => {
+        if (password != rePassword) {
+            ToastAndroid.showWithGravity('Mật khẩu không khớp', ToastAndroid.SHORT, ToastAndroid.CENTER);
+            return;
+        }
+        try {
+            const res = await axios.post(`${API_LINK}/users/register`, {
+                mail,
+                username,
+                password,
+            });
+            ToastAndroid.showWithGravity(res.data.message, ToastAndroid.SHORT, ToastAndroid.CENTER);
+        } catch (error) {
+            ToastAndroid.showWithGravity(error.response.data.message, ToastAndroid.SHORT, ToastAndroid.CENTER);
+        }
+        return;
+    };
 
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -23,15 +47,32 @@ export default function SignUpScreen() {
             </View>
             <View style={styles.formContainer}>
                 <View style={styles.form}>
-                    <Text style={styles.label}>Full Name</Text>
-                    <TextInput style={styles.input} value="full name" placeholder="Enter Name" />
+                    <Text style={styles.label}>Username</Text>
+                    <TextInput
+                        style={styles.input}
+                        value={username}
+                        onChangeText={setUsername}
+                        placeholder="Enter Username"
+                    />
                     <Text style={styles.label}>Email Address</Text>
-                    <TextInput style={styles.input} value="@gmail.com" placeholder="Enter Email" />
+                    <TextInput style={styles.input} value={mail} onChangeText={setMail} placeholder="Enter Email" />
                     <Text style={styles.label}>Password</Text>
-                    <TextInput style={styles.input} secureTextEntry value="12345" placeholder="Enter Password" />
+                    <TextInput
+                        style={styles.input}
+                        secureTextEntry
+                        value={password}
+                        onChangeText={setPassword}
+                        placeholder="Enter Password"
+                    />
                     <Text style={styles.label}>Confirm Password</Text>
-                    <TextInput style={styles.input} secureTextEntry value="12345" placeholder="Enter Confirm Password" /> 
-                    <TouchableOpacity style={styles.signUpButton}>
+                    <TextInput
+                        style={styles.input}
+                        secureTextEntry
+                        value={rePassword}
+                        onChangeText={setRePassword}
+                        placeholder="Enter Confirm Password"
+                    />
+                    <TouchableOpacity style={styles.signUpButton} onPress={handlePress}>
                         <Text style={styles.signUpButtonText}>Sign Up</Text>
                     </TouchableOpacity>
                 </View>
