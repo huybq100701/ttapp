@@ -1,16 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeftIcon } from 'react-native-heroicons/solid';
 import { themeColors } from '../theme';
-import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
 
-export default function CartScreen() {
-    const navigation = useNavigation();
+export default function CartScreen({ route, navigation }) {
     const insets = useSafeAreaInsets();
     const [quantity, setQuantity] = useState(1);
+    const [restaurant, setRestaurant] = useState(null);
+    const [currentLocation, setCurrentLocation] = useState(null);
+
+    useEffect(() => {
+        let { restaurant, currentLocation } = route.params;
+        setRestaurant(restaurant);
+        setCurrentLocation(currentLocation);
+    }, [route.params]);
 
     const increaseQuantity = () => {
         setQuantity((prevQuantity) => prevQuantity + 1);
@@ -23,8 +29,12 @@ export default function CartScreen() {
     };
 
     const handleDelivery = () => {
-        navigation.navigate('Delivery');
+        navigation.navigate('Delivery', {
+            restaurant: restaurant,
+            currentLocation: currentLocation,
+        });
     };
+
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>
             <StatusBar style={{ backgroundColor: themeColors.bg }} />
