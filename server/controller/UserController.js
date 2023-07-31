@@ -16,6 +16,7 @@ const UserController = {
             });
         }
     },
+
     getUserById: async (req, res) => {
         try {
             const id = req.body.verify_id;
