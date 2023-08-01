@@ -1,21 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { StyleSheet, SafeAreaView, View, Text, TouchableOpacity, Image, Animated, ScrollView } from 'react-native';
 import { icons, COLORS, SIZES } from '../constants';
 import { ArrowLeftIcon } from 'react-native-heroicons/solid';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const RestaurantScreen = ({ route, navigation }) => {
+import { restaurantsContext } from '../utils/Context';
+
+const RestaurantScreen = ({ navigation }) => {
     const scrollX = new Animated.Value(0);
-    const [restaurant, setRestaurant] = useState(null);
-    const [currentLocation, setCurrentLocation] = useState(null);
     const [orderItems, setOrderItems] = useState([]);
     const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 
-    useEffect(() => {
-        let { item, currentLocation } = route.params;
-        setRestaurant(item);
-        setCurrentLocation(currentLocation);
-    }, [route.params]);
+    // use params
+    // const [restaurant, setRestaurant] = useState(null);
+    // const { item } = route.params;
+
+    // useEffect(() => {
+    //     setRestaurant(item);
+    // }, [route.params]);
+    // console.log('params:', restaurant);
+
+    // use useContext
+    const { restaurant } = useContext(restaurantsContext);
 
     const handleNavigateToFoodScreen = (menuId) => {
         const selectedMenu = restaurant?.menu.find((item) => item.menuId === menuId);
@@ -419,12 +425,7 @@ const RestaurantScreen = ({ route, navigation }) => {
                                     alignItems: 'center',
                                     borderRadius: SIZES.radius,
                                 }}
-                                onPress={() =>
-                                    navigation.navigate('Cart', {
-                                        restaurant: restaurant,
-                                        currentLocation: currentLocation,
-                                    })
-                                }
+                                onPress={() => navigation.navigate('Cart')}
                             >
                                 <Text style={{ color: COLORS.white, fontSize: 20 }}>Order</Text>
                             </TouchableOpacity>

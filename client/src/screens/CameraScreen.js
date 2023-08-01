@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Fragment } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Button } from 'react-native';
 import { Camera, CameraType } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
@@ -52,12 +52,15 @@ export default function CameraScreen({ navigation, route }) {
     return (
         <View style={[styles.container]}>
             {!image ? (
-                <>
+                <Fragment>
                     <View style={styles.head}></View>
                     <Camera style={styles.camera} type={type} flashMode={flashMode} ref={cameraRef}></Camera>
-                </>
+                </Fragment>
             ) : (
-                <Image source={{ uri: image }} style={styles.camera} />
+                <Fragment>
+                    <View style={styles.head}></View>
+                    <Image source={{ uri: image }} style={styles.camera} />
+                </Fragment>
             )}
             <View style={styles.takePicture}>
                 {image ? (
