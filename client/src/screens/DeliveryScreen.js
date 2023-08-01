@@ -6,7 +6,7 @@ import MapView, { Marker, Polyline } from 'react-native-maps';
 
 import { currentLocationContext, restaurantsContext } from '../utils/Context';
 
-const DeliveryScreen = ({ navigation, route }) => {
+const DeliveryScreen = ({ navigation }) => {
     const insets = useSafeAreaInsets();
     // use useContext
     const currentLocation = useContext(currentLocationContext);

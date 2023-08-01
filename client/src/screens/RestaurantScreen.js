@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { restaurantsContext } from '../utils/Context';
 
-const RestaurantScreen = ({ route, navigation }) => {
+const RestaurantScreen = ({ navigation }) => {
     const scrollX = new Animated.Value(0);
     const [orderItems, setOrderItems] = useState([]);
     const [isSidebarVisible, setIsSidebarVisible] = useState(false);
@@ -425,11 +425,7 @@ const RestaurantScreen = ({ route, navigation }) => {
                                     alignItems: 'center',
                                     borderRadius: SIZES.radius,
                                 }}
-                                onPress={() =>
-                                    navigation.navigate('Cart', {
-                                        restaurant: restaurant,
-                                    })
-                                }
+                                onPress={() => navigation.navigate('Cart')}
                             >
                                 <Text style={{ color: COLORS.white, fontSize: 20 }}>Order</Text>
                             </TouchableOpacity>

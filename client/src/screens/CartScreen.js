@@ -6,7 +6,7 @@ import { themeColors } from '../theme';
 import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
 
-export default function CartScreen({ route, navigation }) {
+export default function CartScreen({ navigation }) {
     const insets = useSafeAreaInsets();
     const [quantity, setQuantity] = useState(1);
 
