@@ -9,14 +9,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 export default function CartScreen({ route, navigation }) {
     const insets = useSafeAreaInsets();
     const [quantity, setQuantity] = useState(1);
-    const [restaurant, setRestaurant] = useState(null);
-    const [currentLocation, setCurrentLocation] = useState(null);
-
-    useEffect(() => {
-        let { restaurant, currentLocation } = route.params;
-        setRestaurant(restaurant);
-        setCurrentLocation(currentLocation);
-    }, [route.params]);
 
     const increaseQuantity = () => {
         setQuantity((prevQuantity) => prevQuantity + 1);
@@ -29,10 +21,7 @@ export default function CartScreen({ route, navigation }) {
     };
 
     const handleDelivery = () => {
-        navigation.navigate('Delivery', {
-            restaurant: restaurant,
-            currentLocation: currentLocation,
-        });
+        navigation.navigate('Delivery');
     };
 
     return (

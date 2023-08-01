@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { icons, images, SIZES, COLORS } from '../constants';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 
+import { currentLocationContext, restaurantsContext } from '../utils/Context';
+
 const DeliveryScreen = ({ navigation, route }) => {
     const insets = useSafeAreaInsets();
-
-    const { currentLocation, restaurant } = route.params;
+    // use useContext
+    const currentLocation = useContext(currentLocationContext);
+    const { restaurant } = useContext(restaurantsContext);
 
     const deliveryData = [
         {
@@ -20,13 +23,6 @@ const DeliveryScreen = ({ navigation, route }) => {
             address: '1234, Street Name, City Name',
         },
     ];
-
-    const initialCurrentLocation = {
-        gps: {
-            latitude: 1.12345678,
-            longitude: 110.324234,
-        },
-    };
 
     const handlePayment = () => {
         navigation.navigate('PaymentComplete');
