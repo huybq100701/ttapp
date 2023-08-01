@@ -15,7 +15,7 @@ const RestaurantScreen = ({ navigation }) => {
     // const [restaurant, setRestaurant] = useState(null);
     // const { item } = route.params;
 
-    // useEffect(() => {r
+    // useEffect(() => {
     //     setRestaurant(item);
     // }, [route.params]);
     // console.log('params:', restaurant);

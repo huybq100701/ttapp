@@ -12,9 +12,6 @@ export default function App() {
                     <AppNavigation />
                 </CurrentLocationProvider>
             </RestaurantsProvider>
-            {/* <CurrentLocationProvider>
-                <AppNavigation />
-            </CurrentLocationProvider> */}
         </SafeAreaProvider>
     );
 }
