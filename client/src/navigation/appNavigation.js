@@ -17,6 +17,7 @@ import PaymentCompleteScreen from '../screens/PaymentCompleteScreen';
 
 import { getItem } from '../utils/asyncStorage.js';
 
+
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigation() {

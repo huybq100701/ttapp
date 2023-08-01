@@ -209,7 +209,7 @@ const HomeScreen = ({ navigation }) => {
         };
 
         return (
-            <View style={{ padding: SIZES.padding * 2 }}>
+            <View style={{ padding: SIZES.padding  }}>
                 <Text style={{ fontSize: 24, fontWeight: 'bold' }}>Categories</Text>
 
                 <FlatList
@@ -219,7 +219,7 @@ const HomeScreen = ({ navigation }) => {
                     keyExtractor={(item) => `${item.id}`}
                     renderItem={renderItem}
                     showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{ paddingVertical: SIZES.padding * 2 }}
+                    contentContainerStyle={{ paddingVertical: SIZES.padding  }}
                 />
             </View>
         );
