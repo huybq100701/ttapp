@@ -162,8 +162,6 @@ export default function RestaurantsProvider({ children }) {
         });
     }, [idRestaurant]);
 
-    console.log('restaurant:', restaurant);
-
     return (
         <restaurantsContext.Provider value={{ restaurants, restaurant, setIdRestaurant }}>
             {children}
