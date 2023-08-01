@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, Image, FlatList ,Dimensions} from 'react-native';
+import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, Image, FlatList } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { icons, images, SIZES, COLORS } from '../constants';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -232,8 +232,6 @@ const HomeScreen = ({ navigation }) => {
     };
 
     const insets = useSafeAreaInsets();
-    const windowWidth = Dimensions.get('window').width;
-    const windowHeight = Dimensions.get('window').height;
 
     function onSelectCategory(category) {
         //filter restaurant
@@ -358,16 +356,17 @@ const HomeScreen = ({ navigation }) => {
         };
 
         return (
-            <View style={{ padding: SIZES.padding * 2 }}>
-                <Text style={{ fontSize: windowWidth * 0.06, fontWeight: 'bold' }}>Categories</Text>
+            <View style={{ padding: SIZES.padding  }}>
+                <Text style={{ fontSize: 24, fontWeight: 'bold' }}>Categories</Text>
 
                 <FlatList
-                data={categories}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                keyExtractor={(item) => `${item.id}`}
-                renderItem={renderItem}
-                contentContainerStyle={{ paddingVertical: SIZES.padding * 2 }}
+                    data={categories}
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    keyExtractor={(item) => `${item.id}`}
+                    renderItem={renderItem}
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{ paddingVertical: SIZES.padding  }}
                 />
             </View>
         );
@@ -375,7 +374,7 @@ const HomeScreen = ({ navigation }) => {
     function renderRestaurantSwiper() {
         const renderItem = ({ item }) => (
             <TouchableOpacity
-                style={{ marginBottom: SIZES.padding * 2 }}
+                style={{ marginBottom: SIZES.padding  }}
                 onPress={() =>
                     navigation.navigate('Restaurant', {
                         item,
@@ -394,23 +393,6 @@ const HomeScreen = ({ navigation }) => {
                             borderRadius: SIZES.radius,
                         }}
                     />
-
-                    <View
-                        style={{
-                            position: 'absolute',
-                            bottom: 0,
-                            height: 50,
-                            width: SIZES.width * 0.3,
-                            backgroundColor: COLORS.white,
-                            borderTopRightRadius: SIZES.radius,
-                            borderBottomLeftRadius: SIZES.radius,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            ...styles.shadow,
-                        }}
-                    >
-                        <Text>{item.duration}</Text>
-                    </View>
                 </View>
 
                 {/* Restaurant Info */}
@@ -481,7 +463,7 @@ const HomeScreen = ({ navigation }) => {
     function renderRestaurantList() {
         const renderItem = ({ item }) => (
             <TouchableOpacity
-                style={{ marginBottom: SIZES.padding * 2 }}
+                style={{ top: SIZES.padding * 2 }}
                 onPress={() =>
                     navigation.navigate('Restaurant', {
                         item,
@@ -500,7 +482,7 @@ const HomeScreen = ({ navigation }) => {
                         resizeMode="cover"
                         style={{
                             width: '100%',
-                            height: 200,
+                            height: 150,
                             borderRadius: SIZES.radius,
                         }}
                     />
