@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useState, useContext } from 'react';
 import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, Image, FlatList } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { icons, images, SIZES, COLORS } from '../constants';
@@ -237,7 +237,7 @@ const HomeScreen = ({ navigation }) => {
                 {/* Image */}
                 <View style={{ marginBottom: SIZES.padding }}>
                     <Image
-                        source={item.photo}
+                        source={{ uri: item.photo }}
                         resizeMode="cover"
                         style={{
                             width: '100%',
@@ -283,19 +283,6 @@ const HomeScreen = ({ navigation }) => {
                                 </View>
                             );
                         })}
-
-                        {/* Price */}
-                        {[1, 2, 3].map((priceRating) => (
-                            <Text
-                                key={priceRating}
-                                style={{
-                                    fontSize: 16,
-                                    color: priceRating <= item.priceRating ? COLORS.black : COLORS.darkgray,
-                                }}
-                            >
-                                $
-                            </Text>
-                        ))}
                     </View>
                 </View>
             </TouchableOpacity>
