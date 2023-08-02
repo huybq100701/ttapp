@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, TextInput, View, TouchableOpacity, Image, FlatList, Text } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS, SIZES, images, icons } from '../constants';
 import { MagnifyingGlassIcon } from 'react-native-heroicons/solid';
 
+import { restaurantsContext } from '../utils/Context';
+
 export default SearchScreen = () => {
     const navigation = useNavigation();
     const insets = useSafeAreaInsets();
+
     const categoryData = [
         {
             id: 1,
@@ -61,6 +64,23 @@ export default SearchScreen = () => {
         },
     ];
 
+    const popularRestaurantData = [
+        {
+            id: 1,
+            name: 'Burger',
+            rating: 4.8,
+            categories: [5, 7],
+            photo: images.burger_restaurant_1,
+        },
+        {
+            id: 2,
+            name: 'Pizza',
+            rating: 4.8,
+            categories: [2, 4, 6],
+            photo: images.pizza_restaurant,
+        },
+    ];
+
     const restaurantData = [
         {
             id: 1,
@@ -79,26 +99,49 @@ export default SearchScreen = () => {
     ];
 
     function getCategoryNameById(id) {
-        let category = categoryData.filter(a => a.id == id)
+        let category = categoryData.filter((a) => a.id == id);
 
-        if (category.length > 0)
-            return category[0].name
+        if (category.length > 0) return category[0].name;
 
-        return ""
+        return '';
     }
 
-    const [searchValue, setSearchValue] = React.useState('');
+    const [restaurants, setRestaurants] = React.useState(restaurantData);
+    const [popularRestaurants, setPopularRestaurants] = React.useState(popularRestaurantData);
+    const [idRestaurant, setIdRestaurant] = useState(null);
+
+    useContext(restaurantsContext).setIdRestaurant(idRestaurant);
+
+    function handleFilter(searchTerm) {
+        if (searchTerm === null || searchTerm === '') {
+            setPopularRestaurants(popularRestaurantData);
+            console.log('if', popularRestaurants);
+        } else {
+            setPopularRestaurants(null);
+            console.log('else', popularRestaurants);
+        }
+        setRestaurants(
+            restaurantData.filter((restaurant) => {
+                return restaurant.name.toLowerCase().includes(searchTerm.toLowerCase());
+            }),
+        );
+    }
 
     const renderItem = ({ item }) => {
         return (
-            <TouchableOpacity style={styles.itemContainer}>
+            <TouchableOpacity
+                style={styles.itemContainer}
+                onPress={() => {
+                    navigation.navigate('Restaurant');
+                    setIdRestaurant(item.id);
+                }}
+            >
                 <Image source={item.photo} style={styles.image} />
                 <View style={styles.infoItem}>
                     <Text style={styles.itemName}>{item.name}</Text>
                     <View
                         style={{
                             flexDirection: 'row',
-                            
                         }}
                     >
                         {item.categories.map((categoryId) => {
@@ -134,11 +177,23 @@ export default SearchScreen = () => {
                 <TextInput
                     style={styles.searchInput}
                     placeholder="Search"
-                    value={searchValue}
-                    onChangeText={(prevText) => setSearchValue(prevText)}
+                    value={restaurants}
+                    onChangeText={(e) => {
+                        handleFilter(e);
+                    }}
+                    // onBlur={() => }
                 />
             </View>
-            <FlatList style={styles.contentSearch} data={restaurantData} renderItem={renderItem} />
+            {popularRestaurants !== null ? (
+                <View style={styles.popular}>
+                    <Text style={styles.popularText}>Popular Restaurant</Text>
+                </View>
+            ) : undefined}
+            <FlatList
+                style={styles.contentSearch}
+                data={popularRestaurants !== null ? popularRestaurants : restaurants}
+                renderItem={renderItem}
+            />
         </View>
     );
 };
@@ -166,7 +221,17 @@ const styles = StyleSheet.create({
     },
     contentSearch: {
         flex: 1,
-        padding: 16,
+        paddingHorizontal: 16,
+        paddingTop: 16,
+        marginBottom: 60,
+    },
+    popular: {
+        paddingHorizontal: 16,
+        paddingTop: 16,
+    },
+    popularText: {
+        fontSize: 20,
+        fontWeight: 'bold',
     },
     itemContainer: {
         flexDirection: 'row',
