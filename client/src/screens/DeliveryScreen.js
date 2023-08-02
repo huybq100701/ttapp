@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useContext ,useState, useEffect} from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { icons, images, SIZES, COLORS } from '../constants';
 import MapView, { Marker, Polyline } from 'react-native-maps';
-
+import * as Location from 'expo-location';
 import { currentLocationContext, restaurantsContext } from '../utils/Context';
 
 const DeliveryScreen = ({ navigation }) => {
@@ -15,14 +15,27 @@ const DeliveryScreen = ({ navigation }) => {
     const deliveryData = [
         {
             id: 1,
-            courier: 'Amy',
             avatar: images.avatar_1,
             duration: '15 min',
-            distance: '3.5 km',
             restaurant: 'Burger',
             address: '1234, Street Name, City Name',
         },
     ];
+    const [location, setLocation] = useState(null);
+    useEffect(() => {
+        (async () => {
+          
+          let { status } = await Location.requestForegroundPermissionsAsync();
+          if (status !== 'granted') {
+            setErrorMsg('Permission to access location was denied');
+            return;
+          }
+    
+          let location = await Location.getCurrentPositionAsync({});
+          setLocation(location);
+          console.log(location);
+        })();
+      }, []);
 
     const handlePayment = () => {
         navigation.navigate('PaymentComplete');
@@ -41,13 +54,13 @@ const DeliveryScreen = ({ navigation }) => {
                                 <View style={styles.deliveryInfo}>
                                     <Image source={item.avatar} style={styles.courierAvatar} />
                                     <View style={styles.deliveryText}>
-                                        <Text style={styles.courierName}>{item.courier}</Text>
+                                        <Text style={styles.courierName}></Text>
                                         <Text style={styles.durationText}>{item.duration}</Text>
                                     </View>
                                 </View>
                                 <View style={styles.distanceContainer}>
                                     <Image source={icons.pin} style={styles.pinIcon} />
-                                    <Text style={styles.distanceText}>{item.distance}</Text>
+                                    <Text style={styles.distanceText}> km</Text>
                                 </View>
                             </View>
                             <View style={styles.restaurantInfo}>
