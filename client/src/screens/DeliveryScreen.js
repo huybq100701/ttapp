@@ -20,36 +20,16 @@ const DeliveryScreen = ({ route, navigation }) => {
                 setErrorMsg('Permission to access location was denied');
                 return;
             }
+
             let location = await Location.getCurrentPositionAsync({});
             setLocation(location);
+            console.log(location);
         })();
     }, []);
 
     const handlePayment = () => {
         navigation.navigate('PaymentComplete');
     };
-
-    const [deliveryData, setDeliveryData] = useState({});
-    const [courierData, setCourierData] = useState({});
-
-    useEffect(() => {
-      
-        axios.get(`${API_LINK}{route.params.deliveryId}`)
-            .then(response => {
-                setDeliveryData(response.data.delivery);
-            })
-            .catch(error => {
-                console.error('Error fetching delivery data:', error);
-            });
-
-        axios.get(`${API_LINK}/couriers/${route.params.courierId}`)
-            .then(response => {
-                setCourierData(response.data.courier);
-            })
-            .catch(error => {
-                console.error('Error fetching courier data:', error);
-            });
-    }, []);
 
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>
