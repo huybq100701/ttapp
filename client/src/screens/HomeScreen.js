@@ -1,4 +1,4 @@
-import React, { useState, useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, Image, FlatList } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { icons, images, SIZES, COLORS } from '../constants';
@@ -237,7 +237,7 @@ const HomeScreen = ({ navigation }) => {
                 {/* Image */}
                 <View style={{ marginBottom: SIZES.padding }}>
                     <Image
-                        source={{ uri: item.photo }}
+                        source={ item.photo }
                         resizeMode="cover"
                         style={{
                             width: '100%',
