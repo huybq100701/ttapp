@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeftIcon } from 'react-native-heroicons/solid';
 import { themeColors } from '../theme';
-import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
 
-export default function CartScreen() {
-    const navigation = useNavigation();
+export default function CartScreen({ navigation }) {
     const insets = useSafeAreaInsets();
     const [quantity, setQuantity] = useState(1);
 
@@ -25,6 +23,7 @@ export default function CartScreen() {
     const handleDelivery = () => {
         navigation.navigate('Delivery');
     };
+
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>
             <StatusBar style={{ backgroundColor: themeColors.bg }} />

@@ -26,7 +26,9 @@ export default function ChangeInfoScreen({ navigation }) {
     };
 
     const handleUpdateImage = () => {
-        setIsUpdatePicture(true);
+        if (imageUri !== '') {
+            setIsUpdatePicture(true);
+        }
         navigation.navigate('Camera', { setImageUri: setImageUri });
         setIsSave(true);
     };

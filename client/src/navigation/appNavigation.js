@@ -14,6 +14,7 @@ import RestaurantScreen from '../screens/RestaurantScreen';
 import FoodScreen from '../screens/FoodScreen';
 import DeliveryScreen from '../screens/DeliveryScreen';
 import PaymentCompleteScreen from '../screens/PaymentCompleteScreen';
+
 import { getItem } from '../utils/asyncStorage.js';
 
 
@@ -49,10 +50,14 @@ export default function AppNavigation() {
                     <Stack.Screen name="Cart" options={{ headerShown: false }} component={CartScreen} />
                     <Stack.Screen name="ChangeInfo" options={{ headerShown: false }} component={ChangeInfoScreen} />
                     <Stack.Screen name="Camera" options={{ headerShown: false }} component={CameraScreen} />
-                    <Stack.Screen name ="Restaurant" options={{headerShown: false}} component={RestaurantScreen} />
-                    <Stack.Screen name ="Food" options={{headerShown: false}} component={FoodScreen} />
-                    <Stack.Screen name ="Delivery" options={{headerShown: false}} component={DeliveryScreen} />
-                    <Stack.Screen name = "PaymentComplete" options={{headerShown: false}} component={PaymentCompleteScreen} />
+                    <Stack.Screen name="Restaurant" options={{ headerShown: false }} component={RestaurantScreen} />
+                    <Stack.Screen name="Food" options={{ headerShown: false }} component={FoodScreen} />
+                    <Stack.Screen name="Delivery" options={{ headerShown: false }} component={DeliveryScreen} />
+                    <Stack.Screen
+                        name="PaymentComplete"
+                        options={{ headerShown: false }}
+                        component={PaymentCompleteScreen}
+                    />
                 </Stack.Navigator>
             </NavigationContainer>
         );
@@ -68,10 +73,14 @@ export default function AppNavigation() {
                     <Stack.Screen name="Cart" options={{ headerShown: false }} component={CartScreen} />
                     <Stack.Screen name="ChangeInfo" options={{ headerShown: false }} component={ChangeInfoScreen} />
                     <Stack.Screen name="Camera" options={{ headerShown: false }} component={CameraScreen} />
-                    <Stack.Screen name ="Restaurant" options={{headerShown: false}} component={RestaurantScreen} />
-                    <Stack.Screen name ="Food" options={{headerShown: false}} component={FoodScreen} />
-                    <Stack.Screen name ="Delivery" options={{headerShown: false}} component={DeliveryScreen} />
-                    <Stack.Screen name = "PaymentComplete" options={{headerShown: false}} component={PaymentCompleteScreen} />
+                    <Stack.Screen name="Restaurant" options={{ headerShown: false }} component={RestaurantScreen} />
+                    <Stack.Screen name="Food" options={{ headerShown: false }} component={FoodScreen} />
+                    <Stack.Screen name="Delivery" options={{ headerShown: false }} component={DeliveryScreen} />
+                    <Stack.Screen
+                        name="PaymentComplete"
+                        options={{ headerShown: false }}
+                        component={PaymentCompleteScreen}
+                    />
                 </Stack.Navigator>
             </NavigationContainer>
         );
