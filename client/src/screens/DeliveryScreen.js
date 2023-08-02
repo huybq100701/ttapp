@@ -1,60 +1,70 @@
-import React, { useContext ,useState, useEffect} from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { icons, images, SIZES, COLORS } from '../constants';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import * as Location from 'expo-location';
+import axios from 'axios'; // Import Axios
 import { currentLocationContext, restaurantsContext } from '../utils/Context';
-
-const DeliveryScreen = ({ navigation }) => {
+import { icons, images, SIZES, COLORS } from '../constants';
+import API_LINK from '../../default-value';
+const DeliveryScreen = ({ route, navigation }) => {
     const insets = useSafeAreaInsets();
-    // use useContext
     const currentLocation = useContext(currentLocationContext);
     const { restaurant } = useContext(restaurantsContext);
 
-    const deliveryData = [
-        {
-            id: 1,
-            avatar: images.avatar_1,
-            duration: '15 min',
-            restaurant: 'Burger',
-            address: '1234, Street Name, City Name',
-        },
-    ];
     const [location, setLocation] = useState(null);
     useEffect(() => {
         (async () => {
-          
-          let { status } = await Location.requestForegroundPermissionsAsync();
-          if (status !== 'granted') {
-            setErrorMsg('Permission to access location was denied');
-            return;
-          }
-    
-          let location = await Location.getCurrentPositionAsync({});
-          setLocation(location);
-          console.log(location);
+            let { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                setErrorMsg('Permission to access location was denied');
+                return;
+            }
+            let location = await Location.getCurrentPositionAsync({});
+            setLocation(location);
         })();
-      }, []);
+    }, []);
 
     const handlePayment = () => {
         navigation.navigate('PaymentComplete');
     };
-  
+
+    const [deliveryData, setDeliveryData] = useState({});
+    const [courierData, setCourierData] = useState({});
+
+    useEffect(() => {
+      
+        axios.get(`${API_LINK}{route.params.deliveryId}`)
+            .then(response => {
+                setDeliveryData(response.data.delivery);
+            })
+            .catch(error => {
+                console.error('Error fetching delivery data:', error);
+            });
+
+        axios.get(`${API_LINK}/couriers/${route.params.courierId}`)
+            .then(response => {
+                setCourierData(response.data.courier);
+            })
+            .catch(error => {
+                console.error('Error fetching courier data:', error);
+            });
+    }, []);
+
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>
             <View style={styles.deliveryList}>
                 <FlatList
-                    data={deliveryData}
+                    data={[deliveryData]} 
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => (
                         <View style={styles.deliveryItemContainer}>
                             {/* Delivery Info */}
                             <View style={styles.deliveryItem}>
                                 <View style={styles.deliveryInfo}>
-                                    <Image source={item.avatar} style={styles.courierAvatar} />
+                                    <Image source={courierData.avatar} style={styles.courierAvatar} />
                                     <View style={styles.deliveryText}>
-                                        <Text style={styles.courierName}></Text>
+                                        <Text style={styles.courierName}>{courierData.name}</Text>
                                         <Text style={styles.durationText}>{item.duration}</Text>
                                     </View>
                                 </View>
@@ -86,7 +96,7 @@ const DeliveryScreen = ({ navigation }) => {
                 }}
             >
                 {/* Markers and Polyline */}
-                <Marker coordinate={currentLocation.gps} title="Người giao hàng" description="Amy" />
+                <Marker coordinate={currentLocation.gps} title="Người giao hàng" description={courierData.name} />
 
                 <Polyline
                     coordinates={[
