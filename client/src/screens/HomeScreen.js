@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, Image, FlatList } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { icons, images, SIZES, COLORS } from '../constants';
@@ -12,6 +12,14 @@ const HomeScreen = ({ navigation }) => {
             longitude: 110.324234,
         },
     };
+
+    useEffect(() => {
+        const fetchRestaurant = async () => {
+            try {
+                const res = await axios.get();
+            } catch (error) {}
+        };
+    }, []);
 
     const categoryData = [
         {
@@ -70,7 +78,7 @@ const HomeScreen = ({ navigation }) => {
     const affordable = 1;
     const fairPrice = 2;
     const expensive = 3;
-  
+
     const restaurantData = [
         {
             id: 1,
@@ -78,15 +86,11 @@ const HomeScreen = ({ navigation }) => {
             rating: 4.8,
             categories: [5, 7],
             priceRating: affordable,
-            photo: images.burger_restaurant_1,
+            photo: 'https://firebasestorage.googleapis.com/v0/b/ttapp-24fa7.appspot.com/o/burger-restaurant.jpg?alt=media&token=da53f0d8-ba91-41f6-b635-da5a331973ad',
             duration: '10 - 15 min',
             location: {
                 latitude: 1.5347282806345879,
                 longitude: 110.35632207358996,
-            },
-            courier: {
-                avatar: images.avatar_1,
-                name: 'Amy',
             },
             menu: [
                 {
@@ -126,102 +130,96 @@ const HomeScreen = ({ navigation }) => {
             ],
         },
         {
+            id: 2,
+            name: 'Pizza',
+            rating: 4.8,
+            categories: [2, 4, 6],
+            priceRating: expensive,
+            photo: 'https://firebasestorage.googleapis.com/v0/b/ttapp-24fa7.appspot.com/o/pizza-restaurant.jpg?alt=media&token=d176b2cd-8d91-46ba-8995-9910ad4795d4',
+            duration: '15 - 20 min',
+            location: {
+                latitude: 1.556306570595712,
+                longitude: 110.35504616746915,
+            },
+            menu: [
+                {
+                    menuId: 4,
+                    name: 'Hawaiian Pizza',
+                    photo: images.hawaiian_pizza,
+                    description: 'Canadian bacon, homemade pizza crust, pizza sauce',
+                    calories: 250,
+                    price: 15,
+                    rating: 4.5,
+                    comment: [
+                        {
+                            userId: 1,
+                            commentText: 'Delicious',
+                            userId: 2,
+                            commentText: 'Delicious',
+                        },
+                    ],
+                },
+                {
+                    menuId: 5,
+                    name: 'Tomato & Basil Pizza',
+                    photo: images.pizza,
+                    description: 'Fresh tomatoes, aromatic basil pesto and melted bocconcini',
+                    calories: 250,
+                    price: 20,
+                    rating: 4.5,
+                    comment: [
+                        {
+                            userId: 1,
+                            commentText: 'Delicious',
+                            userId: 2,
+                            commentText: 'Delicious',
+                        },
+                    ],
+                },
+                {
+                    menuId: 6,
+                    name: 'Tomato Pasta',
+                    photo: images.tomato_pasta,
+                    description: 'Pasta with fresh tomatoes',
+                    calories: 100,
+                    price: 10,
+                    rating: 4.5,
+                    comment: [
+                        {
+                            userId: 1,
+                            commentText: 'Delicious',
+                            userId: 2,
+                            commentText: 'Delicious',
+                        },
+                    ],
+                },
+                {
+                    menuId: 7,
+                    name: 'Mediterranean Chopped Salad ',
+                    photo: images.salad,
+                    description: 'Finely chopped lettuce, tomatoes, cucumbers',
+                    calories: 100,
+                    price: 10,
+                    rating: 4.8,
+                    comment: [
+                        {
+                            userId: 1,
+                            commentText: 'Delicious',
+                            userId: 2,
+                            commentText: 'Delicious',
+                        },
+                    ],
+                },
+            ],
+        },
+    ];
 
-          id: 2,
-          name: "Pizza",
-          rating: 4.8,
-          categories: [2, 4, 6],
-          priceRating: expensive,
-          photo: images.pizza_restaurant,
-          duration: "15 - 20 min",
-          location: {
-              latitude: 1.556306570595712,
-              longitude: 110.35504616746915,
-          },
-          courier: {
-              avatar: images.avatar_2,
-              name: "Jackson"
-          },
-          menu: [
-              {
-                  menuId: 4,
-                  name: "Hawaiian Pizza",
-                  photo: images.hawaiian_pizza,
-                  description: "Canadian bacon, homemade pizza crust, pizza sauce",
-                  calories: 250,
-                  price: 15,
-                  rating: 4.5,
-                  comment: [
-                    {
-                      userId: 1,
-                      commentText: 'Delicious',
-                      userId: 2,
-                      commentText: 'Delicious'
-                    }
-                  ]
-              },
-              {
-                  menuId: 5,
-                  name: "Tomato & Basil Pizza",
-                  photo: images.pizza,
-                  description: "Fresh tomatoes, aromatic basil pesto and melted bocconcini",
-                  calories: 250,
-                  price: 20,
-                  rating: 4.5,
-                  comment: [
-                    {
-                      userId: 1,
-                      commentText: 'Delicious',
-                      userId: 2,
-                      commentText: 'Delicious'
-                    }
-                  ]
-              },
-              {
-                  menuId: 6,
-                  name: "Tomato Pasta",
-                  photo: images.tomato_pasta,
-                  description: "Pasta with fresh tomatoes",
-                  calories: 100,
-                  price: 10,
-                  rating: 4.5,
-                  comment: [
-                    {
-                      userId: 1,
-                      commentText: 'Delicious',
-                      userId: 2,
-                      commentText: 'Delicious'
-                    }
-                  ]
-              },
-              {
-                  menuId: 7,
-                  name: "Mediterranean Chopped Salad ",
-                  photo: images.salad,
-                  description: "Finely chopped lettuce, tomatoes, cucumbers",
-                  calories: 100,
-                  price: 10,
-                  rating: 4.8,
-                  comment: [
-                    {
-                      userId: 1,
-                      commentText: 'Delicious',
-                      userId: 2,
-                      commentText: 'Delicious'
-                    }
-                  ]
-              }
-          ]
-      },
-      
-    ]
-
-    const [categories, setCategories] = React.useState(categoryData)
-    const [selectedCategory, setSelectedCategory] = React.useState(null)
-    const [restaurants, setRestaurants] = React.useState(restaurantData)
-    const [currentLocation, setCurrentLocation] = React.useState(initialCurrentLocation)
+    const [categories, setCategories] = React.useState(categoryData);
+    const [selectedCategory, setSelectedCategory] = React.useState(null);
+    const [restaurants, setRestaurants] = React.useState(restaurantData);
+    const [currentLocation, setCurrentLocation] = React.useState(initialCurrentLocation);
     const [hasNotification, setHasNotification] = useState(false);
-    
+
     const handleCart = () => {
         navigation.navigate('Cart');
     };
@@ -307,7 +305,6 @@ const HomeScreen = ({ navigation }) => {
         );
     };
 
-
     function renderMainCategories() {
         const renderItem = ({ item }) => {
             return (
@@ -385,7 +382,7 @@ const HomeScreen = ({ navigation }) => {
                 {/* Image */}
                 <View style={{ marginBottom: SIZES.padding }}>
                     <Image
-                        source={item.photo}
+                        source={{ uri: item.photo }}
                         resizeMode="cover"
                         style={{
                             width: '100%',
@@ -448,19 +445,6 @@ const HomeScreen = ({ navigation }) => {
                                 </View>
                             );
                         })}
-
-                        {/* Price */}
-                        {[1, 2, 3].map((priceRating) => (
-                            <Text
-                                key={priceRating}
-                                style={{
-                                    fontSize: 16,
-                                    color: priceRating <= item.priceRating ? COLORS.black : COLORS.darkgray,
-                                }}
-                            >
-                                $
-                            </Text>
-                        ))}
                     </View>
                 </View>
             </TouchableOpacity>
@@ -495,7 +479,7 @@ const HomeScreen = ({ navigation }) => {
                     }}
                 >
                     <Image
-                        source={item.photo}
+                        source={{ uri: item.photo }}
                         resizeMode="cover"
                         style={{
                             width: '100%',
@@ -558,19 +542,6 @@ const HomeScreen = ({ navigation }) => {
                                 </View>
                             );
                         })}
-
-                        {/* Price */}
-                        {[1, 2, 3].map((priceRating) => (
-                            <Text
-                                key={priceRating}
-                                style={{
-                                    fontSize: 16,
-                                    color: priceRating <= item.priceRating ? COLORS.black : COLORS.darkgray,
-                                }}
-                            >
-                                $
-                            </Text>
-                        ))}
                     </View>
                 </View>
             </TouchableOpacity>
