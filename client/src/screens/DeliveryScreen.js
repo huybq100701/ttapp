@@ -1,4 +1,4 @@
-import React, { useContext ,useState, useEffect} from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { icons, images, SIZES, COLORS } from '../constants';
@@ -24,23 +24,22 @@ const DeliveryScreen = ({ navigation }) => {
     const [location, setLocation] = useState(null);
     useEffect(() => {
         (async () => {
-          
-          let { status } = await Location.requestForegroundPermissionsAsync();
-          if (status !== 'granted') {
-            setErrorMsg('Permission to access location was denied');
-            return;
-          }
-    
-          let location = await Location.getCurrentPositionAsync({});
-          setLocation(location);
-          console.log(location);
+            let { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                setErrorMsg('Permission to access location was denied');
+                return;
+            }
+
+            let location = await Location.getCurrentPositionAsync({});
+            setLocation(location);
+            console.log(location);
         })();
-      }, []);
+    }, []);
 
     const handlePayment = () => {
         navigation.navigate('PaymentComplete');
     };
-  
+
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>
             <View style={styles.deliveryList}>
