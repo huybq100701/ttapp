@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { restaurantsContext } from './Context';
 import { icons, images, SIZES, COLORS } from '../constants';
+import axios from 'axios';
+import { API_LINK } from '../../default-value';
 
 export default function RestaurantsProvider({ children }) {
-    const affordable = 1;
-    const fairPrice = 2;
-    const expensive = 3;
 
     const restaurantData = [
         {
@@ -13,16 +12,11 @@ export default function RestaurantsProvider({ children }) {
             name: 'Burger',
             rating: 4.8,
             categories: [5, 7],
-            priceRating: affordable,
             photo: images.burger_restaurant_1,
             duration: '10 - 15 min',
             location: {
                 latitude: 21.02154,
                 longitude: 105.77489,
-            },
-            courier: {
-                avatar: images.avatar_1,
-                name: 'Amy',
             },
             menu: [
                 {
@@ -66,16 +60,11 @@ export default function RestaurantsProvider({ children }) {
             name: 'Pizza',
             rating: 4.8,
             categories: [2, 4, 6],
-            priceRating: expensive,
             photo: images.pizza_restaurant,
             duration: '15 - 20 min',
             location: {
                 latitude: 21.017459,
                 longitude: -254.215627,
-            },
-            courier: {
-                avatar: images.avatar_2,
-                name: 'Jackson',
             },
             menu: [
                 {
@@ -150,7 +139,7 @@ export default function RestaurantsProvider({ children }) {
         },
     ];
 
-    const [restaurants, setRestaurants] = useState(restaurantData);
+    const [restaurants, setRestaurants] = useState([]);
     const [restaurant, setRestaurant] = useState(null);
     const [idRestaurant, setIdRestaurant] = useState(null);
 

@@ -1,8 +1,9 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, Image, FlatList } from 'react-native';
-import Swiper from 'react-native-swiper';
 import { icons, images, SIZES, COLORS } from '../constants';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import axios from 'axios';
+import { API_LINK } from '../../default-value';
 
 import { currentLocationContext, restaurantsContext } from '../utils/Context';
 
@@ -72,6 +73,14 @@ const HomeScreen = ({ navigation }) => {
     const [hasNotification, setHasNotification] = useState(false);
 
     useContext(restaurantsContext).setIdRestaurant(idRestaurant);
+
+    useEffect(() => {
+        const fetchRestaurants = async () => {
+            const res = await axios.get(`${API_LINK}/restaurants`);
+            setRestaurants(res.data.restaurants);
+        }
+        fetchRestaurants();
+    }, [])
 
     const insets = useSafeAreaInsets();
 
@@ -209,7 +218,7 @@ const HomeScreen = ({ navigation }) => {
         };
 
         return (
-            <View style={{ padding: SIZES.padding  }}>
+            <View style={{ padding: SIZES.padding }}>
                 <Text style={{ fontSize: 24, fontWeight: 'bold' }}>Categories</Text>
 
                 <FlatList
@@ -219,83 +228,9 @@ const HomeScreen = ({ navigation }) => {
                     keyExtractor={(item) => `${item.id}`}
                     renderItem={renderItem}
                     showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{ paddingVertical: SIZES.padding  }}
+                    contentContainerStyle={{ paddingVertical: SIZES.padding }}
                 />
             </View>
-        );
-    }
-
-    function renderRestaurantSwiper() {
-        const renderItem = ({ item }) => (
-            <TouchableOpacity
-                style={{ marginBottom: SIZES.padding }}
-                onPress={() => {
-                    navigation.navigate('Restaurant');
-                    setIdRestaurant(item.id);
-                }}
-            >
-                {/* Image */}
-                <View style={{ marginBottom: SIZES.padding }}>
-                    <Image
-                        source={ item.photo }
-                        resizeMode="cover"
-                        style={{
-                            width: '100%',
-                            height: 200,
-                            borderRadius: SIZES.radius,
-                        }}
-                    />
-                </View>
-
-                {/* Restaurant Info */}
-                <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{item.name}</Text>
-
-                <View
-                    style={{
-                        marginTop: SIZES.padding,
-                        flexDirection: 'row',
-                    }}
-                >
-                    {/* Rating */}
-                    <Image
-                        source={icons.star}
-                        style={{
-                            height: 20,
-                            width: 20,
-                            tintColor: COLORS.primary,
-                            marginRight: 10,
-                        }}
-                    />
-                    <Text>{item.rating}</Text>
-
-                    {/* Categories */}
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            marginLeft: 10,
-                        }}
-                    >
-                        {item.categories.map((categoryId) => {
-                            return (
-                                <View style={{ flexDirection: 'row' }} key={categoryId}>
-                                    <Text>{getCategoryNameById(categoryId)}</Text>
-                                    <Text style={{ fontSize: 18, color: COLORS.darkgray }}> . </Text>
-                                </View>
-                            );
-                        })}
-                    </View>
-                </View>
-            </TouchableOpacity>
-        );
-
-        return (
-            <Swiper showsButtons={false} loop={false} style={styles.swiperContainer} activeDotColor={COLORS.primary}>
-                {restaurants.map((item) => (
-                    <View key={item.id} style={styles.swiperSlide}>
-                        {renderItem({ item })}
-                    </View>
-                ))}
-            </Swiper>
         );
     }
 
@@ -316,7 +251,7 @@ const HomeScreen = ({ navigation }) => {
                         }}
                     >
                         <Image
-                            source={item.photo}
+                            source={{uri: item.photo}}
                             resizeMode="cover"
                             style={{
                                 width: '100%',
@@ -379,19 +314,6 @@ const HomeScreen = ({ navigation }) => {
                                     </View>
                                 );
                             })}
-
-                            {/* Price */}
-                            {[1, 2, 3].map((priceRating) => (
-                                <Text
-                                    key={priceRating}
-                                    style={{
-                                        fontSize: 16,
-                                        color: priceRating <= item.priceRating ? COLORS.black : COLORS.darkgray,
-                                    }}
-                                >
-                                    $
-                                </Text>
-                            ))}
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -403,7 +325,7 @@ const HomeScreen = ({ navigation }) => {
                 data={restaurants}
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
-                keyExtractor={(item) => `${item.id}`}
+                keyExtractor={(item) => `${item._id}`}
                 renderItem={renderItem}
                 contentContainerStyle={{
                     paddingHorizontal: SIZES.padding * 2,
@@ -417,7 +339,6 @@ const HomeScreen = ({ navigation }) => {
         <SafeAreaView style={[styles.container, { paddingTop: insets.top, paddingBottom: 50 }]}>
             {renderHeader()}
             {renderMainCategories()}
-            {renderRestaurantSwiper()}
             {renderRestaurantList()}
         </SafeAreaView>
     );
