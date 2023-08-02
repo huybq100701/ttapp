@@ -154,6 +154,7 @@ export default function RestaurantsProvider({ children }) {
     const [restaurant, setRestaurant] = useState(null);
     const [idRestaurant, setIdRestaurant] = useState(null);
 
+    // Get restaurant by id
     useEffect(() => {
         restaurants.map((item) => {
             if (item.id === idRestaurant) {
