@@ -24,6 +24,14 @@
         "web": {
             "favicon": "./assets/favicon.png"
         },
-        "sourceExts": ["js", "json", "ts", "tsx", "jsx", "vue"]
+        "sourceExts": ["js", "json", "ts", "tsx", "jsx", "vue"],
+        "plugins": [
+            [
+                "expo-location",
+                {
+                    "isAndroidBackgroundLocationEnabled": true
+                }
+            ]
+        ]
     }
 }
