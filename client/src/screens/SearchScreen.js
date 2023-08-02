@@ -109,16 +109,15 @@ export default SearchScreen = () => {
     const [restaurants, setRestaurants] = React.useState(restaurantData);
     const [popularRestaurants, setPopularRestaurants] = React.useState(popularRestaurantData);
     const [idRestaurant, setIdRestaurant] = useState(null);
+    const [input, setInput] = React.useState('');
 
     useContext(restaurantsContext).setIdRestaurant(idRestaurant);
 
     function handleFilter(searchTerm) {
         if (searchTerm === null || searchTerm === '') {
             setPopularRestaurants(popularRestaurantData);
-            console.log('if', popularRestaurants);
         } else {
             setPopularRestaurants(null);
-            console.log('else', popularRestaurants);
         }
         setRestaurants(
             restaurantData.filter((restaurant) => {
@@ -177,9 +176,10 @@ export default SearchScreen = () => {
                 <TextInput
                     style={styles.searchInput}
                     placeholder="Search"
-                    value={restaurants}
+                    value={input}
                     onChangeText={(e) => {
                         handleFilter(e);
+                        setInput(e);
                     }}
                     // onBlur={() => }
                 />
