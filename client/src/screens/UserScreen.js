@@ -13,10 +13,9 @@ export default function UserScreen() {
     const navigation = useNavigation();
     const insets = useSafeAreaInsets();
 
-
     const handleSetting = () => {
         navigation.navigate('Setting');
-    }
+    };
 
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>

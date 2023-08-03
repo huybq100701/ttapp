@@ -1,77 +1,28 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, Image, FlatList } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { icons, images, SIZES, COLORS } from '../constants';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { currentLocationContext, restaurantsContext } from '../utils/Context';
+import { currentLocationContext, restaurantsContext, categoryContext } from '../utils/Context';
 
 const HomeScreen = ({ navigation }) => {
     // Use useContext instead of params
     const initialCurrentLocation = useContext(currentLocationContext);
     const restaurantData = useContext(restaurantsContext).restaurants;
-
-    const categoryData = [
-        {
-            id: 1,
-            name: 'Rice',
-            icon: icons.rice_bowl,
-        },
-        {
-            id: 2,
-            name: 'Noodles',
-            icon: icons.noodle,
-        },
-        {
-            id: 3,
-            name: 'Hot Dogs',
-            icon: icons.hotdog,
-        },
-        {
-            id: 4,
-            name: 'Salads',
-            icon: icons.salad,
-        },
-        {
-            id: 5,
-            name: 'Burgers',
-            icon: icons.hamburger,
-        },
-        {
-            id: 6,
-            name: 'Pizza',
-            icon: icons.pizza,
-        },
-        {
-            id: 7,
-            name: 'Snacks',
-            icon: icons.fries,
-        },
-        {
-            id: 8,
-            name: 'Sushi',
-            icon: icons.sushi,
-        },
-        {
-            id: 9,
-            name: 'Desserts',
-            icon: icons.donut,
-        },
-        {
-            id: 10,
-            name: 'Drinks',
-            icon: icons.drink,
-        },
-    ];
+    const categoryData = useContext(categoryContext);
 
     const [categories, setCategories] = React.useState(categoryData);
     const [selectedCategory, setSelectedCategory] = React.useState(null);
     const [restaurants, setRestaurants] = React.useState(restaurantData);
-    const [idRestaurant, setIdRestaurant] = useState(null);
+    const [idRestaurantHome, setIdRestaurantHome] = useState(null);
     const [currentLocation, setCurrentLocation] = React.useState(initialCurrentLocation);
     const [hasNotification, setHasNotification] = useState(false);
 
-    useContext(restaurantsContext).setIdRestaurant(idRestaurant);
+    const setIdRestaurant = useContext(restaurantsContext).setIdRestaurant;
+    useEffect(() => {
+        setIdRestaurant(idRestaurantHome);
+    }, [idRestaurantHome]);
 
     const insets = useSafeAreaInsets();
 
@@ -93,10 +44,7 @@ const HomeScreen = ({ navigation }) => {
     }
 
     const handleCart = () => {
-        navigation.navigate('Cart', {
-            restaurants,
-            currentLocation,
-        });
+        navigation.navigate('Cart');
     };
 
     const handleNotification = () => {
@@ -209,7 +157,7 @@ const HomeScreen = ({ navigation }) => {
         };
 
         return (
-            <View style={{ padding: SIZES.padding  }}>
+            <View style={{ padding: SIZES.padding }}>
                 <Text style={{ fontSize: 24, fontWeight: 'bold' }}>Categories</Text>
 
                 <FlatList
@@ -219,7 +167,7 @@ const HomeScreen = ({ navigation }) => {
                     keyExtractor={(item) => `${item.id}`}
                     renderItem={renderItem}
                     showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{ paddingVertical: SIZES.padding  }}
+                    contentContainerStyle={{ paddingVertical: SIZES.padding }}
                 />
             </View>
         );
@@ -231,13 +179,13 @@ const HomeScreen = ({ navigation }) => {
                 style={{ marginBottom: SIZES.padding }}
                 onPress={() => {
                     navigation.navigate('Restaurant');
-                    setIdRestaurant(item.id);
+                    setIdRestaurantHome(item.id);
                 }}
             >
                 {/* Image */}
                 <View style={{ marginBottom: SIZES.padding }}>
                     <Image
-                        source={ item.photo }
+                        source={item.photo}
                         resizeMode="cover"
                         style={{
                             width: '100%',
@@ -306,7 +254,7 @@ const HomeScreen = ({ navigation }) => {
                     style={{ marginBottom: SIZES.padding * 2 }}
                     onPress={() => {
                         navigation.navigate('Restaurant');
-                        setIdRestaurant(item.id);
+                        setIdRestaurantHome(item.id);
                     }}
                 >
                     {/* Image */}
