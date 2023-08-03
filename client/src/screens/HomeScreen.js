@@ -77,10 +77,19 @@ const HomeScreen = ({ navigation }) => {
     useEffect(() => {
         const fetchRestaurants = async () => {
             const res = await axios.get(`${API_LINK}/restaurants`);
-            setRestaurants(res.data.restaurants);
-        }
+
+            if (selectedCategory) {
+                const filteredRestaurants = res.data.restaurants.filter(restaurant =>
+                    restaurant.categories.includes(selectedCategory.id)
+                );
+                setRestaurants(filteredRestaurants);
+            } else {
+                setRestaurants(res.data.restaurants);
+            }
+        };
+
         fetchRestaurants();
-    }, [])
+    }, [selectedCategory]);
 
     const insets = useSafeAreaInsets();
 
