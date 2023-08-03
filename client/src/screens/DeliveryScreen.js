@@ -7,15 +7,17 @@ import axios from 'axios'; // Import Axios
 import { currentLocationContext, restaurantsContext } from '../utils/Context';
 import { icons, images, SIZES, COLORS } from '../constants';
 import API_LINK from '../../default-value';
+
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteCart } from '../store/slice/cartSlice';
 
 const DeliveryScreen = ({ navigation }) => {
     const insets = useSafeAreaInsets();
+    // use useContext
     const currentLocation = useContext(currentLocationContext);
     const { restaurant } = useContext(restaurantsContext);
 
-    const cart = useSelector((state) => state.cart)
+    const cart = useSelector((state) => state.cart);
     const dispatch = useDispatch();
 
     const deliveryData = [
@@ -44,7 +46,7 @@ const DeliveryScreen = ({ navigation }) => {
     }, []);
 
     const handlePayment = () => {
-        dispatch(deleteCart())
+        dispatch(deleteCart());
         navigation.navigate('PaymentComplete');
     };
 
@@ -52,16 +54,16 @@ const DeliveryScreen = ({ navigation }) => {
         <View style={[styles.container, { paddingTop: insets.top }]}>
             <View style={styles.deliveryList}>
                 <FlatList
-                    data={[deliveryData]} 
+                    data={deliveryData}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => (
                         <View style={styles.deliveryItemContainer}>
                             {/* Delivery Info */}
                             <View style={styles.deliveryItem}>
                                 <View style={styles.deliveryInfo}>
-                                    <Image source={courierData.avatar} style={styles.courierAvatar} />
+                                    <Image source={item.avatar} style={styles.courierAvatar} />
                                     <View style={styles.deliveryText}>
-                                        <Text style={styles.courierName}>{courierData.name}</Text>
+                                        <Text style={styles.courierName}>Amy</Text>
                                         <Text style={styles.durationText}>{item.duration}</Text>
                                     </View>
                                 </View>
@@ -93,7 +95,7 @@ const DeliveryScreen = ({ navigation }) => {
                 }}
             >
                 {/* Markers and Polyline */}
-                <Marker coordinate={currentLocation.gps} title="Người giao hàng" description={courierData.name} />
+                <Marker coordinate={currentLocation.gps} title="Người giao hàng" description="Amy" />
 
                 <Polyline
                     coordinates={[
