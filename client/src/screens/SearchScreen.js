@@ -108,10 +108,13 @@ export default SearchScreen = () => {
 
     const [restaurants, setRestaurants] = React.useState(restaurantData);
     const [popularRestaurants, setPopularRestaurants] = React.useState(popularRestaurantData);
-    const [idRestaurant, setIdRestaurant] = useState(null);
+    const [idRestaurantSearch, setIdRestaurantSearch] = useState(null);
     const [input, setInput] = React.useState('');
 
-    useContext(restaurantsContext).setIdRestaurant(idRestaurant);
+    const setIdRestaurant = useContext(restaurantsContext).setIdRestaurant;
+    useEffect(() => {
+        setIdRestaurant(idRestaurantSearch);
+    }, [idRestaurantSearch]);
 
     function handleFilter(searchTerm) {
         if (searchTerm === null || searchTerm === '') {
@@ -132,7 +135,7 @@ export default SearchScreen = () => {
                 style={styles.itemContainer}
                 onPress={() => {
                     navigation.navigate('Restaurant');
-                    setIdRestaurant(item.id);
+                    setIdRestaurantSearch(item.id);
                 }}
             >
                 <Image source={item.photo} style={styles.image} />

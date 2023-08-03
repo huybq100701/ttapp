@@ -5,10 +5,13 @@ import axios from 'axios';
 import { API_LINK } from '../../default-value';
 
 export default function RestaurantsProvider({ children }) {
+    const affordable = 1;
+    const fairPrice = 2;
+    const expensive = 3;
 
     const restaurantData = [
         {
-            id: 1,
+            _id: '64ca050ea1c71c7b4e9e7e57',
             name: 'Burger',
             rating: 4.8,
             categories: [5, 7],
@@ -56,7 +59,7 @@ export default function RestaurantsProvider({ children }) {
             ],
         },
         {
-            id: 2,
+            _id: '64ca055ba1c71c7b4e9e7e59',
             name: 'Pizza',
             rating: 4.8,
             categories: [2, 4, 6],
@@ -139,14 +142,14 @@ export default function RestaurantsProvider({ children }) {
         },
     ];
 
-    const [restaurants, setRestaurants] = useState([]);
+    const [restaurants, setRestaurants] = useState(restaurantData);
     const [restaurant, setRestaurant] = useState(null);
     const [idRestaurant, setIdRestaurant] = useState(null);
 
     // Get restaurant by id
     useEffect(() => {
         restaurants.map((item) => {
-            if (item.id === idRestaurant) {
+            if (item._id === idRestaurant) {
                 setRestaurant(item);
             }
         });

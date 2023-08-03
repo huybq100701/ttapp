@@ -68,29 +68,33 @@ const HomeScreen = ({ navigation }) => {
 
     const [categories, setCategories] = React.useState(categoryData);
     const [selectedCategory, setSelectedCategory] = React.useState(null);
-    const [idRestaurant, setIdRestaurant] = useState(null);
+    const [idRestaurantHome, setIdRestaurantHome] = useState(null);
     const [currentLocation, setCurrentLocation] = React.useState(initialCurrentLocation);
     const [hasNotification, setHasNotification] = useState(false);
     const [filteredRestaurant, setFilteredRestaurant] = useState([]);
-    useContext(restaurantsContext).setIdRestaurant(idRestaurant);
 
-    const restaurants = useSelector((state) => state.restaurant)
+    const setIdRestaurant = useContext(restaurantsContext).setIdRestaurant;
+    useEffect(() => {
+        setIdRestaurant(idRestaurantHome);
+    }, [idRestaurantHome]);
+
+    const restaurants = useSelector((state) => state.restaurant);
     const dispatch = useDispatch();
 
     useEffect(() => {
         (async () => {
             await fetchRestaurantList(dispatch);
         })();
-    }, [])
+    }, []);
 
     useEffect(() => {
         setFilteredRestaurant(restaurants);
-    }, [restaurants])
+    }, [restaurants]);
     const insets = useSafeAreaInsets();
 
     function onSelectCategory(category) {
         let restaurantList = restaurants;
-        if (category){
+        if (category) {
             restaurantList = restaurants.filter((a) => a.categories.includes(category.id));
         }
         //filter restaurant
@@ -109,7 +113,7 @@ const HomeScreen = ({ navigation }) => {
     const handleCart = () => {
         navigation.navigate('Cart', {
             restaurants,
-            currentLocation,    
+            currentLocation,
         });
     };
 
@@ -246,7 +250,7 @@ const HomeScreen = ({ navigation }) => {
                     style={{ marginBottom: SIZES.padding * 2 }}
                     onPress={() => {
                         navigation.navigate('Restaurant');
-                        setIdRestaurant(item._id);
+                        setIdRestaurantHome(item._id);
                     }}
                 >
                     {/* Image */}
@@ -256,7 +260,7 @@ const HomeScreen = ({ navigation }) => {
                         }}
                     >
                         <Image
-                            source={{uri: item.photo}}
+                            source={{ uri: item.photo }}
                             resizeMode="cover"
                             style={{
                                 width: '100%',
