@@ -8,8 +8,10 @@ const menuRouter = require('./menu.route');
 const commentRouter = require('./comment.route');
 const orderRouter = require('./order.route');
 const deliveryRouter = require('./delivery.route');
+const cartRouter = require('./cart.route');
 
 router.use('/users', userRouter);
+router.use('/cart', cartRouter)
 router.use('/auth', authRouter);
 router.use('/restaurants', restaurantRouter);
 router.use('/menu', menuRouter)
