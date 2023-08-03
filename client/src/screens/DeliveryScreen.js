@@ -1,10 +1,13 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { icons, images, SIZES, COLORS } from '../constants';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import * as Location from 'expo-location';
+import axios from 'axios'; // Import Axios
 import { currentLocationContext, restaurantsContext } from '../utils/Context';
+import { icons, images, SIZES, COLORS } from '../constants';
+import API_LINK from '../../default-value';
+
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteCart } from '../store/slice/cartSlice';
 
@@ -14,7 +17,7 @@ const DeliveryScreen = ({ navigation }) => {
     const currentLocation = useContext(currentLocationContext);
     const { restaurant } = useContext(restaurantsContext);
 
-    const cart = useSelector((state) => state.cart)
+    const cart = useSelector((state) => state.cart);
     const dispatch = useDispatch();
 
     const deliveryData = [
@@ -26,6 +29,7 @@ const DeliveryScreen = ({ navigation }) => {
             address: '1234, Street Name, City Name',
         },
     ];
+
     const [location, setLocation] = useState(null);
     useEffect(() => {
         (async () => {
@@ -42,7 +46,7 @@ const DeliveryScreen = ({ navigation }) => {
     }, []);
 
     const handlePayment = () => {
-        dispatch(deleteCart())
+        dispatch(deleteCart());
         navigation.navigate('PaymentComplete');
     };
 
@@ -59,7 +63,7 @@ const DeliveryScreen = ({ navigation }) => {
                                 <View style={styles.deliveryInfo}>
                                     <Image source={item.avatar} style={styles.courierAvatar} />
                                     <View style={styles.deliveryText}>
-                                        <Text style={styles.courierName}></Text>
+                                        <Text style={styles.courierName}>Amy</Text>
                                         <Text style={styles.durationText}>{item.duration}</Text>
                                     </View>
                                 </View>

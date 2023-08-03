@@ -10,6 +10,7 @@ import { fetchRestaurantList } from '../store/apiCall';
 const HomeScreen = ({ navigation }) => {
     // Use useContext instead of params
     const initialCurrentLocation = useContext(currentLocationContext);
+
     const categoryData = [
         {
             id: 1,
@@ -65,27 +66,36 @@ const HomeScreen = ({ navigation }) => {
 
     const [categories, setCategories] = React.useState(categoryData);
     const [selectedCategory, setSelectedCategory] = React.useState(null);
-    const [idRestaurant, setIdRestaurant] = useState(null);
+    const [idRestaurantHome, setIdRestaurantHome] = useState(null);
     const [currentLocation, setCurrentLocation] = React.useState(initialCurrentLocation);
     const [hasNotification, setHasNotification] = useState(false);
+    const [filteredRestaurant, setFilteredRestaurant] = useState([]);
 
-    useContext(restaurantsContext).setIdRestaurant(idRestaurant);
+    const setIdRestaurant = useContext(restaurantsContext).setIdRestaurant;
+    useEffect(() => {
+        setIdRestaurant(idRestaurantHome);
+    }, [idRestaurantHome]);
 
-    const restaurants = useSelector((state) => state.restaurant)
+    const restaurants = useSelector((state) => state.restaurant);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        fetchRestaurantList(dispatch);
-    }, [])
+        (async () => {
+            await fetchRestaurantList(dispatch);
+        })();
+    }, []);
 
+    useEffect(() => {
+        setFilteredRestaurant(restaurants);
+    }, [restaurants]);
     const insets = useSafeAreaInsets();
-
     function onSelectCategory(category) {
+        let restaurantList = restaurants;
+        if (category) {
+            restaurantList = restaurants.filter((a) => a.categories.includes(category.id));
+        }
         //filter restaurant
-        let restaurantList = restaurantData.filter((a) => a.categories.includes(category.id));
-
-        setRestaurants(restaurantList);
-
+        setFilteredRestaurant(restaurantList);
         setSelectedCategory(category);
     }
 
@@ -236,8 +246,7 @@ const HomeScreen = ({ navigation }) => {
                 <TouchableOpacity
                     style={{ marginBottom: SIZES.padding * 2 }}
                     onPress={() => {
-                        navigation.navigate('Restaurant');
-                        setIdRestaurant(item._id);
+                        navigation.navigate('Restaurant', {restaurantId: item._id});
                     }}
                 >
                     {/* Image */}
@@ -247,7 +256,7 @@ const HomeScreen = ({ navigation }) => {
                         }}
                     >
                         <Image
-                            source={{uri: item.photo}}
+                            source={{ uri: item.photo }}
                             resizeMode="cover"
                             style={{
                                 width: '100%',
@@ -318,7 +327,7 @@ const HomeScreen = ({ navigation }) => {
 
         return (
             <FlatList
-                data={restaurants}
+                data={filteredRestaurant}
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
                 keyExtractor={(item) => `${item._id}`}
