@@ -12,7 +12,6 @@ import { fetchRestaurantList } from '../store/apiCall';
 const HomeScreen = ({ navigation }) => {
     // Use useContext instead of params
     const initialCurrentLocation = useContext(currentLocationContext);
-    const restaurantData = useContext(restaurantsContext).restaurants;
 
     const categoryData = [
         {
@@ -72,24 +71,30 @@ const HomeScreen = ({ navigation }) => {
     const [idRestaurant, setIdRestaurant] = useState(null);
     const [currentLocation, setCurrentLocation] = React.useState(initialCurrentLocation);
     const [hasNotification, setHasNotification] = useState(false);
-
+    const [filteredRestaurant, setFilteredRestaurant] = useState([]);
     useContext(restaurantsContext).setIdRestaurant(idRestaurant);
 
     const restaurants = useSelector((state) => state.restaurant)
     const dispatch = useDispatch();
 
     useEffect(() => {
-        fetchRestaurantList(dispatch);
+        (async () => {
+            await fetchRestaurantList(dispatch);
+        })();
     }, [])
 
+    useEffect(() => {
+        setFilteredRestaurant(restaurants);
+    }, [restaurants])
     const insets = useSafeAreaInsets();
 
     function onSelectCategory(category) {
+        let restaurantList = restaurants;
+        if (category){
+            restaurantList = restaurants.filter((a) => a.categories.includes(category.id));
+        }
         //filter restaurant
-        let restaurantList = restaurantData.filter((a) => a.categories.includes(category.id));
-
-        setRestaurants(restaurantList);
-
+        setFilteredRestaurant(restaurantList);
         setSelectedCategory(category);
     }
 
@@ -104,7 +109,7 @@ const HomeScreen = ({ navigation }) => {
     const handleCart = () => {
         navigation.navigate('Cart', {
             restaurants,
-            currentLocation,
+            currentLocation,    
         });
     };
 
@@ -322,7 +327,7 @@ const HomeScreen = ({ navigation }) => {
 
         return (
             <FlatList
-                data={restaurants}
+                data={filteredRestaurant}
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
                 keyExtractor={(item) => `${item._id}`}
