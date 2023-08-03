@@ -4,12 +4,19 @@ export const cartSlice = createSlice({
     name: 'cart',
     initialState: null,
     reducers: {
-        getRestaurantList: (state, action) => {
+        getCart: (state, action) => {
             state.splice(0, state.length, ...action.payload);
         },
+
+        deleteCart: (state) => {
+            state.restaurantId = '';
+            state.items.splice(0, state.length);
+        }
+
     },
 });
 
-export const { getRestaurantList } = restaurantSlice.actions;
+export const { getCart, deleteCart } = cartSlice.actions;
 
-export default restaurantSlice.reducer;
+export default cartSlice.reducer;
+

@@ -5,12 +5,17 @@ import { icons, images, SIZES, COLORS } from '../constants';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { currentLocationContext, restaurantsContext } from '../utils/Context';
+import { useSelector, useDispatch } from 'react-redux';
+import { deleteCart } from '../store/slice/cartSlice';
 
 const DeliveryScreen = ({ navigation }) => {
     const insets = useSafeAreaInsets();
     // use useContext
     const currentLocation = useContext(currentLocationContext);
     const { restaurant } = useContext(restaurantsContext);
+
+    const cart = useSelector((state) => state.cart)
+    const dispatch = useDispatch();
 
     const deliveryData = [
         {
@@ -37,6 +42,7 @@ const DeliveryScreen = ({ navigation }) => {
     }, []);
 
     const handlePayment = () => {
+        dispatch(deleteCart())
         navigation.navigate('PaymentComplete');
     };
 
