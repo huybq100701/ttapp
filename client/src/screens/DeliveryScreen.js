@@ -7,7 +7,6 @@ import axios from 'axios'; // Import Axios
 import { currentLocationContext, restaurantsContext } from '../utils/Context';
 import { icons, images, SIZES, COLORS } from '../constants';
 import API_LINK from '../../default-value';
-const DeliveryScreen = ({ route, navigation }) => {
 
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteCart } from '../store/slice/cartSlice';
@@ -17,7 +16,7 @@ const DeliveryScreen = ({ navigation }) => {
     const currentLocation = useContext(currentLocationContext);
     const { restaurant } = useContext(restaurantsContext);
 
-    const cart = useSelector((state) => state.cart)
+    const cart = useSelector((state) => state.cart);
     const dispatch = useDispatch();
 
     const deliveryData = [
@@ -45,7 +44,7 @@ const DeliveryScreen = ({ navigation }) => {
     }, []);
 
     const handlePayment = () => {
-        dispatch(deleteCart())
+        dispatch(deleteCart());
         navigation.navigate('PaymentComplete');
     };
 
@@ -53,7 +52,7 @@ const DeliveryScreen = ({ navigation }) => {
         <View style={[styles.container, { paddingTop: insets.top }]}>
             <View style={styles.deliveryList}>
                 <FlatList
-                    data={[deliveryData]} 
+                    data={[deliveryData]}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => (
                         <View style={styles.deliveryItemContainer}>
