@@ -27,9 +27,10 @@ export default function SignUpScreen() {
                 username,
                 password,
             });
-            ToastAndroid.showWithGravity(res.data.message, ToastAndroid.SHORT, ToastAndroid.CENTER);
+            ToastAndroid.showWithGravity(res.data?.message, ToastAndroid.SHORT, ToastAndroid.CENTER);
+            navigation.navigate('Login');
         } catch (error) {
-            ToastAndroid.showWithGravity(error.response.data.message, ToastAndroid.SHORT, ToastAndroid.CENTER);
+            ToastAndroid.showWithGravity(error.response.data?.message, ToastAndroid.SHORT, ToastAndroid.CENTER);
         }
         return;
     };

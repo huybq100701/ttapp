@@ -26,6 +26,6 @@ const router = require('./route');
 
 app.use('/api/v1', router);
 
-app.listen(port, "192.168.43.37", () => {
+app.listen(port, "192.168.31.190", () => {
   console.log(`Server listening on ${port}`);
 });

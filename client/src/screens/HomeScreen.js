@@ -2,8 +2,6 @@ import React, { useState, useEffect, useContext } from 'react';
 import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, Image, FlatList } from 'react-native';
 import { icons, images, SIZES, COLORS } from '../constants';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import axios from 'axios';
-import { API_LINK } from '../../default-value';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { currentLocationContext, restaurantsContext } from '../utils/Context';
@@ -12,8 +10,6 @@ import { fetchRestaurantList } from '../store/apiCall';
 const HomeScreen = ({ navigation }) => {
     // Use useContext instead of params
     const initialCurrentLocation = useContext(currentLocationContext);
-    const restaurantData = useContext(restaurantsContext).restaurants;
-
     const categoryData = [
         {
             id: 1,
