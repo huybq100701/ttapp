@@ -72,7 +72,6 @@ const HomeScreen = ({ navigation }) => {
     const [currentLocation, setCurrentLocation] = React.useState(initialCurrentLocation);
     const [hasNotification, setHasNotification] = useState(false);
     const [filteredRestaurant, setFilteredRestaurant] = useState([]);
-    useContext(restaurantsContext).setIdRestaurant(idRestaurant);
 
     const restaurants = useSelector((state) => state.restaurant)
     const dispatch = useDispatch();
@@ -245,8 +244,7 @@ const HomeScreen = ({ navigation }) => {
                 <TouchableOpacity
                     style={{ marginBottom: SIZES.padding * 2 }}
                     onPress={() => {
-                        navigation.navigate('Restaurant');
-                        setIdRestaurant(item._id);
+                        navigation.navigate('Restaurant', {restaurantId: item._id});
                     }}
                 >
                     {/* Image */}

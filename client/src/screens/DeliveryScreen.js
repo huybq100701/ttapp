@@ -7,8 +7,6 @@ import axios from 'axios'; // Import Axios
 import { currentLocationContext, restaurantsContext } from '../utils/Context';
 import { icons, images, SIZES, COLORS } from '../constants';
 import API_LINK from '../../default-value';
-const DeliveryScreen = ({ route, navigation }) => {
-
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteCart } from '../store/slice/cartSlice';
 
@@ -29,6 +27,7 @@ const DeliveryScreen = ({ navigation }) => {
             address: '1234, Street Name, City Name',
         },
     ];
+
     const [location, setLocation] = useState(null);
     useEffect(() => {
         (async () => {
