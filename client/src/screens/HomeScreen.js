@@ -4,8 +4,10 @@ import { icons, images, SIZES, COLORS } from '../constants';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import axios from 'axios';
 import { API_LINK } from '../../default-value';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { currentLocationContext, restaurantsContext } from '../utils/Context';
+import { fetchRestaurantList } from '../store/apiCall';
 
 const HomeScreen = ({ navigation }) => {
     // Use useContext instead of params
@@ -67,19 +69,17 @@ const HomeScreen = ({ navigation }) => {
 
     const [categories, setCategories] = React.useState(categoryData);
     const [selectedCategory, setSelectedCategory] = React.useState(null);
-    const [restaurants, setRestaurants] = React.useState(restaurantData);
     const [idRestaurant, setIdRestaurant] = useState(null);
     const [currentLocation, setCurrentLocation] = React.useState(initialCurrentLocation);
     const [hasNotification, setHasNotification] = useState(false);
 
     useContext(restaurantsContext).setIdRestaurant(idRestaurant);
 
+    const restaurants = useSelector((state) => state.restaurant)
+    const dispatch = useDispatch();
+
     useEffect(() => {
-        const fetchRestaurants = async () => {
-            const res = await axios.get(`${API_LINK}/restaurants`);
-            setRestaurants(res.data.restaurants);
-        }
-        fetchRestaurants();
+        fetchRestaurantList(dispatch);
     }, [])
 
     const insets = useSafeAreaInsets();
@@ -241,7 +241,7 @@ const HomeScreen = ({ navigation }) => {
                     style={{ marginBottom: SIZES.padding * 2 }}
                     onPress={() => {
                         navigation.navigate('Restaurant');
-                        setIdRestaurant(item.id);
+                        setIdRestaurant(item._id);
                     }}
                 >
                     {/* Image */}
