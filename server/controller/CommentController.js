@@ -42,7 +42,7 @@ const CommentController = {
                 message: 'Lấy comment thành công',
                 comment: comments,
             });
-        } catch {
+        } catch(error) {
             return res.status(500).json({
                 message: 'Server error',
                 error: error,

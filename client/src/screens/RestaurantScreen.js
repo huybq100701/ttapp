@@ -31,8 +31,7 @@ const RestaurantScreen = ({route, navigation }) => {
         
 
     const handleNavigateToFoodScreen = (menuId) => {
-        const selectedMenu = menu.find((item) => item.menuId === menuId);
-        navigation.navigate('Food', { item: selectedMenu });
+        navigation.navigate('Food', { menuId });
     };
 
     function editOrder(action, menuId, price) {
