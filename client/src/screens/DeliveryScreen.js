@@ -8,10 +8,27 @@ import { currentLocationContext, restaurantsContext } from '../utils/Context';
 import { icons, images, SIZES, COLORS } from '../constants';
 import API_LINK from '../../default-value';
 const DeliveryScreen = ({ route, navigation }) => {
+
+import { useSelector, useDispatch } from 'react-redux';
+import { deleteCart } from '../store/slice/cartSlice';
+
+const DeliveryScreen = ({ navigation }) => {
     const insets = useSafeAreaInsets();
     const currentLocation = useContext(currentLocationContext);
     const { restaurant } = useContext(restaurantsContext);
 
+    const cart = useSelector((state) => state.cart)
+    const dispatch = useDispatch();
+
+    const deliveryData = [
+        {
+            id: 1,
+            avatar: images.avatar_1,
+            duration: '15 min',
+            restaurant: 'Burger',
+            address: '1234, Street Name, City Name',
+        },
+    ];
     const [location, setLocation] = useState(null);
     useEffect(() => {
         (async () => {
@@ -28,6 +45,7 @@ const DeliveryScreen = ({ route, navigation }) => {
     }, []);
 
     const handlePayment = () => {
+        dispatch(deleteCart())
         navigation.navigate('PaymentComplete');
     };
 
