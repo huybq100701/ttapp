@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, TextInput, View, TouchableOpacity, Image, FlatList, Text } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -66,14 +66,14 @@ export default SearchScreen = () => {
 
     const popularRestaurantData = [
         {
-            id: 1,
+            _id: '64ca050ea1c71c7b4e9e7e57',
             name: 'Burger',
             rating: 4.8,
             categories: [5, 7],
             photo: images.burger_restaurant_1,
         },
         {
-            id: 2,
+            _id: '64ca055ba1c71c7b4e9e7e59',
             name: 'Pizza',
             rating: 4.8,
             categories: [2, 4, 6],
@@ -83,14 +83,14 @@ export default SearchScreen = () => {
 
     const restaurantData = [
         {
-            id: 1,
+            _id: '64ca050ea1c71c7b4e9e7e57',
             name: 'Burger',
             rating: 4.8,
             categories: [5, 7],
             photo: images.burger_restaurant_1,
         },
         {
-            id: 2,
+            _id: '64ca055ba1c71c7b4e9e7e59',
             name: 'Pizza',
             rating: 4.8,
             categories: [2, 4, 6],
@@ -135,7 +135,7 @@ export default SearchScreen = () => {
                 style={styles.itemContainer}
                 onPress={() => {
                     navigation.navigate('Restaurant');
-                    setIdRestaurantSearch(item.id);
+                    setIdRestaurantSearch(item._id);
                 }}
             >
                 <Image source={item.photo} style={styles.image} />

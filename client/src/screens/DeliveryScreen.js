@@ -13,6 +13,7 @@ import { deleteCart } from '../store/slice/cartSlice';
 
 const DeliveryScreen = ({ navigation }) => {
     const insets = useSafeAreaInsets();
+    // use useContext
     const currentLocation = useContext(currentLocationContext);
     const { restaurant } = useContext(restaurantsContext);
 
@@ -52,16 +53,16 @@ const DeliveryScreen = ({ navigation }) => {
         <View style={[styles.container, { paddingTop: insets.top }]}>
             <View style={styles.deliveryList}>
                 <FlatList
-                    data={[deliveryData]}
+                    data={deliveryData}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => (
                         <View style={styles.deliveryItemContainer}>
                             {/* Delivery Info */}
                             <View style={styles.deliveryItem}>
                                 <View style={styles.deliveryInfo}>
-                                    <Image source={courierData.avatar} style={styles.courierAvatar} />
+                                    <Image source={item.avatar} style={styles.courierAvatar} />
                                     <View style={styles.deliveryText}>
-                                        <Text style={styles.courierName}>{courierData.name}</Text>
+                                        <Text style={styles.courierName}>Amy</Text>
                                         <Text style={styles.durationText}>{item.duration}</Text>
                                     </View>
                                 </View>
@@ -93,7 +94,7 @@ const DeliveryScreen = ({ navigation }) => {
                 }}
             >
                 {/* Markers and Polyline */}
-                <Marker coordinate={currentLocation.gps} title="Người giao hàng" description={courierData.name} />
+                <Marker coordinate={currentLocation.gps} title="Người giao hàng" description="Amy" />
 
                 <Polyline
                     coordinates={[
