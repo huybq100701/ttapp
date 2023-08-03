@@ -1,15 +1,44 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeftIcon } from 'react-native-heroicons/solid';
 import { themeColors } from '../theme';
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
-import { icons, images, SIZES, COLORS } from '../constants'
+import { icons, SIZES, COLORS } from '../constants';
+import axios from 'axios'; 
+import { API_LINK } from '../../default-value';
+
 const FoodScreen = ({ route }) => {
     const navigation = useNavigation();
     const insets = useSafeAreaInsets();
-    const { menuId, name, photo, description, calories, price,rating, comment } = route.params.item;
+    const { _id } = route.params.item; 
+
+    const [comments, setComments] = useState([]);
+    const [menuData, setMenuData] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        // Fetch menu data
+        axios.get(`${API_LINK}/menu/${_id}`)
+            .then(response => {
+                setMenuData(response.data.menu);
+            })
+            .catch(error => {
+                console.error('Error fetching menu:', error);
+            });
+            console.log(menuData);
+        // Fetch comments data
+        axios.get(`${API_LINK}/comment/${_id}`)
+            .then(response => {
+                setComments(response.data.comment);
+                setIsLoading(false);
+            })
+            .catch(error => {
+                console.error('Error fetching comments:', error);
+                setIsLoading(false);
+            });
+    }, [_id]);
 
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -20,39 +49,45 @@ const FoodScreen = ({ route }) => {
                 </TouchableOpacity>
             </View>
             <View style={styles.imageContainer}>
-                <Image source={photo} style={styles.image} />
+                <Image source={{ uri: menuData.photo }} style={styles.image} />
             </View>
             <View style={styles.formContainer}>
                 <View style={styles.form}>
                     <Text style={styles.label}>Name:</Text>
-                    <Text style={styles.foodName}>{name}</Text>
+                    <Text style={styles.foodName}>{menuData.name}</Text>
 
                     <Text style={styles.label}>Description:</Text>
-                    <Text style={styles.description}>{description}</Text>
+                    <Text style={styles.description}>{menuData.description}</Text>
 
                     <Text style={styles.label}>Calories:</Text>
-                    <Text style={styles.calories}>{calories.toFixed(2)} cal</Text>
+                    <Text style={styles.calories}>{menuData.calories ? menuData.calories.toFixed(2) : 'N/A'} cal</Text>
 
                     <Text style={styles.label}>Price:</Text>
-                    <Text style={styles.price}>${price.toFixed(2)}</Text>
+                    <Text style={styles.price}>${menuData.price ? menuData.price.toFixed(2) : 'N/A'}</Text>
+
                     <View style={styles.ratingContainer}>
                         <Image source={icons.star} style={styles.starIcon} />
-                        <Text style={styles.ratingText}>{rating.toFixed(1)}</Text>
+                        <Text style={styles.ratingText}>{menuData.rating ? menuData.rating.toFixed(1) : 'N/A'}</Text>
                     </View>
                 </View>
 
                 <View style={styles.commentSection}>
                     <Text style={styles.commentHeader}>Comments:</Text>
-                    {comment.map((item, index) => (
-                        <View key={index} style={styles.comment}>
-                            <Text style={styles.commentText}>User {item.userId}: {item.commentText}</Text>
-                        </View>
-                    ))}
+                    {isLoading ? (
+                        <Text>Loading comments...</Text>
+                    ) : (
+                        comments.map((item, index) => (
+                            <View key={index} style={styles.comment}>
+                                <Text style={styles.commentText}>User {item.userId}: {item.commentText}</Text>
+                            </View>
+                        ))
+                    )}
                 </View>
             </View>
         </View>
     );
 }
+
 
 const styles = StyleSheet.create({
     container: {

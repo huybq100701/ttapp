@@ -249,8 +249,7 @@ const HomeScreen = ({ navigation }) => {
                 <TouchableOpacity
                     style={{ marginBottom: SIZES.padding * 2 }}
                     onPress={() => {
-                        navigation.navigate('Restaurant');
-                        setIdRestaurantHome(item._id);
+                        navigation.navigate('Restaurant', {restaurantId: item._id});
                     }}
                 >
                     {/* Image */}

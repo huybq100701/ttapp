@@ -29,6 +29,7 @@ const DeliveryScreen = ({ navigation }) => {
             address: '1234, Street Name, City Name',
         },
     ];
+
     const [location, setLocation] = useState(null);
     useEffect(() => {
         (async () => {

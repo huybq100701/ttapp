@@ -4,34 +4,40 @@ import { icons, COLORS, SIZES } from '../constants';
 import { ArrowLeftIcon } from 'react-native-heroicons/solid';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { restaurantsContext } from '../utils/Context';
+import axios from 'axios';
+import { API_LINK } from '../../default-value';
 
-const RestaurantScreen = ({ navigation }) => {
+const RestaurantScreen = ({route, navigation }) => {
     const scrollX = new Animated.Value(0);
     const [orderItems, setOrderItems] = useState([]);
     const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+    const [restaurant, setRestaurant] = useState(null);
+    const [menu, setMenu] = useState([{ price: 0, calories: 0}]);
 
-    // use params
-    // const [restaurant, setRestaurant] = useState(null);
-    // const { item } = route.params;
-
-    // useEffect(() => {
-    //     setRestaurant(item);
-    // }, [route.params]);
-    // console.log('params:', restaurant);
-
-    // use useContext
-    const { restaurant } = useContext(restaurantsContext);
+    useEffect(() => {
+        const restaurantId = route.params?.restaurantId;
+        if (restaurantId) {
+            axios.get(`${API_LINK}/restaurants/${restaurantId}`)
+            .then(response => {
+                const fetchedRestaurant = response.data;
+                    setRestaurant(fetchedRestaurant.data.restaurant);
+                    setMenu(fetchedRestaurant.data.menu);
+                })
+                .catch(error => {
+                    console.error('Error fetching restaurant data:', error);
+                });
+            }
+        }, []);
+        
 
     const handleNavigateToFoodScreen = (menuId) => {
-        const selectedMenu = restaurant?.menu.find((item) => item.menuId === menuId);
+        const selectedMenu = menu.find((item) => item.menuId === menuId);
         navigation.navigate('Food', { item: selectedMenu });
     };
 
     function editOrder(action, menuId, price) {
         let orderList = orderItems.slice();
         let item = orderList.find((a) => a.menuId === menuId);
-
         if (action === '+') {
             if (item) {
                 item.qty += 1;
@@ -51,7 +57,6 @@ const RestaurantScreen = ({ navigation }) => {
                 item.total = item.qty * price;
             }
         }
-
         setOrderItems(orderList);
     }
 
@@ -82,19 +87,19 @@ const RestaurantScreen = ({ navigation }) => {
 
         return (
             <ScrollView style={styles.sidebarContainer}>
-                {restaurant?.menu.map((item) => (
+                {menu?.map((item) => (
                     <TouchableOpacity
-                        key={item.menuId}
+                        key={item._id}
                         style={styles.sidebarItem}
-                        onPress={() => handleNavigateToFoodScreen(item.menuId)}
+                        onPress={() => handleNavigateToFoodScreen(item._id)}
                     >
                         <Image
-                            source={item.photo}
+                            source={{uri: item.photo}}
                             style={{ width: 80, height: 80, borderRadius: 10 }}
                             resizeMode="cover"
                         />
                         <Text style={styles.sidebarText}>{item.name}</Text>
-                        <Text style={styles.sidebarPrice}>${item.price.toFixed(2)}</Text>
+                        <Text style={styles.sidebarPrice}>${item?.price.toFixed(2)}</Text>
                     </TouchableOpacity>
                 ))}
             </ScrollView>
@@ -162,11 +167,11 @@ const RestaurantScreen = ({ navigation }) => {
                     useNativeDriver: false,
                 })}
             >
-                {restaurant?.menu.map((item, index) => (
+                {menu?.map((item, index) => (
                     <View key={`menu-${index}`} style={{ alignItems: 'center' }}>
                         <View style={{ height: SIZES.height * 0.35 }}>
                             <Image
-                                source={item.photo}
+                                source={{uri: item.photo}}
                                 resizeMode="cover"
                                 style={{
                                     width: SIZES.width,
@@ -193,7 +198,7 @@ const RestaurantScreen = ({ navigation }) => {
                                         borderTopLeftRadius: 25,
                                         borderBottomLeftRadius: 25,
                                     }}
-                                    onPress={() => editOrder('-', item.menuId, item.price)}
+                                    onPress={() => editOrder('-', item._id, item.price)}
                                 >
                                     <Text style={{ fontSize: 16 }}>-</Text>
                                 </TouchableOpacity>
@@ -206,7 +211,7 @@ const RestaurantScreen = ({ navigation }) => {
                                         justifyContent: 'center',
                                     }}
                                 >
-                                    <Text style={{ fontSize: 20 }}>{getOrderQty(item.menuId)}</Text>
+                                    <Text style={{ fontSize: 20 }}>{getOrderQty(item._id)}</Text>
                                 </View>
 
                                 <TouchableOpacity
@@ -218,7 +223,7 @@ const RestaurantScreen = ({ navigation }) => {
                                         borderTopRightRadius: 25,
                                         borderBottomRightRadius: 25,
                                     }}
-                                    onPress={() => editOrder('+', item.menuId, item.price)}
+                                    onPress={() => editOrder('+', item._id, item.price)}
                                 >
                                     <Text style={{ fontSize: 16 }}>+</Text>
                                 </TouchableOpacity>
@@ -234,7 +239,7 @@ const RestaurantScreen = ({ navigation }) => {
                             }}
                         >
                             <Text style={{ marginVertical: 10, textAlign: 'center', fontSize: 18 }}>
-                                {item.name} - ${item.price.toFixed(2)}
+                                {item.name} - ${item?.price.toFixed(2)}
                             </Text>
                             <Text style={{ fontSize: 14 }}>{item.description}</Text>
                         </View>
@@ -248,7 +253,7 @@ const RestaurantScreen = ({ navigation }) => {
                                     marginRight: 10,
                                 }}
                             />
-                            <Text style={{ fontSize: 14, color: COLORS.darkgray }}>{item.calories.toFixed(2)} cal</Text>
+                            <Text style={{ fontSize: 14, color: COLORS.darkgray }}>{item?.calories.toFixed(2)} cal</Text>
                         </View>
                     </View>
                 ))}
@@ -267,7 +272,7 @@ const RestaurantScreen = ({ navigation }) => {
                         height: SIZES.padding,
                     }}
                 >
-                    {restaurant?.menu.map((item, index) => {
+                    {menu?.map((item, index) => {
                         const opacity = dotPosition.interpolate({
                             inputRange: [index - 1, index, index + 1],
                             outputRange: [0.3, 1, 0.3],
@@ -318,7 +323,7 @@ const RestaurantScreen = ({ navigation }) => {
                                 height: SIZES.padding,
                             }}
                         >
-                            {restaurant?.menu.map((item, index) => {
+                            {menu?.map((item, index) => {
                                 const opacity = dotPosition.interpolate({
                                     inputRange: [index - 1, index, index + 1],
                                     outputRange: [0.3, 1, 0.3],
