@@ -91,7 +91,6 @@ const HomeScreen = ({ navigation }) => {
         setFilteredRestaurant(restaurants);
     }, [restaurants]);
     const insets = useSafeAreaInsets();
-
     function onSelectCategory(category) {
         let restaurantList = restaurants;
         if (category) {

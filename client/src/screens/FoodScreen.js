@@ -12,7 +12,8 @@ import { API_LINK } from '../../default-value';
 const FoodScreen = ({ route }) => {
     const navigation = useNavigation();
     const insets = useSafeAreaInsets();
-    const { _id } = route.params.item; 
+    const { menuId } = route.params;
+    const _id = menuId ? menuId : null;
 
     const [comments, setComments] = useState([]);
     const [menuData, setMenuData] = useState({});
@@ -27,9 +28,8 @@ const FoodScreen = ({ route }) => {
             .catch(error => {
                 console.error('Error fetching menu:', error);
             });
-            console.log(menuData);
         // Fetch comments data
-        axios.get(`${API_LINK}/comment/${_id}`)
+        axios.get(`${API_LINK}/comments/${_id}`)
             .then(response => {
                 setComments(response.data.comment);
                 setIsLoading(false);
@@ -78,7 +78,7 @@ const FoodScreen = ({ route }) => {
                     ) : (
                         comments.map((item, index) => (
                             <View key={index} style={styles.comment}>
-                                <Text style={styles.commentText}>User {item.userId}: {item.commentText}</Text>
+                                <Text style={styles.commentText}>{item.commentText}</Text>
                             </View>
                         ))
                     )}
