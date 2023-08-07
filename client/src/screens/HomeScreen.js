@@ -13,15 +13,9 @@ const HomeScreen = ({ navigation }) => {
     const categoryData = useContext(categoryContext);
     const [categories, setCategories] = React.useState(categoryData);
     const [selectedCategory, setSelectedCategory] = React.useState(null);
-    const [idRestaurantHome, setIdRestaurantHome] = useState(null);
     const [currentLocation, setCurrentLocation] = React.useState(initialCurrentLocation);
     const [hasNotification, setHasNotification] = useState(false);
     const [filteredRestaurant, setFilteredRestaurant] = useState([]);
-
-    const setIdRestaurant = useContext(restaurantsContext).setIdRestaurant;
-    useEffect(() => {
-        setIdRestaurant(idRestaurantHome);
-    }, [idRestaurantHome]);
 
     const restaurants = useSelector((state) => state.restaurant);
     const dispatch = useDispatch();
@@ -35,6 +29,7 @@ const HomeScreen = ({ navigation }) => {
     useEffect(() => {
         setFilteredRestaurant(restaurants);
     }, [restaurants]);
+
     const insets = useSafeAreaInsets();
     function onSelectCategory(category) {
         let restaurantList = restaurants;

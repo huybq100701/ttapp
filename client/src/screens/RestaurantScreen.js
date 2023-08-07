@@ -3,32 +3,30 @@ import { StyleSheet, SafeAreaView, View, Text, TouchableOpacity, Image, Animated
 import { icons, COLORS, SIZES } from '../constants';
 import { ArrowLeftIcon } from 'react-native-heroicons/solid';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchMenuOfRestaurant } from '../store/apiCall';
 
-import axios from 'axios';
-import { API_LINK } from '../../default-value';
-
-const RestaurantScreen = ({route, navigation }) => {
+const RestaurantScreen = ({ route, navigation }) => {
     const scrollX = new Animated.Value(0);
     const [orderItems, setOrderItems] = useState([]);
     const [isSidebarVisible, setIsSidebarVisible] = useState(false);
     const [restaurant, setRestaurant] = useState(null);
-    const [menu, setMenu] = useState([{ price: 0, calories: 0}]);
+    const [menu, setMenu] = useState([{ price: 0, calories: 0 }]);
+
+    const menus = useSelector((state) => state.menu);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const restaurantId = route.params?.restaurantId;
         if (restaurantId) {
-            axios.get(`${API_LINK}/restaurants/${restaurantId}`)
-            .then(response => {
-                const fetchedRestaurant = response.data;
-                    setRestaurant(fetchedRestaurant.data.restaurant);
-                    setMenu(fetchedRestaurant.data.menu);
-                })
-                .catch(error => {
-                    console.error('Error fetching restaurant data:', error);
-                });
-            }
-        }, []);
-        
+            fetchMenuOfRestaurant(dispatch, restaurantId);
+        }
+    }, []);
+
+    useEffect(() => {
+        setRestaurant(menus.restaurant);
+        setMenu(menus.menu);
+    }, [menus]);
 
     const handleNavigateToFoodScreen = (menuId) => {
         navigation.navigate('Food', { menuId });
@@ -93,7 +91,7 @@ const RestaurantScreen = ({route, navigation }) => {
                         onPress={() => handleNavigateToFoodScreen(item._id)}
                     >
                         <Image
-                            source={{uri: item.photo}}
+                            source={{ uri: item.photo }}
                             style={{ width: 80, height: 80, borderRadius: 10 }}
                             resizeMode="cover"
                         />
@@ -170,7 +168,7 @@ const RestaurantScreen = ({route, navigation }) => {
                     <View key={`menu-${index}`} style={{ alignItems: 'center' }}>
                         <View style={{ height: SIZES.height * 0.35 }}>
                             <Image
-                                source={{uri: item.photo}}
+                                source={{ uri: item.photo }}
                                 resizeMode="cover"
                                 style={{
                                     width: SIZES.width,
@@ -252,7 +250,9 @@ const RestaurantScreen = ({route, navigation }) => {
                                     marginRight: 10,
                                 }}
                             />
-                            <Text style={{ fontSize: 14, color: COLORS.darkgray }}>{item?.calories.toFixed(2)} cal</Text>
+                            <Text style={{ fontSize: 14, color: COLORS.darkgray }}>
+                                {item?.calories.toFixed(2)} cal
+                            </Text>
                         </View>
                     </View>
                 ))}
