@@ -5,6 +5,7 @@ import { themeColors } from '../theme';
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { Cog6ToothIcon } from 'react-native-heroicons/solid';
+import { useSelector } from 'react-redux';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -12,6 +13,8 @@ const windowHeight = Dimensions.get('window').height;
 export default function UserScreen() {
     const navigation = useNavigation();
     const insets = useSafeAreaInsets();
+
+    const user = useSelector((state) => state.user);
 
     const handleSetting = () => {
         navigation.navigate('Setting');
@@ -26,10 +29,10 @@ export default function UserScreen() {
                 </TouchableOpacity>
             </View>
             <View style={[styles.imageContainer, { height: windowHeight * 0.2 }]}>
-                <Image source={require('../../assets/images/bglogin.jpg')} style={styles.image} />
+                <Image source={user.image ? { uri: user.image } : require('../../assets/images/bglogin.jpg')} style={styles.image} />
             </View>
             <View style={styles.usernameContainer}>
-                <Text style={[styles.username, { fontSize: windowWidth * 0.06 }]}>Username</Text>
+                <Text style={[styles.username, { fontSize: windowWidth * 0.06 }]}>{user.username}</Text>
             </View>
             <View style={[styles.formContainer, { minHeight: windowHeight * 0.5 }]}>
                 <View style={styles.infoContainer}>
@@ -38,27 +41,27 @@ export default function UserScreen() {
                 <View style={styles.divider}></View>
                 <View style={styles.infoContainer}>
                     <Text style={[styles.label, { fontSize: windowWidth * 0.04 }]}>Email:</Text>
-                    <Text style={[styles.content, { fontSize: windowWidth * 0.04 }]}>user@user.com</Text>
+                    <Text style={[styles.content, { fontSize: windowWidth * 0.04 }]}>{user.mail}</Text>
                 </View>
                 <View style={styles.divider}></View>
                 <View style={styles.infoContainer}>
                     <Text style={[styles.label, { fontSize: windowWidth * 0.04 }]}>Fullname:</Text>
-                    <Text style={[styles.content, { fontSize: windowWidth * 0.04 }]}>Nguyễn Văn A</Text>
+                    <Text style={[styles.content, { fontSize: windowWidth * 0.04 }]}>{user.fullname}</Text>
                 </View>
                 <View style={styles.divider}></View>
                 <View style={styles.infoContainer}>
                     <Text style={[styles.label, { fontSize: windowWidth * 0.04 }]}>Birthday:</Text>
-                    <Text style={[styles.content, { fontSize: windowWidth * 0.04 }]}>dd/mm/yyyy</Text>
+                    <Text style={[styles.content, { fontSize: windowWidth * 0.04 }]}>{user.birthday}</Text>
                 </View>
                 <View style={styles.divider}></View>
                 <View style={styles.infoContainer}>
                     <Text style={[styles.label, { fontSize: windowWidth * 0.04 }]}>Address:</Text>
-                    <Text style={[styles.content, { fontSize: windowWidth * 0.04 }]}>Hai Phong, Vietnam</Text>
+                    <Text style={[styles.content, { fontSize: windowWidth * 0.04 }]}>{user.address}</Text>
                 </View>
                 <View style={styles.divider}></View>
                 <View style={styles.infoContainer}>
                     <Text style={[styles.label, { fontSize: windowWidth * 0.04 }]}>Phone:</Text>
-                    <Text style={[styles.content, { fontSize: windowWidth * 0.04 }]}>0795256013</Text>
+                    <Text style={[styles.content, { fontSize: windowWidth * 0.04 }]}>{user.phone}</Text>
                 </View>
             </View>
         </View>

@@ -1,36 +1,66 @@
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Image, TextInput } from 'react-native';
+import { View, Text, StyleSheet, Modal, TouchableOpacity, Image, TextInput, ToastAndroid } from 'react-native';
 import React, { useState, useRef } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ArrowLeftIcon, CheckIcon } from 'react-native-heroicons/solid';
+import { ArrowLeftIcon, CheckIcon, XMarkIcon } from 'react-native-heroicons/solid';
 import { StatusBar } from 'expo-status-bar';
 import * as MediaLibrary from 'expo-media-library';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { themeColors } from '../theme';
+import { updateUserById } from '../store/apiCall';
 
 export default function ChangeInfoScreen({ navigation }) {
     const insets = useSafeAreaInsets();
+
+    const user = useSelector((state) => state.user);
+    const dispatch = useDispatch();
+
     const [isUpdatePicture, setIsUpdatePicture] = useState(false);
     const [isSave, setIsSave] = useState(false);
     const [isEditable, setIsEditable] = useState(false);
-    const [fullName, setFullName] = useState('Nguyen Van A');
-    const [birth, setBirth] = useState('1/1/2001');
-    const [address, setAddress] = useState('Ha Noi, Viet Nam');
-    const [email, setEmail] = useState('nva@gmail.com');
-    const [phone, setPhone] = useState('0232342354');
+    const [fullName, setFullName] = useState(user.fullname);
+    const [birth, setBirth] = useState(user.birthday);
+    const [address, setAddress] = useState(user.address);
+    const [email, setEmail] = useState(user.mail);
+    const [phone, setPhone] = useState(user.phone);
     const [imageUri, setImageUri] = useState(null);
+    const [modalVisible, setModalVisible] = useState(false);
 
-    const handleSave = () => {
-        setIsSave(false);
-        setIsEditable(false);
+    const handleSave = async () => {
+        try {
+            const updateUser = {
+                fullname: fullName,
+                phone: phone,
+                birthday: birth,
+                address: address,
+                mail: email,
+            };
+            await updateUserById(dispatch, user._id, updateUser);
+            ToastAndroid.showWithGravity('Cập nhật thành công', ToastAndroid.SHORT, ToastAndroid.CENTER);
+            setIsSave(false);
+            setIsEditable(false);
+        } catch (error) {
+            ToastAndroid.showWithGravity('Cập nhật không thành công', ToastAndroid.SHORT, ToastAndroid.CENTER);
+        }
     };
 
     const handleUpdateImage = () => {
+        setModalVisible(true);
+    };
+
+    const handleCamera = () => {
+        setModalVisible(false);
         navigation.navigate('Camera', { setImageUri: setImageUri });
         setIsSave(true);
         if (imageUri !== '') {
             setIsUpdatePicture(true);
         }
+    };
+
+    const handleCollection = () => {
+        setModalVisible(false);
+        setIsSave(true);
     };
 
     const handleChangeInput = () => {
@@ -41,6 +71,21 @@ export default function ChangeInfoScreen({ navigation }) {
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>
             <StatusBar style={{ backgroundColor: themeColors.bg }} />
+            <Modal animationType="fade" transparent={true} visible={modalVisible}>
+                <View style={styles.modalContainer}>
+                    <View style={styles.optionContainer}>
+                        <TouchableOpacity onPress={() => setModalVisible(!modalVisible)} style={styles.closeButton}>
+                            <XMarkIcon size={20} color="black" />
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={handleCamera} style={styles.optionButton}>
+                            <Text style={styles.textOption}>TAKE PHOTO</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={handleCollection} style={styles.optionButton}>
+                            <Text style={styles.textOption}>COLLECTION</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
             <View style={styles.header}>
                 <View style={styles.safeArea}>
                     <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
@@ -193,5 +238,40 @@ const styles = StyleSheet.create({
         marginTop: 160,
         fontSize: 20,
         color: '#F59E0B',
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0 , 0, 0.4 )',
+    },
+    optionContainer: {
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 36,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    optionButton: {
+        backgroundColor: '#2596be',
+        paddingVertical: 16,
+        alignItems: 'center',
+        width: 220,
+        marginTop: 12,
+        borderRadius: 6,
+    },
+    textOption: {
+        color: 'white',
+        fontSize: 18,
+        fontWeight: 600,
+    },
+    closeButton: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#F59E0B',
+        width: 50,
+        padding: 16,
+        borderRadius: 25,
+        marginBottom: 8,
     },
 });
