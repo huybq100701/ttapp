@@ -1,14 +1,12 @@
 import { View, Text, StyleSheet, Modal, TouchableOpacity, Image, TextInput, ToastAndroid } from 'react-native';
 import React, { useState, useRef } from 'react';
-import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeftIcon, CheckIcon, XMarkIcon } from 'react-native-heroicons/solid';
 import { StatusBar } from 'expo-status-bar';
-import * as MediaLibrary from 'expo-media-library';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { themeColors } from '../theme';
 import { updateUserById } from '../store/apiCall';
+import * as ImagePicker from 'expo-image-picker';
 
 export default function ChangeInfoScreen({ navigation }) {
     const insets = useSafeAreaInsets();
@@ -58,9 +56,19 @@ export default function ChangeInfoScreen({ navigation }) {
         }
     };
 
-    const handleCollection = () => {
+    const handleCollection = async () => {
         setModalVisible(false);
         setIsSave(true);
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+        if (!result.canceled) {
+            setImageUri(result.assets[0].uri);
+            setIsUpdatePicture(true);
+        }
     };
 
     const handleChangeInput = () => {
