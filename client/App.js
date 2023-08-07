@@ -11,13 +11,14 @@ export default function App() {
     return (
         <Provider store={store}>
             <SafeAreaProvider>
-              <CategoryProvider>
-                <RestaurantsProvider>
-                    <CurrentLocationProvider>
-                        <AppNavigation />
-                    </CurrentLocationProvider>
-                </RestaurantsProvider>
-            </CategoryProvider>
-        </SafeAreaProvider>
+                <CategoryProvider>
+                    <RestaurantsProvider>
+                        <CurrentLocationProvider>
+                            <AppNavigation />
+                        </CurrentLocationProvider>
+                    </RestaurantsProvider>
+                </CategoryProvider>
+            </SafeAreaProvider>
+        </Provider>
     );
 }

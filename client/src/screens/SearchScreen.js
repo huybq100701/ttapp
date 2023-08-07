@@ -60,11 +60,6 @@ export default SearchScreen = () => {
         return '';
     }
 
-    const [restaurants, setRestaurants] = React.useState(restaurantData);
-    const [popularRestaurants, setPopularRestaurants] = React.useState(popularRestaurantData);
-    const [idRestaurantSearch, setIdRestaurantSearch] = useState(null);
-    const [input, setInput] = React.useState('');
-
     const setIdRestaurant = useContext(restaurantsContext).setIdRestaurant;
     useEffect(() => {
         setIdRestaurant(idRestaurantSearch);
