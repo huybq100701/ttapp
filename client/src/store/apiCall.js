@@ -3,6 +3,7 @@ import { API_LINK } from "../../default-value";
 import { getRestaurantList } from "./slice/restaurantSlice";
 import { getCart } from "./slice/cartSlice";
 import { getMenuList } from "./slice/menuSlice";
+import { getUser } from "./slice/userSlice";
 
 export const fetchRestaurantList = async (dispatch) => {
     try {
@@ -32,5 +33,15 @@ export const fetchMenuOfRestaurant = async (dispatch, restaurantId) => {
         dispatch(getMenuList(res.data.data))
     } catch (error) {
         console.log('Error fetching restaurant data:', error);
+    }
+}
+
+export const fetchUser = async (dispatch, userId) => {
+    try {
+        const url = `${API_LINK}/users/${userId}`;
+        const res = await axios.get(url)
+        dispatch(getUser(res.data.user[0]))
+    } catch (error) {
+        console.log('Error fetching user data:', error);
     }
 }

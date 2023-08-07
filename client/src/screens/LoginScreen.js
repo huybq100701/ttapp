@@ -7,8 +7,7 @@ import { themeColors } from '../theme';
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { API_LINK } from '../../default-value';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchCart } from '../store/apiCall';
+import { setItem } from '../utils/asyncStorage';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -20,15 +19,13 @@ export default function LoginScreen() {
     const [mail, setMail] = React.useState('');
     const [password, setPassword] = React.useState('');
 
-    const dispatch = useDispatch();
-
     const handleLogin = async () => {
         try {
             const res = await axios.post(`${API_LINK}/auth/login`, {
                 mail,
                 password,
             });
-            await fetchCart(dispatch, res.data.user._id);
+            setItem('userId', res.data.user._id);
             ToastAndroid.showWithGravity(res.data.message, ToastAndroid.SHORT, ToastAndroid.CENTER);
             navigation.navigate('Tabs', { screen: 'Home'});
         } catch (error) {
