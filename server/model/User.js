@@ -6,7 +6,11 @@ const userSchema = new Schema(
         mail: { type: String, require: true },
         username: { type: String, require: true },
         password: { type: String, require: true },
-        avatar: { type: String },
+        fullname: { type: String },
+        birthday: { type: String },
+        phone: { type: String },
+        address: { type: String },
+        image: { type: String },
     },
     {
         timestamps: true,

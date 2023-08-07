@@ -5,6 +5,7 @@ import { themeColors } from '../theme';
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { ArrowLeftIcon, ArrowRightOnRectangleIcon, UserIcon } from 'react-native-heroicons/solid';
+import { removeItem } from '../utils/asyncStorage.js';
 
 export default function SettingScreen() {
     const navigation = useNavigation();
@@ -14,6 +15,7 @@ export default function SettingScreen() {
     };
 
     const handleLogout = () => {
+        removeItem('userId');
         navigation.navigate('Login');
     };
 

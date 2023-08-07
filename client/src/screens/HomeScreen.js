@@ -4,13 +4,14 @@ import { icons, images, SIZES, COLORS } from '../constants';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import { currentLocationContext, restaurantsContext, categoryContext } from '../utils/Context';
-import { fetchRestaurantList } from '../store/apiCall';
+import { fetchCart, fetchRestaurantList, fetchUser } from '../store/apiCall';
+import { getItem } from '../utils/asyncStorage.js';
 
 const HomeScreen = ({ navigation }) => {
     // Use useContext instead of params
     const initialCurrentLocation = useContext(currentLocationContext);
-  
     const categoryData = useContext(categoryContext);
+
     const [categories, setCategories] = React.useState(categoryData);
     const [selectedCategory, setSelectedCategory] = React.useState(null);
     const [currentLocation, setCurrentLocation] = React.useState(initialCurrentLocation);
@@ -22,7 +23,14 @@ const HomeScreen = ({ navigation }) => {
 
     useEffect(() => {
         (async () => {
-            await fetchRestaurantList(dispatch);
+            let userId = await getItem('userId');
+            if (userId) {
+                await fetchRestaurantList(dispatch);
+                await fetchUser(dispatch, userId);
+                await fetchCart(dispatch, userId);
+            } else {
+                navigation.navigate('Login');
+            }
         })();
     }, []);
 
@@ -178,14 +186,14 @@ const HomeScreen = ({ navigation }) => {
             </View>
         );
     }
-    
+
     function renderRestaurantList() {
         const renderItem = ({ item }) => {
             return (
                 <TouchableOpacity
                     style={{ marginBottom: SIZES.padding * 2 }}
                     onPress={() => {
-                        navigation.navigate('Restaurant', {restaurantId: item._id});
+                        navigation.navigate('Restaurant', { restaurantId: item._id });
                     }}
                 >
                     {/* Image */}
