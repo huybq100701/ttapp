@@ -15,14 +15,14 @@ export default SearchScreen = () => {
 
     const popularRestaurantData = [
         {
-            id: 1,
+            _id: '64ca050ea1c71c7b4e9e7e57',
             name: 'Burger',
             rating: 4.8,
             categories: [5, 7],
             photo: images.burger_restaurant_1,
         },
         {
-            id: 2,
+            _id: '64ca055ba1c71c7b4e9e7e59',
             name: 'Pizza',
             rating: 4.8,
             categories: [2, 4, 6],
@@ -32,14 +32,14 @@ export default SearchScreen = () => {
 
     const restaurantData = [
         {
-            id: 1,
+            _id: '64ca050ea1c71c7b4e9e7e57',
             name: 'Burger',
             rating: 4.8,
             categories: [5, 7],
             photo: images.burger_restaurant_1,
         },
         {
-            id: 2,
+            _id: '64ca055ba1c71c7b4e9e7e59',
             name: 'Pizza',
             rating: 4.8,
             categories: [2, 4, 6],
@@ -59,6 +59,11 @@ export default SearchScreen = () => {
 
         return '';
     }
+
+    const [restaurants, setRestaurants] = React.useState(restaurantData);
+    const [popularRestaurants, setPopularRestaurants] = React.useState(popularRestaurantData);
+    const [idRestaurantSearch, setIdRestaurantSearch] = useState(null);
+    const [input, setInput] = React.useState('');
 
     const setIdRestaurant = useContext(restaurantsContext).setIdRestaurant;
     useEffect(() => {
@@ -84,7 +89,7 @@ export default SearchScreen = () => {
                 style={styles.itemContainer}
                 onPress={() => {
                     navigation.navigate('Restaurant');
-                    setIdRestaurantSearch(item.id);
+                    setIdRestaurantSearch(item._id);
                 }}
             >
                 <Image source={item.photo} style={styles.image} />

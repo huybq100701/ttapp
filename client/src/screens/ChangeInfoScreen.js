@@ -18,7 +18,7 @@ export default function ChangeInfoScreen({ navigation }) {
     const [address, setAddress] = useState('Ha Noi, Viet Nam');
     const [email, setEmail] = useState('nva@gmail.com');
     const [phone, setPhone] = useState('0232342354');
-    const [imageUri, setImageUri] = useState('');
+    const [imageUri, setImageUri] = useState(null);
 
     const handleSave = () => {
         setIsSave(false);
@@ -26,11 +26,11 @@ export default function ChangeInfoScreen({ navigation }) {
     };
 
     const handleUpdateImage = () => {
+        navigation.navigate('Camera', { setImageUri: setImageUri });
+        setIsSave(true);
         if (imageUri !== '') {
             setIsUpdatePicture(true);
         }
-        navigation.navigate('Camera', { setImageUri: setImageUri });
-        setIsSave(true);
     };
 
     const handleChangeInput = () => {

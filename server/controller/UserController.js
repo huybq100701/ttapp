@@ -4,7 +4,11 @@ const mongoose = require('mongoose');
 const UserController = {
     create: async (req, res) => {
         try {
-            const newUser = await User.create(req.body);
+            console.log(req.body);
+            const newUser = await User.create({
+                ...req.body,
+                avatar: '',
+            });
             return res.status(200).json({
                 message: 'Tạo tài khoản thành công',
                 user: newUser,

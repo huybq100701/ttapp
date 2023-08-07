@@ -7,7 +7,11 @@ const restaurantSchema = new Schema(
         rating: { type: Number },
         photo: { type: String, require: true },
         duration: { type: String, require: true },
-        catogories: [{ type: Number }],
+        categories: [{ type: Number }],
+        location: {
+            latitude: { type: String },
+            longitude: { type: String },
+        },
     },
     {
         timestamps: true,

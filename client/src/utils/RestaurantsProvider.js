@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { restaurantsContext } from './Context';
 import { icons, images, SIZES, COLORS } from '../constants';
+import axios from 'axios';
+import { API_LINK } from '../../default-value';
 
 export default function RestaurantsProvider({ children }) {
     const affordable = 1;
@@ -9,20 +11,15 @@ export default function RestaurantsProvider({ children }) {
 
     const restaurantData = [
         {
-            id: 1,
+            _id: '64ca050ea1c71c7b4e9e7e57',
             name: 'Burger',
             rating: 4.8,
             categories: [5, 7],
-            priceRating: affordable,
             photo: images.burger_restaurant_1,
             duration: '10 - 15 min',
             location: {
                 latitude: 21.02154,
                 longitude: 105.77489,
-            },
-            courier: {
-                avatar: images.avatar_1,
-                name: 'Amy',
             },
             menu: [
                 {
@@ -62,20 +59,15 @@ export default function RestaurantsProvider({ children }) {
             ],
         },
         {
-            id: 2,
+            _id: '64ca055ba1c71c7b4e9e7e59',
             name: 'Pizza',
             rating: 4.8,
             categories: [2, 4, 6],
-            priceRating: expensive,
             photo: images.pizza_restaurant,
             duration: '15 - 20 min',
             location: {
                 latitude: 21.017459,
                 longitude: -254.215627,
-            },
-            courier: {
-                avatar: images.avatar_2,
-                name: 'Jackson',
             },
             menu: [
                 {
@@ -157,7 +149,7 @@ export default function RestaurantsProvider({ children }) {
     // Get restaurant by id
     useEffect(() => {
         restaurants.map((item) => {
-            if (item.id === idRestaurant) {
+            if (item._id === idRestaurant) {
                 setRestaurant(item);
             }
         });

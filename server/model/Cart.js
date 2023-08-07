@@ -1,12 +1,16 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const orderSchema = new Schema(
+const cartSchema = new Schema(
     {
         userId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
             required: true,
+        },
+        restaurantId: {
+            type: String,
+            ref: 'Restaurant', 
         },
         items: [
             {
@@ -19,15 +23,12 @@ const orderSchema = new Schema(
             },
         ],
         total: { type: Number, default: 0 },
-        status: {
-            type: Boolean,
-            default: false,
-        },
     },
     {
         timestamps: true,
     },
 );
 
-const Order = mongoose.model('Order', orderSchema);
-module.exports = Order;
+const Cart = mongoose.model('Cart', cartSchema);
+
+module.exports = Cart;

@@ -32,17 +32,6 @@ const DeliveryController = {
         }
     },
 
-    getAllDeliveries: async (req, res) => {
-        try {
-            const deliveries = await Delivery.find();
-            return res.status(200).json(deliveries);
-        } catch (error) {
-            return res.status(500).json({
-                message: 'Server error',
-                error: error,
-            });
-        }
-    }
 };
 
 module.exports = DeliveryController;

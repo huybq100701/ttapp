@@ -1,37 +1,48 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, Image, FlatList } from 'react-native';
-import Swiper from 'react-native-swiper';
 import { icons, images, SIZES, COLORS } from '../constants';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
+import { useDispatch, useSelector } from 'react-redux';
 import { currentLocationContext, restaurantsContext, categoryContext } from '../utils/Context';
+import { fetchRestaurantList } from '../store/apiCall';
 
 const HomeScreen = ({ navigation }) => {
     // Use useContext instead of params
     const initialCurrentLocation = useContext(currentLocationContext);
-    const restaurantData = useContext(restaurantsContext).restaurants;
+  
     const categoryData = useContext(categoryContext);
-
     const [categories, setCategories] = React.useState(categoryData);
     const [selectedCategory, setSelectedCategory] = React.useState(null);
-    const [restaurants, setRestaurants] = React.useState(restaurantData);
     const [idRestaurantHome, setIdRestaurantHome] = useState(null);
     const [currentLocation, setCurrentLocation] = React.useState(initialCurrentLocation);
     const [hasNotification, setHasNotification] = useState(false);
+    const [filteredRestaurant, setFilteredRestaurant] = useState([]);
 
     const setIdRestaurant = useContext(restaurantsContext).setIdRestaurant;
     useEffect(() => {
         setIdRestaurant(idRestaurantHome);
     }, [idRestaurantHome]);
 
+    const restaurants = useSelector((state) => state.restaurant);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        (async () => {
+            await fetchRestaurantList(dispatch);
+        })();
+    }, []);
+
+    useEffect(() => {
+        setFilteredRestaurant(restaurants);
+    }, [restaurants]);
     const insets = useSafeAreaInsets();
-
     function onSelectCategory(category) {
+        let restaurantList = restaurants;
+        if (category) {
+            restaurantList = restaurants.filter((a) => a.categories.includes(category.id));
+        }
         //filter restaurant
-        let restaurantList = restaurantData.filter((a) => a.categories.includes(category.id));
-
-        setRestaurants(restaurantList);
-
+        setFilteredRestaurant(restaurantList);
         setSelectedCategory(category);
     }
 
@@ -172,89 +183,14 @@ const HomeScreen = ({ navigation }) => {
             </View>
         );
     }
-
-    function renderRestaurantSwiper() {
-        const renderItem = ({ item }) => (
-            <TouchableOpacity
-                style={{ marginBottom: SIZES.padding }}
-                onPress={() => {
-                    navigation.navigate('Restaurant');
-                    setIdRestaurantHome(item.id);
-                }}
-            >
-                {/* Image */}
-                <View style={{ marginBottom: SIZES.padding }}>
-                    <Image
-                        source={item.photo}
-                        resizeMode="cover"
-                        style={{
-                            width: '100%',
-                            height: 200,
-                            borderRadius: SIZES.radius,
-                        }}
-                    />
-                </View>
-
-                {/* Restaurant Info */}
-                <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{item.name}</Text>
-
-                <View
-                    style={{
-                        marginTop: SIZES.padding,
-                        flexDirection: 'row',
-                    }}
-                >
-                    {/* Rating */}
-                    <Image
-                        source={icons.star}
-                        style={{
-                            height: 20,
-                            width: 20,
-                            tintColor: COLORS.primary,
-                            marginRight: 10,
-                        }}
-                    />
-                    <Text>{item.rating}</Text>
-
-                    {/* Categories */}
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            marginLeft: 10,
-                        }}
-                    >
-                        {item.categories.map((categoryId) => {
-                            return (
-                                <View style={{ flexDirection: 'row' }} key={categoryId}>
-                                    <Text>{getCategoryNameById(categoryId)}</Text>
-                                    <Text style={{ fontSize: 18, color: COLORS.darkgray }}> . </Text>
-                                </View>
-                            );
-                        })}
-                    </View>
-                </View>
-            </TouchableOpacity>
-        );
-
-        return (
-            <Swiper showsButtons={false} loop={false} style={styles.swiperContainer} activeDotColor={COLORS.primary}>
-                {restaurants.map((item) => (
-                    <View key={item.id} style={styles.swiperSlide}>
-                        {renderItem({ item })}
-                    </View>
-                ))}
-            </Swiper>
-        );
-    }
-
+    
     function renderRestaurantList() {
         const renderItem = ({ item }) => {
             return (
                 <TouchableOpacity
                     style={{ marginBottom: SIZES.padding * 2 }}
                     onPress={() => {
-                        navigation.navigate('Restaurant');
-                        setIdRestaurantHome(item.id);
+                        navigation.navigate('Restaurant', {restaurantId: item._id});
                     }}
                 >
                     {/* Image */}
@@ -264,7 +200,7 @@ const HomeScreen = ({ navigation }) => {
                         }}
                     >
                         <Image
-                            source={item.photo}
+                            source={{ uri: item.photo }}
                             resizeMode="cover"
                             style={{
                                 width: '100%',
@@ -327,19 +263,6 @@ const HomeScreen = ({ navigation }) => {
                                     </View>
                                 );
                             })}
-
-                            {/* Price */}
-                            {[1, 2, 3].map((priceRating) => (
-                                <Text
-                                    key={priceRating}
-                                    style={{
-                                        fontSize: 16,
-                                        color: priceRating <= item.priceRating ? COLORS.black : COLORS.darkgray,
-                                    }}
-                                >
-                                    $
-                                </Text>
-                            ))}
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -348,10 +271,10 @@ const HomeScreen = ({ navigation }) => {
 
         return (
             <FlatList
-                data={restaurants}
+                data={filteredRestaurant}
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
-                keyExtractor={(item) => `${item.id}`}
+                keyExtractor={(item) => `${item._id}`}
                 renderItem={renderItem}
                 contentContainerStyle={{
                     paddingHorizontal: SIZES.padding * 2,
@@ -365,7 +288,6 @@ const HomeScreen = ({ navigation }) => {
         <SafeAreaView style={[styles.container, { paddingTop: insets.top, paddingBottom: 50 }]}>
             {renderHeader()}
             {renderMainCategories()}
-            {renderRestaurantSwiper()}
             {renderRestaurantList()}
         </SafeAreaView>
     );
