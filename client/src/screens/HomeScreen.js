@@ -3,67 +3,14 @@ import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, Image, FlatList
 import { icons, images, SIZES, COLORS } from '../constants';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
-
-import { currentLocationContext, restaurantsContext } from '../utils/Context';
+import { currentLocationContext, restaurantsContext, categoryContext } from '../utils/Context';
 import { fetchRestaurantList } from '../store/apiCall';
 
 const HomeScreen = ({ navigation }) => {
     // Use useContext instead of params
     const initialCurrentLocation = useContext(currentLocationContext);
-
-    const categoryData = [
-        {
-            id: 1,
-            name: 'Rice',
-            icon: icons.rice_bowl,
-        },
-        {
-            id: 2,
-            name: 'Noodles',
-            icon: icons.noodle,
-        },
-        {
-            id: 3,
-            name: 'Hot Dogs',
-            icon: icons.hotdog,
-        },
-        {
-            id: 4,
-            name: 'Salads',
-            icon: icons.salad,
-        },
-        {
-            id: 5,
-            name: 'Burgers',
-            icon: icons.hamburger,
-        },
-        {
-            id: 6,
-            name: 'Pizza',
-            icon: icons.pizza,
-        },
-        {
-            id: 7,
-            name: 'Snacks',
-            icon: icons.fries,
-        },
-        {
-            id: 8,
-            name: 'Sushi',
-            icon: icons.sushi,
-        },
-        {
-            id: 9,
-            name: 'Desserts',
-            icon: icons.donut,
-        },
-        {
-            id: 10,
-            name: 'Drinks',
-            icon: icons.drink,
-        },
-    ];
-
+  
+    const categoryData = useContext(categoryContext);
     const [categories, setCategories] = React.useState(categoryData);
     const [selectedCategory, setSelectedCategory] = React.useState(null);
     const [idRestaurantHome, setIdRestaurantHome] = useState(null);
@@ -108,10 +55,7 @@ const HomeScreen = ({ navigation }) => {
     }
 
     const handleCart = () => {
-        navigation.navigate('Cart', {
-            restaurants,
-            currentLocation,
-        });
+        navigation.navigate('Cart');
     };
 
     const handleNotification = () => {
@@ -239,7 +183,7 @@ const HomeScreen = ({ navigation }) => {
             </View>
         );
     }
-
+    
     function renderRestaurantList() {
         const renderItem = ({ item }) => {
             return (

@@ -5,64 +5,13 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS, SIZES, images, icons } from '../constants';
 import { MagnifyingGlassIcon } from 'react-native-heroicons/solid';
 
-import { restaurantsContext } from '../utils/Context';
+import { restaurantsContext, categoryContext } from '../utils/Context';
 
 export default SearchScreen = () => {
     const navigation = useNavigation();
     const insets = useSafeAreaInsets();
 
-    const categoryData = [
-        {
-            id: 1,
-            name: 'Rice',
-            icon: icons.rice_bowl,
-        },
-        {
-            id: 2,
-            name: 'Noodles',
-            icon: icons.noodle,
-        },
-        {
-            id: 3,
-            name: 'Hot Dogs',
-            icon: icons.hotdog,
-        },
-        {
-            id: 4,
-            name: 'Salads',
-            icon: icons.salad,
-        },
-        {
-            id: 5,
-            name: 'Burgers',
-            icon: icons.hamburger,
-        },
-        {
-            id: 6,
-            name: 'Pizza',
-            icon: icons.pizza,
-        },
-        {
-            id: 7,
-            name: 'Snacks',
-            icon: icons.fries,
-        },
-        {
-            id: 8,
-            name: 'Sushi',
-            icon: icons.sushi,
-        },
-        {
-            id: 9,
-            name: 'Desserts',
-            icon: icons.donut,
-        },
-        {
-            id: 10,
-            name: 'Drinks',
-            icon: icons.drink,
-        },
-    ];
+    const categoryData = useContext(categoryContext);
 
     const popularRestaurantData = [
         {
@@ -97,6 +46,11 @@ export default SearchScreen = () => {
             photo: images.pizza_restaurant,
         },
     ];
+
+    const [restaurants, setRestaurants] = React.useState(restaurantData);
+    const [popularRestaurants, setPopularRestaurants] = React.useState(popularRestaurantData);
+    const [idRestaurantSearch, setIdRestaurantSearch] = useState(null);
+    const [input, setInput] = React.useState('');
 
     function getCategoryNameById(id) {
         let category = categoryData.filter((a) => a.id == id);
