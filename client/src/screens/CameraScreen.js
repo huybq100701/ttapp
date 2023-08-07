@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, Fragment } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Button } from 'react-native';
 import { Camera, CameraType } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import ButtonCamera from '../utils/button';
 
