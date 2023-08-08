@@ -1,127 +1,124 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import axios from 'axios';
-import { API_LINK } from '../../default-value';
-const CartScreen = ({ route, navigation }) => {
-    const { userId } = route.params; 
+import { LinearGradient } from 'expo-linear-gradient';
+import { fetchCart } from '../store/apiCall'; 
+import { themeColors } from '../theme';
 
-    const [cart, setCart] = useState({});
-    const [totalPrice, setTotalPrice] = useState(0);
-
-    useEffect(() => {
-        fetchCart();
-    }, []);
-
-    const fetchCart = async () => {
-        try {
-            const response = await axios.get(`${API_LINK}/cart/${userId}`);
-            const fetchedCart = response.data.cart;
-
-            const calculatedTotalPrice = fetchedCart.items.reduce(
-                (total, item) => total + item.menu.price * item.quantity,
-                0
-            );
-
-            setCart(fetchedCart);
-            setTotalPrice(calculatedTotalPrice);
-        } catch (error) {
-            console.error('Error fetching cart:', error);
-        }
-    };
+export default function CartScreen({ navigation, route }) {
     const insets = useSafeAreaInsets();
+    const [totalPrice, setTotalPrice] = useState(0); 
+    const [fetchedCart, setFetchedCart] = useState(null); 
 
-    const renderCartItem = ({ item }) => (
-        <View style={styles.cartItem}>
-            <Text>{item.menu.name}</Text>
-            <Text>${(item.menu.price * item.quantity).toFixed(2)}</Text>
-        </View>
-    );
+    const userId = route.params.userId; 
+    useEffect(() => {
+        const fetchCartData = async () => {
+            try {
+                const cartData = await fetchCart(userId);
+                setFetchedCart(cartData);
+
+                const calculatedTotalPrice = cartData.items.reduce(
+                    (total, item) => total + item.menu.price * item.quantity,
+                    0
+                );
+                setTotalPrice(calculatedTotalPrice);
+            } catch (error) {
+                console.error('Error fetching cart:', error);
+            }
+        };
+
+        fetchCartData();
+    }, [userId]);
+
+    const handleDelivery = () => {
+        navigation.navigate('Delivery');
+    };
 
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>
-            <Text style={styles.header}>Your Cart</Text>
-            {cart.items && cart.items.length > 0 ? (
-                <View style={styles.cartContainer}>
-                    <FlatList
-                        data={cart.items}
-                        renderItem={renderCartItem}
-                        keyExtractor={(item) => item._id}
-                        ListFooterComponent={
-                            <View style={styles.totalContainer}>
-                                <Text style={styles.totalText}>Total:</Text>
-                                <Text style={styles.totalPrice}>${totalPrice.toFixed(2)}</Text>
-                            </View>
-                        }
-                    />
-                    <TouchableOpacity
-                        style={styles.orderButton}
-                        onPress={() => navigation.navigate('OrderConfirmation')}
-                    >
-                        <Text style={styles.orderButtonText}>Place Order</Text>
+            {fetchedCart && fetchedCart.items.length > 0 ? (
+                <View>
+                    <View style={styles.cartHeader}>
+                        <Text style={styles.cartHeaderText}>Your Cart</Text>
+                    </View>
+                    <View style={styles.cartItems}>
+                        {/* Render cart items */}
+                    </View>
+                    <View style={styles.totalContainer}>
+                        <Text style={styles.totalLabel}>Total:</Text>
+                        <Text style={styles.totalAmount}>${totalPrice.toFixed(2)}</Text>
+                    </View>
+                    <TouchableOpacity style={styles.payButton} onPress={handleDelivery}>
+                        <LinearGradient colors={['#FF6600', '#F7941D']} start={[0, 0.5]} end={[1, 0.5]} style={styles.gradient}>
+                            <Text style={styles.payButtonText}>Pay Now</Text>
+                        </LinearGradient>
                     </TouchableOpacity>
                 </View>
             ) : (
-                <Text style={styles.emptyText}>Your cart is empty.</Text>
+                <View style={styles.emptyCartContainer}>
+                    <Text style={styles.emptyCartText}>Your cart is empty</Text>
+                </View>
             )}
         </View>
     );
-};
+}
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: themeColors.bg,
     },
-    header: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        margin: 20,
-    },
-    cartContainer: {
+    cartHeader: {
+        backgroundColor: themeColors.primary,
+        paddingVertical: 15,
         paddingHorizontal: 20,
     },
-    cartItem: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingVertical: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
+    cartHeaderText: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: 'white',
+    },
+    cartItems: {
+        marginVertical: 20,
+        paddingHorizontal: 20,
     },
     totalContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingVertical: 10,
-        marginTop: 10,
-    },
-    totalText: {
-        fontWeight: 'bold',
-        fontSize: 18,
-    },
-    totalPrice: {
-        fontWeight: 'bold',
-        fontSize: 18,
-    },
-    orderButton: {
-        backgroundColor: 'blue',
-        padding: 10,
-        borderRadius: 5,
+        paddingHorizontal: 20,
         marginTop: 20,
+    },
+    totalLabel: {
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    totalAmount: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        fontSize: 25,
+    },
+    payButton: {
+        alignSelf: 'center',
+        marginVertical: 20,
+    },
+    gradient: {
+        borderRadius: 25,
+        width: 140,
+        height: 45,
+        justifyContent: 'center',
         alignItems: 'center',
     },
-    orderButtonText: {
+    payButtonText: {
+        fontSize: 17,
         color: 'white',
-        fontWeight: 'bold',
-        fontSize: 18,
     },
-    emptyText: {
-        alignSelf: 'center',
-        marginTop: 100,
+    emptyCartContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    emptyCartText: {
         fontSize: 18,
-        color: '#888',
+        color: themeColors.text,
     },
 });
-
-export default CartScreen;

@@ -8,7 +8,6 @@ import { fetchCart, fetchRestaurantList, fetchUser } from '../store/apiCall';
 import { getItem } from '../utils/asyncStorage.js';
 
 const HomeScreen = ({ navigation }) => {
-    // Use useContext instead of params
     const initialCurrentLocation = useContext(currentLocationContext);
     const categoryData = useContext(categoryContext);
 
@@ -57,8 +56,14 @@ const HomeScreen = ({ navigation }) => {
         return '';
     }
 
-    const handleCart = () => {
-        navigation.navigate('Cart');
+    const handleCart = async () => {
+        let userId = await getItem('userId');
+        if (userId) {
+            await fetchCart(dispatch, userId);
+            navigation.navigate('Cart', { userId }); 
+        } else {
+            navigation.navigate('Login');
+        }
     };
 
     const handleNotification = () => {

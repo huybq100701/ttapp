@@ -11,12 +11,21 @@ export const cartSlice = createSlice({
         deleteCart: (state) => {
             state.restaurantId = '';
             state.items.splice(0, state.length);
-        }
+        },
+        addToCart: (state, action) => {
+            const { userId, items } = action.payload;
+            const userCart = state.items.find(cart => cart.userId === userId);
+            if (userCart) {
+                userCart.items.push(...items);
+            } else {
+                state.items.push({ userId, items });
+            }
+        },
 
     },
 });
 
-export const { getCart, deleteCart } = cartSlice.actions;
+export const { getCart, deleteCart, addToCart } = cartSlice.actions;
 
 export default cartSlice.reducer;
 
