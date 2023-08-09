@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { API_LINK } from '../../default-value';
 import { getRestaurantList } from './slice/restaurantSlice';
-import { getCart } from './slice/cartSlice';
+import { getCart, update } from './slice/cartSlice';
 import { getMenuList } from './slice/menuSlice';
 import { getUser, updateUser } from './slice/userSlice';
 
@@ -55,11 +55,16 @@ export const updateUserById = async (dispatch, userId, updateData) => {
     }
 };
 
-export const saveCartToStorage = async (cartItems) => {
+export const saveCart = async (dispatch, cartId, restaurantId, items) => {
     try {
-        const cartItemsJSON = JSON.stringify(cartItems);
-        await AsyncStorage.setItem('cart', cartItemsJSON);
+        const updateData = {
+            restaurantId,
+            items
+        }
+        const url = `${API_LINK}/cart/${cartId}`;
+        const res = await axios.put(url, updateData);
+        dispatch(update(res.data.cart));
     } catch (error) {
-        console.error('Error saving cart to AsyncStorage:', error);
+        console.error('Error saving cart ', error);
     }
 };

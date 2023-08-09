@@ -12,15 +12,15 @@ export const cartSlice = createSlice({
             state.restaurantId = '';
             state.items.splice(0, state.length);
         },
-        
-        addItems: (state, action) => {
-            state.items.splice(0, state.items.length, ...action.payload)
+
+        update: (state, action) => {
+            return action.payload;
         },
     },
 });
 
 
-export const { getCart, deleteCart, addItems } = cartSlice.actions;
+export const { getCart, deleteCart, update } = cartSlice.actions;
 
 export default cartSlice.reducer;
 
