@@ -15,7 +15,16 @@ const RestaurantScreen = ({ route, navigation }) => {
 
     const menus = useSelector((state) => state.menu);
     const dispatch = useDispatch();
+    const cartItems = useSelector(state => state.cart.items);
 
+    const handleAddToCart = (menuId) => {
+        const selectedItem = menu.find(item => item._id === menuId);
+
+        if (selectedItem) {
+            dispatch(addItem({ menuId, quantity: 1 }));
+        }
+        navigation.navigate("Cart");
+    };
     useEffect(() => {
         const restaurantId = route.params?.restaurantId;
         if (restaurantId) {
@@ -310,6 +319,9 @@ const RestaurantScreen = ({ route, navigation }) => {
     };
 
     const renderOrder = () => {
+        const basketItemCount = getBasketItemCount();
+        const totalSum = sumOrder();
+    
         return (
             <View>
                 <View>
@@ -421,18 +433,22 @@ const RestaurantScreen = ({ route, navigation }) => {
                                 justifyContent: 'center',
                             }}
                         >
-                            <TouchableOpacity
-                                style={{
-                                    width: SIZES.width * 0.9,
-                                    padding: SIZES.padding,
-                                    backgroundColor: COLORS.primary,
-                                    alignItems: 'center',
-                                    borderRadius: SIZES.radius,
-                                }}
-                                onPress={() => navigation.navigate('Cart')}
-                            >
-                                <Text style={{ color: COLORS.white, fontSize: 20 }}>Order</Text>
-                            </TouchableOpacity>
+                              {basketItemCount > 0 ? (
+                                <TouchableOpacity
+                                    style={{
+                                        width: SIZES.width * 0.9,
+                                        padding: SIZES.padding,
+                                        backgroundColor: COLORS.primary,
+                                        alignItems: 'center',
+                                        borderRadius: SIZES.radius,
+                                    }}
+                                    onPress={() => handleAddToCart(selectedItem._id)}
+                                >
+                                    <Text style={{ color: COLORS.white, fontSize: 20 }}>Order</Text>
+                                </TouchableOpacity>
+                            ) : (
+                                <Text style={{ fontSize: 20 }}>Add items to your cart</Text>
+                            )}
                         </View>
                     </View>
                 </View>
