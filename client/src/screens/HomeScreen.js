@@ -16,7 +16,6 @@ const HomeScreen = ({ navigation }) => {
     const [currentLocation, setCurrentLocation] = React.useState(initialCurrentLocation);
     const [hasNotification, setHasNotification] = useState(false);
     const [filteredRestaurant, setFilteredRestaurant] = useState([]);
-
     const restaurants = useSelector((state) => state.restaurant);
     const dispatch = useDispatch();
 

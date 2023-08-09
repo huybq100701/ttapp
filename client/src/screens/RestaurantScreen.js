@@ -4,8 +4,7 @@ import { icons, COLORS, SIZES } from '../constants';
 import { ArrowLeftIcon } from 'react-native-heroicons/solid';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMenuOfRestaurant } from '../store/apiCall';
-import { addItems } from '../store/slice/cartSlice';
+import { fetchMenuOfRestaurant, saveCart } from '../store/apiCall';
 
 const RestaurantScreen = ({ route, navigation }) => {
     const scrollX = new Animated.Value(0);
@@ -14,14 +13,19 @@ const RestaurantScreen = ({ route, navigation }) => {
     const [restaurant, setRestaurant] = useState(null);
     const [menu, setMenu] = useState([{ price: 0, calories: 0 }]);
     const menus = useSelector((state) => state.menu);
+    const cart = useSelector((state) => state.cart);
+    const restaurantId = route.params?.restaurantId;
     const dispatch = useDispatch();
 
-    const handleAddToCart = () => {
-        dispatch(addItems(orderItems));
-        navigation.navigate('Cart');
+    const handleAddToCart = async () => {
+        try {
+            await saveCart(dispatch, cart._id, restaurantId, orderItems);
+            navigation.navigate('Cart');
+        } catch (error) {
+            console.log('Error o handle Add to Cart');
+        }
     };
     useEffect(() => {
-        const restaurantId = route.params?.restaurantId;
         if (restaurantId) {
             fetchMenuOfRestaurant(dispatch, restaurantId);
         }
