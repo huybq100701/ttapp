@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Modal, TouchableOpacity, Image, TextInput, ToastAndroid } from 'react-native';
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeftIcon, CheckIcon, XMarkIcon } from 'react-native-heroicons/solid';
 import { StatusBar } from 'expo-status-bar';
@@ -7,6 +7,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { themeColors } from '../theme';
 import { updateUserById } from '../store/apiCall';
 import * as ImagePicker from 'expo-image-picker';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import 'react-native-get-random-values';
+import { storage } from '../firebase/config';
 
 export default function ChangeInfoScreen({ navigation }) {
     const insets = useSafeAreaInsets();
@@ -22,17 +25,39 @@ export default function ChangeInfoScreen({ navigation }) {
     const [address, setAddress] = useState(user.address);
     const [email, setEmail] = useState(user.mail);
     const [phone, setPhone] = useState(user.phone);
-    const [imageUri, setImageUri] = useState(null);
+    const [imageUri, setImageUri] = useState(user.image);
     const [modalVisible, setModalVisible] = useState(false);
 
     const handleSave = async () => {
         try {
+            let imageURL = '';
+            if (imageUri !== user.image) {
+                const filename = imageUri.substring(imageUri.lastIndexOf('/') + 1);
+                const storageRef = ref(storage, filename);
+                const blob = await new Promise((resolve, reject) => {
+                    const xhr = new XMLHttpRequest();
+                    xhr.onload = function () {
+                        resolve(xhr.response);
+                    };
+                    xhr.onerror = function () {
+                        reject(new TypeError('Network request failed'));
+                    };
+                    xhr.responseType = 'blob';
+                    xhr.open('GET', imageUri, true);
+                    xhr.send(null);
+                });
+
+                const snapshot = await uploadBytes(storageRef, blob);
+                const downloadURL = await getDownloadURL(snapshot.ref);
+                imageURL = downloadURL;
+            }
             const updateUser = {
                 fullname: fullName,
                 phone: phone,
                 birthday: birth,
                 address: address,
                 mail: email,
+                image: imageURL,
             };
             await updateUserById(dispatch, user._id, updateUser);
             ToastAndroid.showWithGravity('Cập nhật thành công', ToastAndroid.SHORT, ToastAndroid.CENTER);
@@ -111,7 +136,7 @@ export default function ChangeInfoScreen({ navigation }) {
             </View>
             <View style={styles.imageContainer}>
                 <Image
-                    source={isUpdatePicture ? { uri: imageUri } : require('../../assets/images/bglogin.jpg')}
+                    source={user.image ? { uri: imageUri } : require('../../assets/images/bglogin.jpg')}
                     style={styles.image}
                 />
                 <TouchableOpacity style={styles.changeImage}>
