@@ -14,12 +14,12 @@ db.connect();
 app.use(
     express.urlencoded({
         extended: true,
-    })
+    }),
 );
 app.use(express.json());
 
 // CORS
-app.use(cors())
+app.use(cors());
 
 // Route
 const router = require('./route');

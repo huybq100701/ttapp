@@ -11,17 +11,17 @@ export const fetchRestaurantList = async (dispatch) => {
         const res = await axios.get(url);
         dispatch(getRestaurantList(res.data.restaurants));
     } catch (error) {
-        console.log(error);
+        console.log('Error fetching RestaurantList data:', error);
     }
 };
 
 export const fetchCart = async (dispatch, userId) => {
     try {
-        const url = `${API_LINK}/cart/${userId}r`;
+        const url = `${API_LINK}/cart/${userId}`;
         const res = await axios.get(url);
         dispatch(getCart(res.data.cart));
     } catch (error) {
-        console.log(error);
+        console.log('Error fetching cart data:', error);
     }
 };
 
@@ -39,7 +39,7 @@ export const fetchUser = async (dispatch, userId) => {
     try {
         const url = `${API_LINK}/users/${userId}`;
         const res = await axios.get(url);
-        dispatch(getUser(res.data.user[0]));
+        await dispatch(getUser(res.data?.user[0]));
     } catch (error) {
         console.log('Error fetching user data:', error);
     }

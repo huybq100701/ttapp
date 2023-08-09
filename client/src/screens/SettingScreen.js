@@ -6,17 +6,21 @@ import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { ArrowLeftIcon, ArrowRightOnRectangleIcon, UserIcon } from 'react-native-heroicons/solid';
 import { removeItem } from '../utils/asyncStorage.js';
+import { useDispatch } from 'react-redux';
+import { deleteUser } from '../store/slice/userSlice';
 
 export default function SettingScreen() {
     const navigation = useNavigation();
     const insets = useSafeAreaInsets();
+    const dispatch = useDispatch();
+
     const handleGoBack = () => {
         navigation.goBack();
     };
 
     const handleLogout = () => {
         removeItem('userId');
-        navigation.navigate('Login');
+        dispatch(deleteUser());
     };
 
     return (
