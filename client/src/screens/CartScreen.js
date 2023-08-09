@@ -2,33 +2,29 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import { fetchCart } from '../store/apiCall'; 
 import { themeColors } from '../theme';
+import { useSelector } from 'react-redux';
 
-export default function CartScreen({ navigation, route }) {
+export default function CartScreen({ navigation }) {
     const insets = useSafeAreaInsets();
-    const [totalPrice, setTotalPrice] = useState(0); 
-    const [fetchedCart, setFetchedCart] = useState(null); 
 
-    const userId = route.params.userId; 
+    const cart = useSelector((state) => state.cart);
+    const menus = useSelector((state) => state.menu);
+    const menu = menus.menu;
+
+    const [totalPrice, setTotalPrice] = useState(0);
+
     useEffect(() => {
-        const fetchCartData = async () => {
-            try {
-                const cartData = await fetchCart(userId);
-                setFetchedCart(cartData);
-
-                const calculatedTotalPrice = cartData.items.reduce(
-                    (total, item) => total + item.menu.price * item.quantity,
-                    0
-                );
-                setTotalPrice(calculatedTotalPrice);
-            } catch (error) {
-                console.error('Error fetching cart:', error);
+        const calculateCart = () => {
+            let total = 0;
+            for (let i = 0; i < cart.items.length; i++) {
+                total += cart.items[i].total;
             }
+            setTotalPrice(total);
         };
+        calculateCart();
+    }, [cart])
 
-        fetchCartData();
-    }, [userId]);
 
     const handleDelivery = () => {
         navigation.navigate('Delivery');
@@ -36,20 +32,23 @@ export default function CartScreen({ navigation, route }) {
 
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>
-            {fetchedCart && fetchedCart.items.length > 0 ? (
+            {cart && cart.items.length > 0 ? (
                 <View>
                     <View style={styles.cartHeader}>
                         <Text style={styles.cartHeaderText}>Your Cart</Text>
                     </View>
-                    <View style={styles.cartItems}>
-                        {/* Render cart items */}
-                    </View>
+                    <View style={styles.cartItems}>{/* Render cart items */}</View>
                     <View style={styles.totalContainer}>
                         <Text style={styles.totalLabel}>Total:</Text>
                         <Text style={styles.totalAmount}>${totalPrice.toFixed(2)}</Text>
                     </View>
                     <TouchableOpacity style={styles.payButton} onPress={handleDelivery}>
-                        <LinearGradient colors={['#FF6600', '#F7941D']} start={[0, 0.5]} end={[1, 0.5]} style={styles.gradient}>
+                        <LinearGradient
+                            colors={['#FF6600', '#F7941D']}
+                            start={[0, 0.5]}
+                            end={[1, 0.5]}
+                            style={styles.gradient}
+                        >
                             <Text style={styles.payButtonText}>Pay Now</Text>
                         </LinearGradient>
                     </TouchableOpacity>

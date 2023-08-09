@@ -58,7 +58,7 @@ const HomeScreen = ({ navigation }) => {
     }
 
     const handleCart = async () => {
-        navigation.navigate('Cart', { userId });
+        navigation.navigate('Cart');
     };
 
     const handleNotification = () => {
