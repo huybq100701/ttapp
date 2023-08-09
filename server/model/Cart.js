@@ -8,10 +8,6 @@ const cartSchema = new Schema(
             ref: 'User',
             required: true,
         },
-        restaurantId: {
-            type: String,
-            ref: 'Restaurant', 
-        },
         items: [
             {
                 menu: {
@@ -20,9 +16,9 @@ const cartSchema = new Schema(
                     required: true,
                 },
                 quantity: { type: Number, default: 1 },
+                total: { type: Number, default: 0 },
             },
         ],
-        total: { type: Number, default: 0 },
     },
     {
         timestamps: true,

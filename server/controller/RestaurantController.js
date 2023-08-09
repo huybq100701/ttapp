@@ -56,33 +56,7 @@ const RestaurantController = {
             });
         }
     },
-    addToCart: async (req, res) => {
-        try {
-            const { userId, restaurantId, menuId, quantity } = req.body;
 
-            const menu = await Menu.findById(menuId);
-            const restaurant = await Restaurant.findById(restaurantId);
-
-            let cart = await Cart.findOne({ userId });
-            if (!cart) {
-                cart = await Cart.create({ userId, items: [] });
-            }
-
-
-            cart.items.push({ menu: menuId, quantity });
-            await cart.save();
-
-            return res.status(200).json({
-                message: 'Thêm vào giỏ hàng thành công',
-                cart,
-            });
-        } catch (error) {
-            return res.status(500).json({
-                message: 'Server error',
-                error: error,
-            });
-        }
-    },
 };
 
 module.exports = RestaurantController;
