@@ -3,7 +3,7 @@ import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, Image, FlatList
 import { icons, images, SIZES, COLORS } from '../constants';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
-import { currentLocationContext, restaurantsContext, categoryContext } from '../utils/Context';
+import { currentLocationContext, categoryContext } from '../utils/Context';
 import { fetchCart, fetchRestaurantList, fetchUser } from '../store/apiCall';
 import { getItem } from '../utils/asyncStorage.js';
 
