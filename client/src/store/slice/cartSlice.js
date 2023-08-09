@@ -13,6 +13,7 @@ export const cartSlice = createSlice({
             state.restaurantId = '';
             state.items.splice(0, state.length);
         },
+        
         addItem: (state, action) => {
             const { menuId, quantity } = action.payload;
             const existingItem = state.items.find(item => item.menu._id === menuId);
