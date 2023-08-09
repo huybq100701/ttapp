@@ -55,3 +55,12 @@ export const updateUserById = async (dispatch, userId, updateData) => {
         console.log('Error update user data:', error);
     }
 };
+
+export const saveCartToStorage = async (cartItems) => {
+    try {
+        const cartItemsJSON = JSON.stringify(cartItems);
+        await AsyncStorage.setItem('cart', cartItemsJSON);
+    } catch (error) {
+        console.error('Error saving cart to AsyncStorage:', error);
+    }
+};
