@@ -14,7 +14,7 @@ export const cartSlice = createSlice({
         },
         
         addItems: (state, action) => {
-            state.items.splice(0, state.items.length, ...action.payload)
+            state.items?.splice(0, state.items?.length, ...action.payload)
         },
     },
 });

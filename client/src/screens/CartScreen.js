@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet,Image } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { themeColors } from '../theme';
@@ -11,7 +11,7 @@ export default function CartScreen({ navigation }) {
     const cart = useSelector((state) => state.cart);
     const menus = useSelector((state) => state.menu);
     const menu = menus.menu;
-
+    console.log(menu);
     const [totalPrice, setTotalPrice] = useState(0);
 
     useEffect(() => {
@@ -37,7 +37,21 @@ export default function CartScreen({ navigation }) {
                     <View style={styles.cartHeader}>
                         <Text style={styles.cartHeaderText}>Your Cart</Text>
                     </View>
-                    <View style={styles.cartItems}>{/* Render cart items */}</View>
+                    <View style={styles.cartItems}>
+                        {cart.items.map((item, index) => (
+                            <View key={index} style={styles.cartItem}>
+                                <Image
+                                    source={{ uri: item.menu.photo }} 
+                                    style={styles.itemImage}
+                                />
+                                <View style={styles.itemDetails}>
+                                    <Text style={styles.itemName}>{item.menu.name}</Text>
+                                    <Text style={styles.itemQuantity}>Quantity: {item.quantity}</Text>
+                                </View>
+                            </View>
+                        ))}
+                    </View>
+
                     <View style={styles.totalContainer}>
                         <Text style={styles.totalLabel}>Total:</Text>
                         <Text style={styles.totalAmount}>${totalPrice.toFixed(2)}</Text>
@@ -118,6 +132,30 @@ const styles = StyleSheet.create({
     },
     emptyCartText: {
         fontSize: 18,
+        color: themeColors.text,
+    },
+    cartItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 15,
+        paddingHorizontal: 20,
+    },
+    itemImage: {
+        width: 80,
+        height: 80,
+        borderRadius: 10,
+    },
+    itemDetails: {
+        marginLeft: 10,
+        flex: 1,
+        justifyContent: 'center',
+    },
+    itemName: {
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    itemQuantity: {
+        fontSize: 14,
         color: themeColors.text,
     },
 });
