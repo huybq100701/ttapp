@@ -1,24 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ArrowLeftIcon } from 'react-native-heroicons/solid';
-import { themeColors } from '../theme';
-import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
+import { fetchCart } from '../store/apiCall'; 
+import { themeColors } from '../theme';
 
-export default function CartScreen({ navigation }) {
+export default function CartScreen({ navigation, route }) {
     const insets = useSafeAreaInsets();
-    const [quantity, setQuantity] = useState(1);
+    const [totalPrice, setTotalPrice] = useState(0); 
+    const [fetchedCart, setFetchedCart] = useState(null); 
 
-    const increaseQuantity = () => {
-        setQuantity((prevQuantity) => prevQuantity + 1);
-    };
+    const userId = route.params.userId; 
+    useEffect(() => {
+        const fetchCartData = async () => {
+            try {
+                const cartData = await fetchCart(userId);
+                setFetchedCart(cartData);
 
-    const decreaseQuantity = () => {
-        if (quantity > 1) {
-            setQuantity((prevQuantity) => prevQuantity - 1);
-        }
-    };
+                const calculatedTotalPrice = cartData.items.reduce(
+                    (total, item) => total + item.menu.price * item.quantity,
+                    0
+                );
+                setTotalPrice(calculatedTotalPrice);
+            } catch (error) {
+                console.error('Error fetching cart:', error);
+            }
+        };
+
+        fetchCartData();
+    }, [userId]);
 
     const handleDelivery = () => {
         navigation.navigate('Delivery');
@@ -26,40 +36,29 @@ export default function CartScreen({ navigation }) {
 
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>
-            <StatusBar style={{ backgroundColor: themeColors.bg }} />
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-                    <ArrowLeftIcon size={20} color="black" />
-                </TouchableOpacity>
-                <Text style={styles.headerText}>Cart</Text>
-            </View>
-
-            <View style={styles.foodContainer}>
-                <Image source={require('../assets/images/burger-restaurant-2.jpg')} style={styles.foodImage} />
-                <View style={styles.foodText}>
-                    <Text style={styles.foodName}>Burger</Text>
-                    <Text style={styles.foodPrice}>$4</Text>
-                </View>
-                <View style={styles.quantityContainer}>
-                    <TouchableOpacity style={styles.quantityButton} onPress={decreaseQuantity}>
-                        <Text style={styles.quantityButtonText}>-</Text>
-                    </TouchableOpacity>
-                    <Text style={styles.quantityText}>{quantity}</Text>
-                    <TouchableOpacity style={styles.quantityButton} onPress={increaseQuantity}>
-                        <Text style={styles.quantityButtonText}>+</Text>
+            {fetchedCart && fetchedCart.items.length > 0 ? (
+                <View>
+                    <View style={styles.cartHeader}>
+                        <Text style={styles.cartHeaderText}>Your Cart</Text>
+                    </View>
+                    <View style={styles.cartItems}>
+                        {/* Render cart items */}
+                    </View>
+                    <View style={styles.totalContainer}>
+                        <Text style={styles.totalLabel}>Total:</Text>
+                        <Text style={styles.totalAmount}>${totalPrice.toFixed(2)}</Text>
+                    </View>
+                    <TouchableOpacity style={styles.payButton} onPress={handleDelivery}>
+                        <LinearGradient colors={['#FF6600', '#F7941D']} start={[0, 0.5]} end={[1, 0.5]} style={styles.gradient}>
+                            <Text style={styles.payButtonText}>Pay Now</Text>
+                        </LinearGradient>
                     </TouchableOpacity>
                 </View>
-            </View>
-
-            <View style={styles.totalContainer}>
-                <Text style={styles.totalLabel}>Total:</Text>
-                <Text style={styles.totalAmount}>${4 * quantity}</Text>
-            </View>
-            <TouchableOpacity style={styles.payButton} onPress={handleDelivery}>
-                <LinearGradient colors={['#FF6600', '#F7941D']} start={[0, 0.5]} end={[1, 0.5]} style={styles.gradient}>
-                    <Text style={styles.payButtonText}>Pay Now</Text>
-                </LinearGradient>
-            </TouchableOpacity>
+            ) : (
+                <View style={styles.emptyCartContainer}>
+                    <Text style={styles.emptyCartText}>Your cart is empty</Text>
+                </View>
+            )}
         </View>
     );
 }
@@ -69,68 +68,19 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: themeColors.bg,
     },
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        paddingHorizontal: 16,
-        paddingTop: 16,
-        alignItems: 'center',
+    cartHeader: {
+        backgroundColor: themeColors.primary,
+        paddingVertical: 15,
+        paddingHorizontal: 20,
     },
-    backButton: {
-        backgroundColor: '#F59E0B',
-        padding: 10,
-        borderRadius: 20,
-    },
-    headerText: {
+    cartHeaderText: {
         fontSize: 24,
         fontWeight: 'bold',
-        marginLeft: 20,
-    },
-    foodContainer: {
-        marginHorizontal: 20,
-        backgroundColor: '#EEEEEE',
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 10,
-        borderRadius: 10,
-        marginTop: 20,
-    },
-    foodImage: {
-        width: 70,
-        height: 70,
-        borderRadius: 10,
-    },
-    foodText: {
-        flex: 1,
-        marginLeft: 10,
-    },
-    foodName: {
-        fontSize: 18,
-    },
-    foodPrice: {
-        fontSize: 16,
-        color: '#777',
-    },
-    quantityContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    quantityButton: {
-        width: 30,
-        height: 30,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 5,
-        backgroundColor: 'red',
-        marginHorizontal: 5,
-    },
-    quantityButtonText: {
-        fontSize: 18,
         color: 'white',
     },
-    quantityText: {
-        fontSize: 18,
-        marginHorizontal: 8,
+    cartItems: {
+        marginVertical: 20,
+        paddingHorizontal: 20,
     },
     totalContainer: {
         flexDirection: 'row',
@@ -161,5 +111,14 @@ const styles = StyleSheet.create({
     payButtonText: {
         fontSize: 17,
         color: 'white',
+    },
+    emptyCartContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    emptyCartText: {
+        fontSize: 18,
+        color: themeColors.text,
     },
 });

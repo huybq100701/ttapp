@@ -17,7 +17,7 @@ export const fetchRestaurantList = async (dispatch) => {
 
 export const fetchCart = async (dispatch, userId) => {
     try {
-        const url = `${API_LINK}/cart/${userId}`;
+        const url = `${API_LINK}/cart/${userId}r`;
         const res = await axios.get(url);
         dispatch(getCart(res.data.cart));
     } catch (error) {
@@ -52,5 +52,14 @@ export const updateUserById = async (dispatch, userId, updateData) => {
         dispatch(updateUser(res.data.user));
     } catch (error) {
         console.log('Error update user data:', error);
+    }
+};
+
+export const saveCartToStorage = async (cartItems) => {
+    try {
+        const cartItemsJSON = JSON.stringify(cartItems);
+        await AsyncStorage.setItem('cart', cartItemsJSON);
+    } catch (error) {
+        console.error('Error saving cart to AsyncStorage:', error);
     }
 };
