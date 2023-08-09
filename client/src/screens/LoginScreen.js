@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 import { View, Text, TouchableOpacity, Image, TextInput, StyleSheet, ToastAndroid, Dimensions, Platform,KeyboardAvoidingView  } from 'react-native';
+import { useDispatch } from 'react-redux';
+import {  fetchUser } from '../store/apiCall';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeftIcon } from 'react-native-heroicons/solid';
 import { themeColors } from '../theme';
@@ -15,7 +17,7 @@ const windowHeight = Dimensions.get('window').height;
 export default function LoginScreen() {
     const navigation = useNavigation();
     const insets = useSafeAreaInsets();
-
+    const dispatch = useDispatch()
     const [mail, setMail] = React.useState('');
     const [password, setPassword] = React.useState('');
 
@@ -25,9 +27,9 @@ export default function LoginScreen() {
                 mail,
                 password,
             });
-            setItem('userId', res.data.user._id);
+            await setItem('userId', res.data?.user._id);
+            await fetchUser(dispatch, res.data?.user._id);
             ToastAndroid.showWithGravity(res.data.message, ToastAndroid.SHORT, ToastAndroid.CENTER);
-            navigation.navigate('Tabs', { screen: 'Home'});
         } catch (error) {
             ToastAndroid.showWithGravity(error.response.data.message, ToastAndroid.SHORT, ToastAndroid.CENTER);
         }

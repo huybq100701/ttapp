@@ -3,7 +3,7 @@ import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, Image, FlatList
 import { icons, images, SIZES, COLORS } from '../constants';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
-import { currentLocationContext, restaurantsContext, categoryContext } from '../utils/Context';
+import { currentLocationContext, categoryContext } from '../utils/Context';
 import { fetchCart, fetchRestaurantList, fetchUser } from '../store/apiCall';
 import { getItem } from '../utils/asyncStorage.js';
 
@@ -22,13 +22,14 @@ const HomeScreen = ({ navigation }) => {
 
     useEffect(() => {
         (async () => {
-            let userId = await getItem('userId');
-            if (userId) {
-                await fetchRestaurantList(dispatch);
-                await fetchUser(dispatch, userId);
-                await fetchCart(dispatch, userId);
-            } else {
-                navigation.navigate('Login');
+            try {
+                let userId = await getItem('userId');
+                if (userId) {
+                    await fetchRestaurantList(dispatch);
+                    await fetchCart(dispatch, userId);
+                }
+            } catch (error) {
+                console.log('Error o HomeScreen', error);
             }
         })();
     }, []);
@@ -57,13 +58,7 @@ const HomeScreen = ({ navigation }) => {
     }
 
     const handleCart = async () => {
-        let userId = await getItem('userId');
-        if (userId) {
-            await fetchCart(dispatch, userId);
-            navigation.navigate('Cart', { userId }); 
-        } else {
-            navigation.navigate('Login');
-        }
+        navigation.navigate('Cart');
     };
 
     const handleNotification = () => {
