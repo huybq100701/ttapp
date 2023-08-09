@@ -19,7 +19,6 @@ export const fetchCart = async (dispatch, userId) => {
     try {
         const url = `${API_LINK}/cart/${userId}r`;
         const res = await axios.get(url);
-        console.log(res.data.cart)
         dispatch(getCart(res.data.cart));
     } catch (error) {
         console.log(error);
