@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, SafeAreaView, View, Text, TouchableOpacity, Image, Animated, ScrollView } from 'react-native';
 import { icons, COLORS, SIZES } from '../constants';
 import { ArrowLeftIcon } from 'react-native-heroicons/solid';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchMenuOfRestaurant } from '../store/apiCall';
+import { addItems } from '../store/slice/cartSlice';
 
 const RestaurantScreen = ({ route, navigation }) => {
     const scrollX = new Animated.Value(0);
@@ -12,18 +13,12 @@ const RestaurantScreen = ({ route, navigation }) => {
     const [isSidebarVisible, setIsSidebarVisible] = useState(false);
     const [restaurant, setRestaurant] = useState(null);
     const [menu, setMenu] = useState([{ price: 0, calories: 0 }]);
-
     const menus = useSelector((state) => state.menu);
     const dispatch = useDispatch();
-    const cartItems = useSelector(state => state.cart.items);
 
-    const handleAddToCart = (menuId) => {
-        const selectedItem = menu.find(item => item._id === menuId);
-
-        if (selectedItem) {
-            dispatch(addItem({ menuId, quantity: 1 }));
-        }
-        navigation.navigate("Cart");
+    const handleAddToCart = () => {
+        dispatch(addItems(orderItems));
+        navigation.navigate('Cart');
     };
     useEffect(() => {
         const restaurantId = route.params?.restaurantId;
@@ -36,44 +31,42 @@ const RestaurantScreen = ({ route, navigation }) => {
         setRestaurant(menus.restaurant);
         setMenu(menus.menu);
     }, [menus]);
-
     const handleNavigateToFoodScreen = (menuId) => {
         navigation.navigate('Food', { menuId });
     };
 
     function editOrder(action, menuId, price) {
         let orderList = orderItems.slice();
-        let item = orderList.find((a) => a.menuId === menuId);
+        let item = orderList.find((a) => a.menu === menuId);
         if (action === '+') {
             if (item) {
-                item.qty += 1;
-                item.total = item.qty * price;
+                item.quantity += 1;
+                item.total = item.quantity * price;
             } else {
                 const newItem = {
-                    menuId: menuId,
-                    qty: 1,
-                    price: price,
+                    menu: menuId,
+                    quantity: 1,
                     total: price,
                 };
                 orderList.push(newItem);
             }
         } else {
-            if (item && item.qty > 0) {
-                item.qty -= 1;
-                item.total = item.qty * price;
+            if (item && item.quantity > 0) {
+                item.quantity -= 1;
+                item.total = item.quantity * price;
             }
         }
-        setOrderItems(orderList);
+        setOrderItems(orderList.filter((item) => item.quantity > 0));
     }
 
     function getOrderQty(menuId) {
-        let orderItem = orderItems.find((a) => a.menuId === menuId);
+        let orderItem = orderItems.find((a) => a.menu === menuId);
 
-        return orderItem ? orderItem.qty : 0;
+        return orderItem ? orderItem.quantity : 0;
     }
 
     function getBasketItemCount() {
-        let itemCount = orderItems.reduce((a, b) => a + (b.qty || 0), 0);
+        let itemCount = orderItems.reduce((a, b) => a + (b.quantity || 0), 0);
         return itemCount;
     }
 
@@ -321,7 +314,7 @@ const RestaurantScreen = ({ route, navigation }) => {
     const renderOrder = () => {
         const basketItemCount = getBasketItemCount();
         const totalSum = sumOrder();
-    
+
         return (
             <View>
                 <View>
@@ -433,7 +426,7 @@ const RestaurantScreen = ({ route, navigation }) => {
                                 justifyContent: 'center',
                             }}
                         >
-                              {basketItemCount > 0 ? (
+                            {basketItemCount > 0 ? (
                                 <TouchableOpacity
                                     style={{
                                         width: SIZES.width * 0.9,
@@ -442,7 +435,7 @@ const RestaurantScreen = ({ route, navigation }) => {
                                         alignItems: 'center',
                                         borderRadius: SIZES.radius,
                                     }}
-                                    onPress={() => handleAddToCart(selectedItem._id)}
+                                    onPress={() => handleAddToCart()}
                                 >
                                     <Text style={{ color: COLORS.white, fontSize: 20 }}>Order</Text>
                                 </TouchableOpacity>
