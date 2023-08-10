@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Modal, TouchableOpacity, Image, TextInput, ToastAndroid } from 'react-native';
+import { View, Text, StyleSheet, Modal, TouchableOpacity, Image, TextInput, ToastAndroid ,Dimensions} from 'react-native';
 import React, { useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeftIcon, CheckIcon, XMarkIcon } from 'react-native-heroicons/solid';
@@ -10,13 +10,15 @@ import * as ImagePicker from 'expo-image-picker';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import 'react-native-get-random-values';
 import { storage } from '../firebase/config';
+const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
 
 export default function ChangeInfoScreen({ navigation }) {
     const insets = useSafeAreaInsets();
 
     const user = useSelector((state) => state.user);
     const dispatch = useDispatch();
-
+    
     const [isUpdatePicture, setIsUpdatePicture] = useState(false);
     const [isSave, setIsSave] = useState(false);
     const [isEditable, setIsEditable] = useState(false);
@@ -207,13 +209,8 @@ const styles = StyleSheet.create({
         backgroundColor: themeColors.bg,
     },
     header: {
-        width: '100%',
-        justifyContent: 'space-between',
         flexDirection: 'row',
-    },
-    safeArea: {
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
+        justifyContent: 'space-between',
         paddingHorizontal: 16,
         paddingTop: 16,
     },
@@ -231,9 +228,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     image: {
-        width: 200,
-        height: 200,
-        borderRadius: 900,
+        width: 0.5 * screenWidth,
+        height: 0.5 * screenWidth,
+        borderRadius: 0.5 * screenWidth,
     },
     changeImage: {
         margin: 10,
@@ -246,7 +243,7 @@ const styles = StyleSheet.create({
         paddingTop: 20,
         borderRadius: 32,
         backgroundColor: 'white',
-        paddingHorizontal: 18,
+        paddingHorizontal: 0.05 * screenWidth,
         flex: 1,
         alignItems: 'flex-end',
     },
@@ -259,16 +256,16 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: 20,
-        width: 95,
+        width: 0.3 * screenWidth,
         fontWeight: 'bold',
     },
     info: {
         fontSize: 20,
         flex: 1,
-        marginLeft: 15,
+        marginLeft: 0.03 * screenWidth,
     },
     textChangeInfo: {
-        marginTop: 160,
+        
         fontSize: 20,
         color: '#F59E0B',
     },
@@ -281,30 +278,30 @@ const styles = StyleSheet.create({
     optionContainer: {
         backgroundColor: 'white',
         borderRadius: 20,
-        padding: 36,
+        padding: 0.1 * screenWidth,
         justifyContent: 'center',
         alignItems: 'center',
     },
     optionButton: {
         backgroundColor: '#2596be',
-        paddingVertical: 16,
+        paddingVertical: 0.04 * screenHeight,
         alignItems: 'center',
-        width: 220,
-        marginTop: 12,
+        width: 0.4 * screenWidth,
+        marginTop: 0.02 * screenHeight,
         borderRadius: 6,
     },
     textOption: {
         color: 'white',
         fontSize: 18,
-        fontWeight: 600,
+        fontWeight: '600',
     },
     closeButton: {
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#F59E0B',
-        width: 50,
-        padding: 16,
+        width: 0.15 * screenWidth,
+        padding: 0.04 * screenHeight,
         borderRadius: 25,
-        marginBottom: 8,
+        marginBottom: 0.01 * screenHeight,
     },
 });
