@@ -35,6 +35,23 @@ const RestaurantController = {
         }
     },
 
+    getAllRestaurantsByQuery: async (req, res) => {
+        try {
+            const query = req.params.query;
+            const restaurants = query === '' ? await Restaurant.find() : await Restaurant.find({name: query});
+            return res.status(200).json({
+                message: 'Lấy restaurants thành công',
+                restaurants: restaurants,
+            })
+
+        } catch (error) {
+            return res.status(500).json({
+                message: 'Server error',
+                error: error,
+            });
+        }
+    },
+
     getRestaurantMenu: async (req, res) => {
         try {
             const { id } = req.params;

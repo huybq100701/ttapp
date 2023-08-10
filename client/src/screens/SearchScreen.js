@@ -13,43 +13,7 @@ export default SearchScreen = () => {
 
     const categoryData = useContext(categoryContext);
 
-    const popularRestaurantData = [
-        {
-            _id: '64ca050ea1c71c7b4e9e7e57',
-            name: 'Burger',
-            rating: 4.8,
-            categories: [5, 7],
-            photo: images.burger_restaurant_1,
-        },
-        {
-            _id: '64ca055ba1c71c7b4e9e7e59',
-            name: 'Pizza',
-            rating: 4.8,
-            categories: [2, 4, 6],
-            photo: images.pizza_restaurant,
-        },
-    ];
-
-    const restaurantData = [
-        {
-            _id: '64ca050ea1c71c7b4e9e7e57',
-            name: 'Burger',
-            rating: 4.8,
-            categories: [5, 7],
-            photo: images.burger_restaurant_1,
-        },
-        {
-            _id: '64ca055ba1c71c7b4e9e7e59',
-            name: 'Pizza',
-            rating: 4.8,
-            categories: [2, 4, 6],
-            photo: images.pizza_restaurant,
-        },
-    ];
-
-    const [restaurants, setRestaurants] = React.useState(restaurantData);
-    const [popularRestaurants, setPopularRestaurants] = React.useState(popularRestaurantData);
-    const [idRestaurantSearch, setIdRestaurantSearch] = useState(null);
+    const [restaurants, setRestaurants] = React.useState([]);
     const [input, setInput] = React.useState('');
 
     function getCategoryNameById(id) {
@@ -60,22 +24,8 @@ export default SearchScreen = () => {
         return '';
     }
 
-    const setIdRestaurant = useContext(restaurantsContext).setIdRestaurant;
-    useEffect(() => {
-        setIdRestaurant(idRestaurantSearch);
-    }, [idRestaurantSearch]);
+    const submit = () => {
 
-    function handleFilter(searchTerm) {
-        if (searchTerm === null || searchTerm === '') {
-            setPopularRestaurants(popularRestaurantData);
-        } else {
-            setPopularRestaurants(null);
-        }
-        setRestaurants(
-            restaurantData.filter((restaurant) => {
-                return restaurant.name.toLowerCase().includes(searchTerm.toLowerCase());
-            }),
-        );
     }
 
     const renderItem = ({ item }) => {
@@ -83,8 +33,7 @@ export default SearchScreen = () => {
             <TouchableOpacity
                 style={styles.itemContainer}
                 onPress={() => {
-                    navigation.navigate('Restaurant');
-                    setIdRestaurantSearch(item._id);
+                    navigation.navigate('Restaurant', { restaurantId: item._id });
                 }}
             >
                 <Image source={item.photo} style={styles.image} />
@@ -133,19 +82,15 @@ export default SearchScreen = () => {
                         handleFilter(e);
                         setInput(e);
                     }}
-                    // onBlur={() => }
+                    onSubmitEditing={submit}
                 />
             </View>
-            {popularRestaurants !== null ? (
-                <View style={styles.popular}>
-                    <Text style={styles.popularText}>Popular Restaurant</Text>
-                </View>
-            ) : undefined}
-            <FlatList
-                style={styles.contentSearch}
-                data={popularRestaurants !== null ? popularRestaurants : restaurants}
-                renderItem={renderItem}
-            />
+
+            <View style={styles.popular}>
+                <Text style={styles.popularText}>Popular Restaurant</Text>
+            </View>
+
+            <FlatList style={styles.contentSearch} data={restaurants} renderItem={renderItem} />
         </View>
     );
 };
