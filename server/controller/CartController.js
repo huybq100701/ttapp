@@ -36,6 +36,23 @@ const CartController = {
             });
         }
     },
+
+    updateCart: async (req, res) => {
+        try {
+            const cart = await Cart.findByIdAndUpdate(req.params.id, req.body, {
+                new: true
+            });
+            return res.status(200).json({
+                message: 'Update cart thành công',
+                cart,
+            });
+        } catch (error) {
+            return res.status(500).json({
+                message: 'Server error',
+                error,
+            });
+        }
+    }
 }
 
 module.exports = CartController
