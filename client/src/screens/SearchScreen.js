@@ -1,11 +1,13 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, TextInput, View, TouchableOpacity, Image, FlatList, Text } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { COLORS, SIZES, images, icons } from '../constants';
+import { COLORS, icons } from '../constants';
 import { MagnifyingGlassIcon } from 'react-native-heroicons/solid';
+import axios from 'axios';
+import { API_LINK } from '../../default-value';
 
-import { restaurantsContext, categoryContext } from '../utils/Context';
+import { categoryContext } from '../utils/Context';
 
 export default SearchScreen = () => {
     const navigation = useNavigation();
@@ -24,9 +26,16 @@ export default SearchScreen = () => {
         return '';
     }
 
-    const submit = () => {
-
-    }
+    const submit = async (e) => {
+        try {
+            setInput(e);
+            const url = `${API_LINK}/restaurants/search?query=${e}`;
+            const res = await axios.get(url);
+            setRestaurants(res.data.restaurants);
+        } catch (error) {
+            console.log('Error o submit ', error);
+        }
+    };
 
     const renderItem = ({ item }) => {
         return (
@@ -36,7 +45,7 @@ export default SearchScreen = () => {
                     navigation.navigate('Restaurant', { restaurantId: item._id });
                 }}
             >
-                <Image source={item.photo} style={styles.image} />
+                <Image source={{ uri: item.photo }} style={styles.image} />
                 <View style={styles.infoItem}>
                     <Text style={styles.itemName}>{item.name}</Text>
                     <View
@@ -79,10 +88,8 @@ export default SearchScreen = () => {
                     placeholder="Search"
                     value={input}
                     onChangeText={(e) => {
-                        handleFilter(e);
-                        setInput(e);
+                        submit(e);
                     }}
-                    onSubmitEditing={submit}
                 />
             </View>
 

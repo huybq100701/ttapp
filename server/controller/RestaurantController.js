@@ -37,8 +37,9 @@ const RestaurantController = {
 
     getAllRestaurantsByQuery: async (req, res) => {
         try {
-            const query = req.params.query;
-            const restaurants = query === '' ? await Restaurant.find() : await Restaurant.find({name: query});
+            const { query } = req.query;
+            const regex = new RegExp(query, 'i')
+            const restaurants = query === '' ? await Restaurant.find() : await Restaurant.find({name: {$regex: regex}});
             return res.status(200).json({
                 message: 'Lấy restaurants thành công',
                 restaurants: restaurants,
