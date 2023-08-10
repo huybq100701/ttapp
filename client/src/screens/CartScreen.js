@@ -11,7 +11,7 @@ export default function CartScreen({ navigation }) {
     const cart = useSelector((state) => state.cart);
     const menus = useSelector((state) => state.menu);
     const menu = menus.menu;
-    console.log(menu);
+    
     const [totalPrice, setTotalPrice] = useState(0);
 
     useEffect(() => {

@@ -1,48 +1,51 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image, Dimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import MapView, { Marker, Polyline } from 'react-native-maps';
-import * as Location from 'expo-location';
-import axios from 'axios'; // Import Axios
-import { currentLocationContext, restaurantsContext } from '../utils/Context';
-import { icons, images, SIZES, COLORS } from '../constants';
-import API_LINK from '../../default-value';
-
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { deleteCart } from '../store/slice/cartSlice';
+import { currentLocationContext } from '../utils/Context';
+import { icons, images, SIZES, COLORS } from '../constants';
+import axios from 'axios'; 
+import API_LINK from '../../default-value'; 
+
+const { width, height } = Dimensions.get('window');
 
 const DeliveryScreen = ({ navigation }) => {
     const insets = useSafeAreaInsets();
-    // use useContext
     const currentLocation = useContext(currentLocationContext);
-    const { restaurant } = useContext(restaurantsContext);
-
-    const cart = useSelector((state) => state.cart);
     const dispatch = useDispatch();
 
-    const deliveryData = [
-        {
-            id: 1,
-            avatar: images.avatar_1,
-            duration: '15 min',
-            restaurant: 'Burger',
-            address: '1234, Street Name, City Name',
-        },
-    ];
+    const [deliveries, setDeliveries] = useState([]);
+    const [restaurantLocation, setRestaurantLocation] = useState({
+        latitude: 0,
+        longitude: 0,
+    });
+    const [errorMsg, setErrorMsg] = useState('');
 
-    const [location, setLocation] = useState(null);
     useEffect(() => {
-        (async () => {
-            let { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted') {
-                setErrorMsg('Permission to access location was denied');
-                return;
-            }
+        axios.get(`${API_LINK}/delivery`)
+            .then(response => {
+                setDeliveries(response.data);
 
-            let location = await Location.getCurrentPositionAsync({});
-            setLocation(location);
-            console.log(location);
-        })();
+                if (response.data.length > 0) {
+                    axios.get(`${API_LINK}/restaurant/${response.data[0].restaurant}`)
+                        .then(restaurantResponse => {
+                            const restaurant = restaurantResponse.data;
+                            setRestaurantLocation({
+                                latitude: restaurant.location.latitude,
+                                longitude: restaurant.location.longitude,
+                            });
+                        })
+                        .catch(error => {
+                            console.log('Error fetching restaurant data:', error);
+                        });
+                }
+            })
+            .catch(error => {
+                setErrorMsg('Error fetching delivery data');
+                console.log(error);
+            });
     }, []);
 
     const handlePayment = () => {
@@ -52,56 +55,39 @@ const DeliveryScreen = ({ navigation }) => {
 
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>
-            <View style={styles.deliveryList}>
-                <FlatList
-                    data={deliveryData}
-                    keyExtractor={(item) => item.id.toString()}
-                    renderItem={({ item }) => (
-                        <View style={styles.deliveryItemContainer}>
-                            {/* Delivery Info */}
-                            <View style={styles.deliveryItem}>
-                                <View style={styles.deliveryInfo}>
-                                    <Image source={item.avatar} style={styles.courierAvatar} />
-                                    <View style={styles.deliveryText}>
-                                        <Text style={styles.courierName}>Amy</Text>
-                                        <Text style={styles.durationText}>{item.duration}</Text>
-                                    </View>
-                                </View>
-                                <View style={styles.distanceContainer}>
-                                    <Image source={icons.pin} style={styles.pinIcon} />
-                                    <Text style={styles.distanceText}> km</Text>
-                                </View>
-                            </View>
-                            <View style={styles.restaurantInfo}>
-                                <Image source={images.burger_restaurant_1} style={styles.restaurantImage} />
-                                <View style={styles.restaurantDetails}>
-                                    <Text style={styles.restaurantName}>{item.restaurant}</Text>
-                                    <Text style={styles.restaurantAddress}>{item.address}</Text>
-                                </View>
-                            </View>
-                        </View>
-                    )}
-                />
+            <View style={styles.deliveryInfoContainer}>
+                <View style={styles.deliveryInfo}>
+                    <Image source={images.avatar_1} style={styles.courierAvatar} />
+                    <View style={styles.deliveryText}>
+                        <Text style={styles.courierName}>Amy</Text>
+                        <Text style={styles.durationText}>{deliveries.length > 0 ? deliveries[0].duration : ''}</Text>
+                    </View>
+                </View>
+            </View>
+            <View style={styles.restaurantInfoContainer}>
+                <Image source={images.burger_restaurant_1} style={styles.restaurantImage} />
+                <View style={styles.restaurantDetails}>
+                    <Text style={styles.restaurantName}>{deliveries.length > 0 ? deliveries[0].restaurant.name : ''}</Text>
+                    <Text style={styles.restaurantAddress}>{deliveries.length > 0 ? deliveries[0].restaurant.address : ''}</Text>
+                </View>
             </View>
 
-            {/* Map */}
             <MapView
                 style={styles.map}
                 initialRegion={{
-                    latitude: restaurant.location.latitude,
-                    longitude: restaurant.location.longitude,
+                    latitude: restaurantLocation.latitude,
+                    longitude: restaurantLocation.longitude,
                     latitudeDelta: 0.05,
                     longitudeDelta: 0.05,
                 }}
             >
-                {/* Markers and Polyline */}
                 <Marker coordinate={currentLocation.gps} title="Người giao hàng" description="Amy" />
 
                 <Polyline
                     coordinates={[
                         {
-                            latitude: restaurant.location.latitude,
-                            longitude: restaurant.location.longitude,
+                            latitude: restaurantLocation.latitude,
+                            longitude: restaurantLocation.longitude,
                         },
                         currentLocation.gps,
                     ]}
@@ -110,7 +96,6 @@ const DeliveryScreen = ({ navigation }) => {
                 />
             </MapView>
 
-            {/* Confirm Delivery Button */}
             <TouchableOpacity style={styles.confirmButton} onPress={handlePayment}>
                 <Text style={styles.confirmButtonText}>Confirm Delivery</Text>
             </TouchableOpacity>
@@ -124,22 +109,14 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.lightGray4,
     },
     map: {
-        flex: 1,
+        width: width,
+        height: height * 0.7,
     },
-    deliveryList: {
-        padding: SIZES.padding,
-    },
-    deliveryItemContainer: {
-        backgroundColor: COLORS.white,
-        marginBottom: SIZES.padding,
-        borderRadius: SIZES.radius,
-        padding: SIZES.padding,
-    },
-    deliveryItem: {
+    deliveryInfoContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: SIZES.padding,
+        backgroundColor: COLORS.primary,
+        padding: SIZES.padding,
     },
     deliveryInfo: {
         flexDirection: 'row',
@@ -161,23 +138,10 @@ const styles = StyleSheet.create({
     durationText: {
         color: COLORS.gray,
     },
-    distanceContainer: {
+    restaurantInfoContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-    },
-    pinIcon: {
-        width: 20,
-        height: 20,
-        tintColor: COLORS.primary,
-        marginRight: 5,
-    },
-    distanceText: {
-        fontSize: 16,
-        color: COLORS.gray,
-    },
-    restaurantInfo: {
-        flexDirection: 'row',
-        alignItems: 'center',
+        padding: SIZES.padding,
     },
     restaurantImage: {
         width: 80,
@@ -191,9 +155,10 @@ const styles = StyleSheet.create({
     restaurantName: {
         fontSize: 18,
         fontWeight: 'bold',
+        marginBottom: 4,
     },
     restaurantAddress: {
-        fontSize: 16,
+        fontSize: 14,
         color: COLORS.gray,
     },
     confirmButton: {
