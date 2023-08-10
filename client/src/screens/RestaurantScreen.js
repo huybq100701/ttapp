@@ -5,6 +5,7 @@ import { ArrowLeftIcon } from 'react-native-heroicons/solid';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchMenuOfRestaurant, saveCart } from '../store/apiCall';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const RestaurantScreen = ({ route, navigation }) => {
     const scrollX = new Animated.Value(0);
@@ -20,6 +21,7 @@ const RestaurantScreen = ({ route, navigation }) => {
     const handleAddToCart = async () => {
         try {
             await saveCart(dispatch, cart._id, restaurantId, orderItems);
+            await AsyncStorage.setItem('orderItems', JSON.stringify(orderItems));
             navigation.navigate('Cart');
         } catch (error) {
             console.log('Error o handle Add to Cart');
@@ -28,6 +30,15 @@ const RestaurantScreen = ({ route, navigation }) => {
     useEffect(() => {
         if (restaurantId) {
             fetchMenuOfRestaurant(dispatch, restaurantId);
+            AsyncStorage.getItem('orderItems')
+                .then((storedOrderItems) => {
+                    if (storedOrderItems) {
+                        setOrderItems(JSON.parse(storedOrderItems));
+                    }
+                })
+                .catch((error) => {
+                    console.log('Error fetching order items from AsyncStorage:', error);
+                });
         }
     }, []);
 

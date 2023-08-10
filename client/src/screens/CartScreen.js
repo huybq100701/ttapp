@@ -38,18 +38,23 @@ export default function CartScreen({ navigation }) {
                         <Text style={styles.cartHeaderText}>Your Cart</Text>
                     </View>
                     <View style={styles.cartItems}>
-                        {cart.items.map((item, index) => (
-                            <View key={index} style={styles.cartItem}>
-                                <Image
-                                    source={{ uri: item.menu.photo }} 
-                                    style={styles.itemImage}
-                                />
-                                <View style={styles.itemDetails}>
-                                    <Text style={styles.itemName}>{item.menu.name}</Text>
-                                    <Text style={styles.itemQuantity}>Quantity: {item.quantity}</Text>
+                        {cart.items.map((item, index) => {
+                            console.log("Item Name:", item.menu.name);
+                            console.log("Item Photo:", item.menu.photo);
+
+                            return (
+                                <View key={index} style={styles.cartItem}>
+                                    <Image
+                                        source={{ uri: item.menu.photo }} 
+                                        style={styles.itemImage}
+                                    />
+                                    <View style={styles.itemDetails}>
+                                        <Text style={styles.itemName}>{item.menu.name}</Text>
+                                        <Text style={styles.itemQuantity}>Quantity: {item.quantity}</Text>
+                                    </View>
                                 </View>
-                            </View>
-                        ))}
+                            );
+                        })}
                     </View>
 
                     <View style={styles.totalContainer}>
