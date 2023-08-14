@@ -27,6 +27,9 @@ export default function SignUpScreen() {
                 username,
                 password,
             });
+            const res2 = await axios.post(`${API_LINK}/cart`, {
+                id: res.data.user._id
+            })
             ToastAndroid.showWithGravity(res.data?.message, ToastAndroid.SHORT, ToastAndroid.CENTER);
             navigation.navigate('Login');
         } catch (error) {

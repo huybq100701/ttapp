@@ -4,6 +4,7 @@ import { getRestaurantList } from './slice/restaurantSlice';
 import { getCart, update } from './slice/cartSlice';
 import { getMenuList } from './slice/menuSlice';
 import { getUser, updateUser } from './slice/userSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const fetchRestaurantList = async (dispatch) => {
     try {
@@ -20,6 +21,16 @@ export const fetchCart = async (dispatch, userId) => {
         const url = `${API_LINK}/cart/${userId}`;
         const res = await axios.get(url);
         dispatch(getCart(res.data.cart));
+    } catch (error) {
+        console.log('Error fetching cart data:', error);
+    }
+};
+
+export const fetchCartForLocal = async (userId) => {
+    try {
+        const url = `${API_LINK}/cart/local/${userId}`;
+        const res = await axios.get(url);
+        await AsyncStorage.setItem('orderItems', JSON.stringify(res.data.cart[0].items));
     } catch (error) {
         console.log('Error fetching cart data:', error);
     }
@@ -55,9 +66,10 @@ export const updateUserById = async (dispatch, userId, updateData) => {
     }
 };
 
-export const saveCart = async (dispatch, cartId, restaurantId, items) => {
+export const saveCart = async (dispatch, userId, cartId, restaurantId, items) => {
     try {
         const updateData = {
+            userId,
             restaurantId,
             items
         }
