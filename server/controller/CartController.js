@@ -5,7 +5,7 @@ const CartController = {
     create: async (req, res) => {
         try {
             const cart = {
-                userId: req.params.id,
+                userId: req.body.id,
                 restaurantId: '',
                 items: []
             }

@@ -8,7 +8,7 @@ import { themeColors } from '../theme';
 import { updateUserById } from '../store/apiCall';
 import * as ImagePicker from 'expo-image-picker';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import 'react-native-get-random-values';
+import DateTimePicker, { DateTimePickerEvent }  from '@react-native-community/datetimepicker';
 import { storage } from '../firebase/config';
 
 export default function ChangeInfoScreen({ navigation }) {
@@ -27,6 +27,8 @@ export default function ChangeInfoScreen({ navigation }) {
     const [phone, setPhone] = useState(user.phone);
     const [imageUri, setImageUri] = useState(user.image);
     const [modalVisible, setModalVisible] = useState(false);
+    const [show, setShow] = useState(false);
+    const [date, setDate] = useState(new Date());
 
     const handleSave = async () => {
         try {
@@ -101,6 +103,17 @@ export default function ChangeInfoScreen({ navigation }) {
         setIsSave(true);
     };
 
+    const onChange = (event, selectedDate) => {
+        const currentDate = selectedDate || date;
+        setShow(Platform.OS === 'ios');
+        setDate(currentDate);
+        let tempDate = new Date(currentDate);
+        const day = tempDate.getDay() < 10 ? `0${tempDate.getDate() + 1}`: `${tempDate.getDate()}`
+        const month = (tempDate.getMonth() + 1) < 10 ? `0${tempDate.getMonth() + 1}`: `${tempDate.getMonth()}`
+        setBirth(day + '/' + month + '/' + tempDate.getFullYear());
+        setShow(false)
+    }
+
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>
             <StatusBar style={{ backgroundColor: themeColors.bg }} />
@@ -119,6 +132,15 @@ export default function ChangeInfoScreen({ navigation }) {
                     </View>
                 </View>
             </Modal>
+            {show && (
+                <DateTimePicker
+                    value={date}
+                    mode='date'
+                    display='default'
+                    is24Hour={true}
+                    onChange={onChange}
+                />
+            )}
             <View style={styles.header}>
                 <View style={styles.safeArea}>
                     <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
@@ -156,12 +178,13 @@ export default function ChangeInfoScreen({ navigation }) {
                     />
                 </View>
                 <View style={styles.itemInfo}>
-                    <Text style={styles.label}>Birth: </Text>
+                    <Text style={styles.label}>Birthday: </Text>
                     <TextInput
                         style={styles.info}
                         editable={isEditable}
                         value={birth}
                         onChangeText={(e) => setBirth(e)}
+                        onPressIn={() => setShow(true)}
                     />
                 </View>
                 <View style={styles.itemInfo}>

@@ -9,8 +9,7 @@ const cartSchema = new Schema(
             required: true,
         },
         restaurantId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Restaurant',
+            type: String,
         },
         items: [
             {
