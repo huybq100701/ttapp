@@ -9,8 +9,8 @@ const restaurantSchema = new Schema(
         duration: { type: String, require: true },
         categories: [{ type: Number }],
         location: {
-            latitude: { type: String },
-            longitude: { type: String },
+            latitude: { type: Number },
+            longitude: { type: Number },
         },
     },
     {
