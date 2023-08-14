@@ -2,12 +2,16 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image, Dimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import MapView, { Marker, Polyline } from 'react-native-maps';
-import { useDispatch } from 'react-redux';
+import MapViewDirections from 'react-native-maps-directions';
+import { useSelector, useDispatch } from 'react-redux';
 import { deleteCart } from '../store/slice/cartSlice';
 import { currentLocationContext } from '../utils/Context';
 import { icons, images, SIZES, COLORS } from '../constants';
-import axios from 'axios'; 
-import API_LINK from '../../default-value'; 
+import axios from 'axios';
+import API_LINK from '../../default-value';
+import { GOOGLE_API_KEY } from '../constants';
+import { user } from '../constants/icons';
+import * as Location from 'expo-location';
 
 const { width, height } = Dimensions.get('window');
 
@@ -16,37 +20,70 @@ const DeliveryScreen = ({ navigation }) => {
     const currentLocation = useContext(currentLocationContext);
     const dispatch = useDispatch();
 
+    const restaurants = useSelector((state) => state.restaurant);
+    const cart = useSelector((state) => state.cart);
+
     const [deliveries, setDeliveries] = useState([]);
-    const [restaurantLocation, setRestaurantLocation] = useState({
-        latitude: 0,
-        longitude: 0,
-    });
+    const [restaurantLocation, setRestaurantLocation] = useState({ latitude: 21.027763, longitude: 105.83416 });
+    const [restaurantId, setRestaurantId] = useState(cart.restaurantId);
+    const [restaurant, setRestaurant] = useState(restaurants);
     const [errorMsg, setErrorMsg] = useState('');
 
     useEffect(() => {
-        axios.get(`${API_LINK}/delivery`)
-            .then(response => {
+        axios
+            .get(`${API_LINK}/delivery`)
+            .then((response) => {
                 setDeliveries(response.data);
 
-                if (response.data.length > 0) {
-                    axios.get(`${API_LINK}/restaurant/${response.data[0].restaurant}`)
-                        .then(restaurantResponse => {
-                            const restaurant = restaurantResponse.data;
-                            setRestaurantLocation({
-                                latitude: restaurant.location.latitude,
-                                longitude: restaurant.location.longitude,
-                            });
-                        })
-                        .catch(error => {
-                            console.log('Error fetching restaurant data:', error);
-                        });
-                }
+                // if (response.data.length > 0) {
+                //     axios
+                //         .get(`${API_LINK}/restaurant/${response.data[0].restaurant}`)
+                //         .then((restaurantResponse) => {
+                //             const restaurant = restaurantResponse.data;
+                //             setRestaurantLocation({
+                //                 latitude: restaurant.location.latitude,
+                //                 longitude: restaurant.location.longitude,
+                //             });
+                //         })
+                //         .catch((error) => {
+                //             console.log('Error fetching restaurant data:', error);
+                //         });
+                // }
             })
-            .catch(error => {
+            .catch((error) => {
                 setErrorMsg('Error fetching delivery data');
                 console.log(error);
             });
     }, []);
+
+    useEffect(() => {
+        const res = restaurants.filter((item) => {
+            return item._id === restaurantId;
+        });
+        setRestaurant(res);
+        setRestaurantLocation({
+            latitude: parseFloat(res[0].location.latitude),
+            longitude: parseFloat(res[0].location.longitude),
+        });
+    }, [restaurants]);
+
+    const [userLocation, setUserLocation] = useState({ latitude: 0, longitude: 0 });
+    useEffect(() => {
+        (async () => {
+            const { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                setErrorMsg('Permission to access location was denied');
+                return;
+            }
+
+            const location = await Location.getCurrentPositionAsync({});
+            setUserLocation({
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+            });
+        })();
+    }, []);
+    console.log('userLocation', userLocation);
 
     const handlePayment = () => {
         dispatch(deleteCart());
@@ -67,8 +104,12 @@ const DeliveryScreen = ({ navigation }) => {
             <View style={styles.restaurantInfoContainer}>
                 <Image source={images.burger_restaurant_1} style={styles.restaurantImage} />
                 <View style={styles.restaurantDetails}>
-                    <Text style={styles.restaurantName}>{deliveries.length > 0 ? deliveries[0].restaurant.name : ''}</Text>
-                    <Text style={styles.restaurantAddress}>{deliveries.length > 0 ? deliveries[0].restaurant.address : ''}</Text>
+                    <Text style={styles.restaurantName}>
+                        {deliveries.length > 0 ? deliveries[0].restaurant.name : ''}
+                    </Text>
+                    <Text style={styles.restaurantAddress}>
+                        {deliveries.length > 0 ? deliveries[0].restaurant.address : ''}
+                    </Text>
                 </View>
             </View>
 
@@ -81,9 +122,17 @@ const DeliveryScreen = ({ navigation }) => {
                     longitudeDelta: 0.05,
                 }}
             >
+                <MapViewDirections
+                    origin={restaurantLocation}
+                    destination={userLocation}
+                    apikey={GOOGLE_API_KEY}
+                    optimizeWaypoints={true}
+                    strokeWidth={3}
+                    strokeColor={COLORS.primary}
+                />
                 <Marker coordinate={currentLocation.gps} title="Người giao hàng" description="Amy" />
 
-                <Polyline
+                {/* <Polyline
                     coordinates={[
                         {
                             latitude: restaurantLocation.latitude,
@@ -93,7 +142,7 @@ const DeliveryScreen = ({ navigation }) => {
                     ]}
                     strokeWidth={3}
                     strokeColor={COLORS.primary}
-                />
+                /> */}
             </MapView>
 
             <TouchableOpacity style={styles.confirmButton} onPress={handlePayment}>
