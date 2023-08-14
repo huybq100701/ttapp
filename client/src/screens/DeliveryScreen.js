@@ -18,8 +18,6 @@ const { width, height } = Dimensions.get('window');
 const DeliveryScreen = ({ navigation }) => {
     const insets = useSafeAreaInsets();
     const currentLocation = useContext(currentLocationContext);
-    const cart = useSelector((state) => state.cart);
-    const dispatch = useDispatch();
 
     const restaurants = useSelector((state) => state.restaurant);
     const cart = useSelector((state) => state.cart);
@@ -28,7 +26,6 @@ const DeliveryScreen = ({ navigation }) => {
     const [restaurantLocation, setRestaurantLocation] = useState({ latitude: 21.027763, longitude: 105.83416 });
     const [restaurantId, setRestaurantId] = useState(cart.restaurantId);
     const [restaurant, setRestaurant] = useState(restaurants);
-    }, []);
 
     useEffect(() => {
         const res = restaurants.filter((item) => {
