@@ -4,6 +4,7 @@ import { getRestaurantList } from './slice/restaurantSlice';
 import { getCart, update } from './slice/cartSlice';
 import { getMenuList } from './slice/menuSlice';
 import { getUser, updateUser } from './slice/userSlice';
+import { getDelivery } from './slice/deliverySlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const fetchRestaurantList = async (dispatch) => {
@@ -78,5 +79,30 @@ export const saveCart = async (dispatch, userId, cartId, restaurantId, items) =>
         dispatch(update(res.data.cart));
     } catch (error) {
         console.error('Error saving cart ', error);
+    }
+};
+
+export const saveDelivery = async (dispatch, userId, cartId, deliveryData) => {
+    try {
+        const url = `${API_LINK}/delivery`;
+        const requestData = {
+            userId,
+            cartId,
+            ...deliveryData
+        };
+        const res = await axios.post(url, requestData);
+        dispatch(getDelivery(res.data.delivery));
+    } catch (error) {
+        console.error('Error saving delivery:', error);
+    }
+};
+
+export const fetchDelivery = async (dispatch, userId) => {
+    try {
+        const url = `${API_LINK}/delivery/${userId}`;
+        const res = await axios.get(url);
+        dispatch(getDelivery(res.data.deliveries));
+    } catch (error) {
+        console.log('Error fetching delivery data:', error);
     }
 };
