@@ -9,13 +9,11 @@ export default function CartScreen({ navigation }) {
     const insets = useSafeAreaInsets();
 
     const cart = useSelector((state) => state.cart);
-    const menus = useSelector((state) => state.menu);
-    const menu = menus.menu;
     
     const [totalPrice, setTotalPrice] = useState(0);
-
+    
     useEffect(() => {
-        const calculateCart = () => {
+        const calculateCart = async () => {
             let total = 0;
             for (let i = 0; i < cart.items.length; i++) {
                 total += cart.items[i].total;
@@ -25,23 +23,19 @@ export default function CartScreen({ navigation }) {
         calculateCart();
     }, [cart])
 
-
     const handleDelivery = () => {
         navigation.navigate('Delivery');
     };
 
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>
-            {cart && cart.items.length > 0 ? (
+            {cart && cart.items?.length > 0 ? (
                 <View>
                     <View style={styles.cartHeader}>
                         <Text style={styles.cartHeaderText}>Your Cart</Text>
                     </View>
                     <View style={styles.cartItems}>
                         {cart.items.map((item, index) => {
-                            console.log("Item Name:", item.menu.name);
-                            console.log("Item Photo:", item.menu.photo);
-
                             return (
                                 <View key={index} style={styles.cartItem}>
                                     <Image

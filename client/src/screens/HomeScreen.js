@@ -4,7 +4,7 @@ import { icons, images, SIZES, COLORS } from '../constants';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import { currentLocationContext, categoryContext } from '../utils/Context';
-import { fetchCart, fetchRestaurantList, fetchUser } from '../store/apiCall';
+import { fetchCart, fetchCartForLocal, fetchRestaurantList, fetchUser } from '../store/apiCall';
 import { getItem } from '../utils/asyncStorage.js';
 
 const HomeScreen = ({ navigation }) => {
@@ -26,6 +26,7 @@ const HomeScreen = ({ navigation }) => {
                 if (userId) {
                     await fetchRestaurantList(dispatch);
                     await fetchCart(dispatch, userId);
+                    await fetchCartForLocal(userId);
                 }
             } catch (error) {
                 console.log('Error o HomeScreen', error);

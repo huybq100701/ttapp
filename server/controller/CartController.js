@@ -7,8 +7,8 @@ const CartController = {
             const cart = {
                 userId: req.body.id,
                 restaurantId: '',
-                items: []
-            }
+                items: [],
+            };
             const newCart = await Cart.create(cart);
             return res.status(200).json({
                 message: 'Tạo cart thành công',
@@ -24,7 +24,22 @@ const CartController = {
 
     getCart: async (req, res) => {
         try {
-            const cart = await Cart.find({userId: req.params.id});
+            const cart = await Cart.find({ userId: req.params.id }).populate('items.menu');
+            return res.status(200).json({
+                message: 'Lấy thông tin cart thành công',
+                cart,
+            });
+        } catch (error) {
+            return res.status(500).json({
+                message: 'Server error',
+                error,
+            });
+        }
+    },
+
+    getCartforSaveLocal: async (req, res) => {
+        try {
+            const cart = await Cart.find({ userId: req.params.id });
             return res.status(200).json({
                 message: 'Lấy thông tin cart thành công',
                 cart,
@@ -40,8 +55,8 @@ const CartController = {
     updateCart: async (req, res) => {
         try {
             const cart = await Cart.findByIdAndUpdate(req.params.id, req.body, {
-                new: true
-            });
+                new: true,
+            }).populate('items.menu');
             return res.status(200).json({
                 message: 'Update cart thành công',
                 cart,
@@ -52,7 +67,7 @@ const CartController = {
                 error,
             });
         }
-    }
-}
+    },
+};
 
-module.exports = CartController
+module.exports = CartController;

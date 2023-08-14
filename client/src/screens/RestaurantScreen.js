@@ -13,6 +13,7 @@ const RestaurantScreen = ({ route, navigation }) => {
     const [isSidebarVisible, setIsSidebarVisible] = useState(false);
     const [restaurant, setRestaurant] = useState(null);
     const [menu, setMenu] = useState([{ price: 0, calories: 0 }]);
+    const user = useSelector((state) => state.user);
     const menus = useSelector((state) => state.menu);
     const cart = useSelector((state) => state.cart);
     const restaurantId = route.params?.restaurantId;
@@ -20,7 +21,7 @@ const RestaurantScreen = ({ route, navigation }) => {
 
     const handleAddToCart = async () => {
         try {
-            await saveCart(dispatch, cart._id, restaurantId, orderItems);
+            await saveCart(dispatch, user._id, cart._id, restaurantId, orderItems);
             await AsyncStorage.setItem('orderItems', JSON.stringify(orderItems));
             navigation.navigate('Cart');
         } catch (error) {
@@ -39,9 +40,8 @@ const RestaurantScreen = ({ route, navigation }) => {
                 .catch((error) => {
                     console.log('Error fetching order items from AsyncStorage:', error);
                 });
-        }
-    }, []);
-
+            }
+        }, []);
     useEffect(() => {
         setRestaurant(menus.restaurant);
         setMenu(menus.menu);
