@@ -18,6 +18,7 @@ const { width, height } = Dimensions.get('window');
 const DeliveryScreen = ({ navigation }) => {
     const insets = useSafeAreaInsets();
     const currentLocation = useContext(currentLocationContext);
+    const cart = useSelector((state) => state.cart);
     const dispatch = useDispatch();
 
     const restaurants = useSelector((state) => state.restaurant);
@@ -27,33 +28,6 @@ const DeliveryScreen = ({ navigation }) => {
     const [restaurantLocation, setRestaurantLocation] = useState({ latitude: 21.027763, longitude: 105.83416 });
     const [restaurantId, setRestaurantId] = useState(cart.restaurantId);
     const [restaurant, setRestaurant] = useState(restaurants);
-    const [errorMsg, setErrorMsg] = useState('');
-
-    useEffect(() => {
-        axios
-            .get(`${API_LINK}/delivery`)
-            .then((response) => {
-                setDeliveries(response.data);
-
-                // if (response.data.length > 0) {
-                //     axios
-                //         .get(`${API_LINK}/restaurant/${response.data[0].restaurant}`)
-                //         .then((restaurantResponse) => {
-                //             const restaurant = restaurantResponse.data;
-                //             setRestaurantLocation({
-                //                 latitude: restaurant.location.latitude,
-                //                 longitude: restaurant.location.longitude,
-                //             });
-                //         })
-                //         .catch((error) => {
-                //             console.log('Error fetching restaurant data:', error);
-                //         });
-                // }
-            })
-            .catch((error) => {
-                setErrorMsg('Error fetching delivery data');
-                console.log(error);
-            });
     }, []);
 
     useEffect(() => {
@@ -97,12 +71,12 @@ const DeliveryScreen = ({ navigation }) => {
                     <Image source={images.avatar_1} style={styles.courierAvatar} />
                     <View style={styles.deliveryText}>
                         <Text style={styles.courierName}>Amy</Text>
-                        <Text style={styles.durationText}>{deliveries.length > 0 ? deliveries[0].duration : ''}</Text>
+                        <Text style={styles.durationText}>{deliveries?.duration}</Text>
                     </View>
                 </View>
             </View>
             <View style={styles.restaurantInfoContainer}>
-                <Image source={images.burger_restaurant_1} style={styles.restaurantImage} />
+                <Image source={{uri: deliveries.photo}} style={styles.restaurantImage} />
                 <View style={styles.restaurantDetails}>
                     <Text style={styles.restaurantName}>
                         {deliveries.length > 0 ? deliveries[0].restaurant.name : ''}
@@ -116,8 +90,8 @@ const DeliveryScreen = ({ navigation }) => {
             <MapView
                 style={styles.map}
                 initialRegion={{
-                    latitude: restaurantLocation.latitude,
-                    longitude: restaurantLocation.longitude,
+                    latitude: currentLocation.gps.latitude,
+                    longitude: currentLocation.gps.longitude,
                     latitudeDelta: 0.05,
                     longitudeDelta: 0.05,
                 }}
@@ -135,8 +109,8 @@ const DeliveryScreen = ({ navigation }) => {
                 {/* <Polyline
                     coordinates={[
                         {
-                            latitude: restaurantLocation.latitude,
-                            longitude: restaurantLocation.longitude,
+                            latitude: deliveries?.location?.latitude,
+                            longitude: deliveries?.location?.longitude,
                         },
                         currentLocation.gps,
                     ]}
