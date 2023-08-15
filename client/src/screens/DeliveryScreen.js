@@ -2,50 +2,53 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image, Dimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import MapView, { Marker, Polyline } from 'react-native-maps';
-import { useDispatch } from 'react-redux';
+import MapViewDirections from 'react-native-maps-directions';
+import axios from 'axios';
+import API_LINK from '../../default-value';
+import * as Location from 'expo-location';
+
+import { icons, images, SIZES, COLORS } from '../constants';
+import { GOOGLE_API_KEY } from '../constants';
+import { useSelector, useDispatch } from 'react-redux';
 import { deleteCart } from '../store/slice/cartSlice';
 import { currentLocationContext } from '../utils/Context';
-import { icons, images, SIZES, COLORS } from '../constants';
-import axios from 'axios'; 
-import API_LINK from '../../default-value'; 
+import { user } from '../constants/icons';
 
 const { width, height } = Dimensions.get('window');
 
-const DeliveryScreen = ({ navigation }) => {
+const DeliveryScreen = ({ navigation, route }) => {
     const insets = useSafeAreaInsets();
     const currentLocation = useContext(currentLocationContext);
     const dispatch = useDispatch();
 
-    const [deliveries, setDeliveries] = useState([]);
-    const [restaurantLocation, setRestaurantLocation] = useState({
-        latitude: 0,
-        longitude: 0,
-    });
-    const [errorMsg, setErrorMsg] = useState('');
+    const { cartData } = route.params;
+    const cart = useSelector((state) => state.cart);
+    const restaurants = useSelector((state) => state.restaurant);
+
+    const [restaurant, setRestaurant] = useState(null);
 
     useEffect(() => {
-        axios.get(`${API_LINK}/delivery`)
-            .then(response => {
-                setDeliveries(response.data);
+        if (restaurants && cartData.restaurantId) {
+            const selectedRestaurant = restaurants.find(r => r._id === cartData.restaurantId);
+            setRestaurant(selectedRestaurant);
+        }
+    }, [restaurants, cartData.restaurantId]);
 
-                if (response.data.length > 0) {
-                    axios.get(`${API_LINK}/restaurant/${response.data[0].restaurant}`)
-                        .then(restaurantResponse => {
-                            const restaurant = restaurantResponse.data;
-                            setRestaurantLocation({
-                                latitude: restaurant.location.latitude,
-                                longitude: restaurant.location.longitude,
-                            });
-                        })
-                        .catch(error => {
-                            console.log('Error fetching restaurant data:', error);
-                        });
-                }
-            })
-            .catch(error => {
-                setErrorMsg('Error fetching delivery data');
-                console.log(error);
+    const [userLocation, setUserLocation] = useState({ latitude: 21.027763, longitude: 105.83416 });
+    useEffect(() => {
+        (async () => {
+            const { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                setErrorMsg('Permission to access location was denied');
+                return;
+            }
+
+            const location = await Location.getCurrentPositionAsync({});
+            setUserLocation({
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
             });
+        })();
     }, []);
 
     const handlePayment = () => {
@@ -60,17 +63,19 @@ const DeliveryScreen = ({ navigation }) => {
                     <Image source={images.avatar_1} style={styles.courierAvatar} />
                     <View style={styles.deliveryText}>
                         <Text style={styles.courierName}>Amy</Text>
-                        <Text style={styles.durationText}>{deliveries.length > 0 ? deliveries[0].duration : ''}</Text>
+                        <Text style={styles.durationText}>{delivery.length > 0 ? delivery[0].duration : ''}</Text>
                     </View>
                 </View>
             </View>
-            <View style={styles.restaurantInfoContainer}>
-                <Image source={images.burger_restaurant_1} style={styles.restaurantImage} />
-                <View style={styles.restaurantDetails}>
-                    <Text style={styles.restaurantName}>{deliveries.length > 0 ? deliveries[0].restaurant.name : ''}</Text>
-                    <Text style={styles.restaurantAddress}>{deliveries.length > 0 ? deliveries[0].restaurant.address : ''}</Text>
+            {restaurant && (
+                <View style={styles.restaurantInfoContainer}>
+                    <Image source={{ uri: restaurant.image }} style={styles.restaurantImage} />
+                    <View style={styles.restaurantDetails}>
+                        <Text style={styles.restaurantName}>{restaurant.name}</Text>
+                        <Text style={styles.restaurantDuration}>{cartData.restaurant.duration}</Text>
+                    </View>
                 </View>
-            </View>
+            )}
 
             <MapView
                 style={styles.map}
@@ -81,19 +86,24 @@ const DeliveryScreen = ({ navigation }) => {
                     longitudeDelta: 0.05,
                 }}
             >
-                <Marker coordinate={currentLocation.gps} title="Người giao hàng" description="Amy" />
-
-                <Polyline
-                    coordinates={[
-                        {
-                            latitude: restaurantLocation.latitude,
-                            longitude: restaurantLocation.longitude,
-                        },
-                        currentLocation.gps,
-                    ]}
+                <MapViewDirections
+                    origin={restaurantLocation}
+                    destination={userLocation}
+                    apikey={GOOGLE_API_KEY}
+                    optimizeWaypoints={true}
                     strokeWidth={3}
                     strokeColor={COLORS.primary}
                 />
+                <Marker coordinate={currentLocation.gps} />
+                <Marker coordinate={restaurantLocation} anchor={{ x: 0.5, y: 0.5 }} flat={true}>
+                    <Image
+                        source={icons.motor}
+                        style={{
+                            width: 40,
+                            height: 40,
+                        }}
+                    />
+                </Marker>
             </MapView>
 
             <TouchableOpacity style={styles.confirmButton} onPress={handlePayment}>
@@ -157,7 +167,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 4,
     },
-    restaurantAddress: {
+    restaurantDuration: {
         fontSize: 14,
         color: COLORS.gray,
     },
