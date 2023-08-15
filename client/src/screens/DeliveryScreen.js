@@ -1,142 +1,118 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, Dimensions, CheckBox } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image, Dimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import MapView, { Marker, Polyline } from 'react-native-maps';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useDispatch } from 'react-redux';
-import { useStripe } from '@stripe/stripe-react-native';
-import { getDelivery, deleteDelivery } from './../store/slice/deliverySlice'; 
-import { currentLocationContext } from '../utils/Context';
-import { images, SIZES, COLORS } from '../constants';
+import MapViewDirections from 'react-native-maps-directions';
 import axios from 'axios';
 import API_LINK from '../../default-value';
+import * as Location from 'expo-location';
+
+import { icons, images, SIZES, COLORS } from '../constants';
+import { GOOGLE_API_KEY } from '../constants';
+import { useSelector, useDispatch } from 'react-redux';
+import { deleteCart } from '../store/slice/cartSlice';
+import { currentLocationContext } from '../utils/Context';
+import { user } from '../constants/icons';
 
 const { width, height } = Dimensions.get('window');
 
-const DeliveryScreen = ({ route, navigation }) => {
+const DeliveryScreen = ({ navigation }) => {
     const insets = useSafeAreaInsets();
-    const cartData = route.params.cartData;
     const currentLocation = useContext(currentLocationContext);
     const dispatch = useDispatch();
 
-    const [deliveryInfo, setDeliveryInfo] = useState(null);
-    const [restaurantLocation, setRestaurantLocation] = useState({
-        latitude: 0,
-        longitude: 0,
-    });
-    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
+    const restaurants = useSelector((state) => state.restaurant);
+    const cart = useSelector((state) => state.cart);
+
+    const [deliveries, setDeliveries] = useState([]);
+    const [restaurantLocation, setRestaurantLocation] = useState({ latitude: 0, longitude: 0 });
+    const [restaurantId, setRestaurantId] = useState(cart.restaurantId);
+    const [restaurant, setRestaurant] = useState(restaurants);
 
     useEffect(() => {
-        const fetchCartData = async () => {
-            try {
-                if (cartData) {
-                    axios.get(`${API_LINK}/delivery/${cartData.id}`)
-                        .then(response => {
-                            setDeliveryInfo(response.data);
+        const res = restaurants.filter((item) => {
+            return item._id === restaurantId;
+        });
+        setRestaurant(res);
+        setRestaurantLocation({
+            latitude: parseFloat(res[0].location.latitude),
+            longitude: parseFloat(res[0].location.longitude),
+        });
+    }, [restaurants]);
 
-                            if (response.data.restaurant) {
-                                axios.get(`${API_LINK}/restaurant/${response.data.restaurant}`)
-                                    .then(restaurantResponse => {
-                                        const restaurant = restaurantResponse.data;
-                                        setRestaurantLocation({
-                                            latitude: restaurant.location.latitude,
-                                            longitude: restaurant.location.longitude,
-                                        });
-                                    })
-                                    .catch(error => {
-                                        console.log('Error fetching restaurant data:', error);
-                                    });
-                            }
-                        })
-                        .catch(error => {
-                            console.log('Error fetching delivery data:', error);
-                        });
-                }
-            } catch (error) {
-                console.log('Error fetching cart data:', error);
+    const [userLocation, setUserLocation] = useState({ latitude: 21.027763, longitude: 105.83416 });
+    useEffect(() => {
+        (async () => {
+            const { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                setErrorMsg('Permission to access location was denied');
+                return;
             }
-        };
-        fetchCartData();
-    }, [cartData]);
-    const stripe = useStripe();
-    const handleConfirmDelivery = async () => {
-        if (selectedPaymentMethod === 'COD') {
-            dispatch(deleteDelivery());
-            navigation.navigate('PaymentComplete');
-        } else if (selectedPaymentMethod === 'Other') {
-            // Do something for other payment methods
-        }
+
+            const location = await Location.getCurrentPositionAsync({});
+            setUserLocation({
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+            });
+        })();
+    }, []);
+
+    const handlePayment = () => {
+        dispatch(deleteCart());
+        navigation.navigate('PaymentComplete');
     };
+
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>
-            {deliveryInfo && (
-                <View>
-                    <View style={styles.deliveryInfoContainer}>
-                        <View style={styles.deliveryInfo}>
-                            <Image source={images.avatar_1} style={styles.courierAvatar} />
-                            <View style={styles.deliveryText}>
-                                <Text style={styles.courierName}>Amy</Text>
-                                <Text style={styles.durationText}>{deliveryInfo.duration}</Text>
-                            </View>
-                        </View>
+            <View style={styles.deliveryInfoContainer}>
+                <View style={styles.deliveryInfo}>
+                    <Image source={images.avatar_1} style={styles.courierAvatar} />
+                    <View style={styles.deliveryText}>
+                        <Text style={styles.courierName}>Amy</Text>
+                        <Text style={styles.durationText}>{deliveries.length > 0 ? deliveries[0].duration : ''}</Text>
                     </View>
-                    <View style={styles.restaurantInfoContainer}>
-                        <Image source={images.burger_restaurant_1} style={styles.restaurantImage} />
-                        <View style={styles.restaurantDetails}>
-                            <Text style={styles.restaurantName}>{deliveryInfo.restaurant.name}</Text>
-                            <Text style={styles.restaurantAddress}>{deliveryInfo.restaurant.address}</Text>
-                        </View>
-                    </View>
-
-                    <MapView
-                        style={styles.map}
-                        initialRegion={{
-                            latitude: restaurantLocation.latitude,
-                            longitude: restaurantLocation.longitude,
-                            latitudeDelta: 0.05,
-                            longitudeDelta: 0.05,
-                        }}
-                    >
-                        <Marker coordinate={currentLocation.gps} title="Người giao hàng" description="Amy" />
-
-                        <Polyline
-                            coordinates={[
-                                {
-                                    latitude: restaurantLocation.latitude,
-                                    longitude: restaurantLocation.longitude,
-                                },
-                                currentLocation.gps,
-                            ]}
-                            strokeWidth={3}
-                            strokeColor={COLORS.primary}
-                        />
-                    </MapView>
-
-                    <View style={styles.paymentContainer}>
-                        <Text style={styles.paymentLabel}>Select Payment Method:</Text>
-                        <View style={styles.paymentButtons}>
-                            <View style={styles.paymentOption}>
-                                <CheckBox
-                                    value={selectedPaymentMethod === 'COD'}
-                                    onValueChange={() => setSelectedPaymentMethod('COD')}
-                                />
-                                <Text style={styles.paymentOptionText}>Cash on Delivery</Text>
-                            </View>
-                            <View style={styles.paymentOption}>
-                                <CheckBox
-                                    value={selectedPaymentMethod === 'Other'}
-                                    onValueChange={() => setSelectedPaymentMethod('Other')}
-                                />
-                                <Text style={styles.paymentOptionText}>Other Payment Method</Text>
-                            </View>
-                        </View>
-                    </View>
-
-                    <TouchableOpacity style={styles.confirmButton} onPress={handleConfirmDelivery}>
-                        <Text style={styles.confirmButtonText}>Confirm Delivery</Text>
-                    </TouchableOpacity>
                 </View>
-            )}
+            </View>
+            <View style={styles.restaurantInfoContainer}>
+                <Image source={images.burger_restaurant_1} style={styles.restaurantImage} />
+                <View style={styles.restaurantDetails}>
+                    <Text style={styles.restaurantName}>{restaurant[0].name}</Text>
+                    <Text style={styles.restaurantDuration}>{restaurant[0].duration}</Text>
+                </View>
+            </View>
+
+            <MapView
+                style={styles.map}
+                initialRegion={{
+                    latitude: restaurantLocation.latitude,
+                    longitude: restaurantLocation.longitude,
+                    latitudeDelta: 0.05,
+                    longitudeDelta: 0.05,
+                }}
+            >
+                <MapViewDirections
+                    origin={restaurantLocation}
+                    destination={userLocation}
+                    apikey={GOOGLE_API_KEY}
+                    optimizeWaypoints={true}
+                    strokeWidth={3}
+                    strokeColor={COLORS.primary}
+                />
+                <Marker coordinate={currentLocation.gps} />
+                <Marker coordinate={restaurantLocation} anchor={{ x: 0.5, y: 0.5 }} flat={true}>
+                    <Image
+                        source={icons.motor}
+                        style={{
+                            width: 40,
+                            height: 40,
+                        }}
+                    />
+                </Marker>
+            </MapView>
+
+            <TouchableOpacity style={styles.confirmButton} onPress={handlePayment}>
+                <Text style={styles.confirmButtonText}>Confirm Delivery</Text>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -195,7 +171,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 4,
     },
-    restaurantAddress: {
+    restaurantDuration: {
         fontSize: 14,
         color: COLORS.gray,
     },
@@ -212,27 +188,6 @@ const styles = StyleSheet.create({
         color: COLORS.white,
         fontSize: 18,
         fontWeight: 'bold',
-    },
-    paymentContainer: {
-        marginTop: 20,
-        paddingHorizontal: SIZES.padding,
-    },
-    paymentLabel: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 10,
-    },
-    paymentButtons: {
-        flexDirection: 'column',
-    },
-    paymentOption: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 10,
-    },
-    paymentOptionText: {
-        fontSize: 16,
-        marginLeft: 10,
     },
 });
 
