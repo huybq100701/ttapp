@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
+import { useStripe } from '@stripe/stripe-react-native';
 import { getDelivery, deleteDelivery } from './../store/slice/deliverySlice'; 
 import { currentLocationContext } from '../utils/Context';
 import { images, SIZES, COLORS } from '../constants';
@@ -12,8 +13,9 @@ import API_LINK from '../../default-value';
 
 const { width, height } = Dimensions.get('window');
 
-const DeliveryScreen = ({ navigation }) => {
+const DeliveryScreen = ({ route, navigation }) => {
     const insets = useSafeAreaInsets();
+    const cartData = route.params.cartData;
     const currentLocation = useContext(currentLocationContext);
     const dispatch = useDispatch();
 
@@ -27,9 +29,8 @@ const DeliveryScreen = ({ navigation }) => {
     useEffect(() => {
         const fetchCartData = async () => {
             try {
-                const cartId = await AsyncStorage.getItem('cartId');
-                if (cartId) {
-                    axios.get(`${API_LINK}/delivery/${cartId}`)
+                if (cartData) {
+                    axios.get(`${API_LINK}/delivery/${cartData.id}`)
                         .then(response => {
                             setDeliveryInfo(response.data);
 
@@ -56,9 +57,9 @@ const DeliveryScreen = ({ navigation }) => {
             }
         };
         fetchCartData();
-    }, []);
-
-    const handleConfirmDelivery = () => {
+    }, [cartData]);
+    const stripe = useStripe();
+    const handleConfirmDelivery = async () => {
         if (selectedPaymentMethod === 'COD') {
             dispatch(deleteDelivery());
             navigation.navigate('PaymentComplete');
