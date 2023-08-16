@@ -69,7 +69,6 @@ const FoodScreen = ({ route }) => {
             };
 
                 const username = user.username;
-                console.log(username)
                 setComments([...comments, { ...newCommentData, username }]);
                 setNewComment('');
             } catch (error) {
