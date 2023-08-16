@@ -50,7 +50,8 @@ const DeliveryScreen = ({ navigation, route }) => {
     }, []);
 
 
-    const handlePayment = () => {
+    const handlePayment = async () => {
+        await saveOrder(dispatch, cart);
         navigation.navigate('PaymentComplete');
     };
 

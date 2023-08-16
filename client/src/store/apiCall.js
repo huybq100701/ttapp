@@ -72,8 +72,8 @@ export const saveCart = async (dispatch, userId, cartId, restaurantId, items) =>
         const updateData = {
             userId,
             restaurantId,
-            items
-        }
+            items,
+        };
         const url = `${API_LINK}/cart/${cartId}`;
         const res = await axios.put(url, updateData);
         dispatch(update(res.data.cart));
@@ -98,14 +98,3 @@ export const saveOrder = async (dispatch, cart) => {
         console.error('Error saving order ', error);
     }
 };
-
-export const fetchDelivery = async (dispatch, userId) => {
-    try {
-        const url = `${API_LINK}/delivery/${userId}`;
-        const res = await axios.get(url);
-        dispatch(getDelivery(res.data.deliveries));
-    } catch (error) {
-        console.log('Error fetching delivery data:', error);
-    }
-};
-
