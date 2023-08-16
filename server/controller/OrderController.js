@@ -48,8 +48,8 @@ const OrderController = {
 
     getOrdersByUser: async (req, res) => {
         try {
-            const userId = req.body.id;
-            const orders = await Order.find({ userId }).populate('items.menu');
+            const id = req.params.id;
+            const orders = await Order.find({ userId: id }).populate('items.menu');
             if (orders.length == 0) {
                 return res.status(404).json({
                     message: 'Không tìm thấy order nào',
