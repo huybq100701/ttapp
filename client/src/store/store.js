@@ -12,6 +12,7 @@ export const store = configureStore({
         menu: menuSlice,
         user: userSlice,
         delivery: deliverySlice,
+
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
         immutableCheck: { warnAfter: 128 },
