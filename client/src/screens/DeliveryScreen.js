@@ -34,6 +34,7 @@ const DeliveryScreen = ({ navigation, route }) => {
         }
     }, [restaurants, cartData.restaurantId]);
 
+
     const [userLocation, setUserLocation] = useState({ latitude: 21.027763, longitude: 105.83416 });
     useEffect(() => {
         (async () => {
@@ -67,6 +68,7 @@ const DeliveryScreen = ({ navigation, route }) => {
                     </View>
                 </View>
             </View>
+
             {restaurant && (
                 <View style={styles.restaurantInfoContainer}>
                     <Image source={{ uri: restaurant.image }} style={styles.restaurantImage} />

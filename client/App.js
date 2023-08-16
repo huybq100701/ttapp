@@ -6,6 +6,7 @@ import CurrentLocationProvider from './src/utils/CurrentLocationProvider';
 import CategoryProvider from './src/utils/CategoryProvider';
 import { Provider } from 'react-redux';
 import { store } from './src/store/store';
+import { StripeProvider } from '@stripe/stripe-react-native';
 
 export default function App() {
     return (

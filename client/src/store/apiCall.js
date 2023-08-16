@@ -89,6 +89,7 @@ export const saveDelivery = async (dispatch, userId, cartId, deliveryData) => {
             cartId,
             ...deliveryData
         };
+
         const url = `${API_LINK}/delivery/${deliveryData}`;
         const res = await axios.post(url, requestData);
         dispatch(getDelivery(res.data.delivery));

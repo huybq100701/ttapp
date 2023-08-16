@@ -4,12 +4,17 @@ import cartSlice from "./slice/cartSlice";
 import menuSlice from "./slice/menuSlice";
 import userSlice from "./slice/userSlice";
 import deliverySlice from "./slice/deliverySlice";
+
 export const store = configureStore({
     reducer: {
         restaurant: restaurantSlice,
         cart: cartSlice,
         menu: menuSlice,
         user: userSlice,
-        delivery: deliverySlice
+        delivery: deliverySlice,
     },
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+        immutableCheck: { warnAfter: 128 },
+        serializableCheck: { warnAfter: 128 },
+    })
 });
