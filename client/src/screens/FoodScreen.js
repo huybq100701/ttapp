@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState} from 'react';
+import { useSelector } from 'react-redux'; 
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeftIcon } from 'react-native-heroicons/solid';
@@ -19,6 +20,7 @@ const FoodScreen = ({ route }) => {
     const [comments, setComments] = useState([]);
     const [menuData, setMenuData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
+   
 
     useEffect(() => {
         // Fetch menu data
@@ -38,24 +40,40 @@ const FoodScreen = ({ route }) => {
             .catch(error => {
                 console.error('Error fetching comments:', error);
                 setIsLoading(false);
-            });
+            }); 
     }, [_id]);
 
-    const handleAddComment = async () => {
-        if (newComment.trim() === '') {
-            return;
-        }
-        try {
-            const response = await axios.post(`${API_LINK}/comments/${menuId}`, {
-                commentText: newComment,
-            });
-            setComments([...comments, response.data.comment]);
-            setNewComment('');
-        } catch (error) {
-            console.error('Error adding comment:', error);
-        }
-    };
+    const user = useSelector((state) => state.user);
+    const handleAddComment = async (user) => {
+            if (newComment.trim() === '') {
+                return;
+            }
+            try {
+                const response = await axios.post(`${API_LINK}/comments/${_id}`, {
+                    userId: user._id,
+                    menuId: _id,
+                    commentText: newComment,
+                });
 
+                const newCommentData = {
+                    _id: response.data.comment._id,
+                    menuId: _id,
+                    userId: user._id,
+                    commentText: newComment,
+                    createdAt: response.data.comment.createdAt,
+                    updatedAt: response.data.comment.updatedAt,
+                    __v: 0,
+                    user: [user]
+                };
+
+                const username = user.username;
+                setComments([...comments, { ...newCommentData, username }]);
+                setNewComment('');
+            } catch (error) {
+                console.error('Error adding comment:', error);
+            }
+        };  
+    
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>
             <StatusBar style={{ backgroundColor: themeColors.bg }} />
@@ -85,18 +103,20 @@ const FoodScreen = ({ route }) => {
                         <Image source={icons.star} style={styles.starIcon} />
                         <Text style={styles.ratingText}>{menuData.rating ? menuData.rating.toFixed(1) : 'N/A'}</Text>
                     </View>
-                        <View style={styles.commentSection}>
+                    <View style={styles.commentSection}>
                         <Text style={styles.commentHeader}>Comments:</Text>
                         {isLoading ? (
                             <Text>Loading comments...</Text>
                         ) : (
                             comments.map((item, index) => (
                                 <View key={index} style={styles.comment}>
+                                    <Text style={styles.username}>{item.user[0].username}</Text>
                                     <Text style={styles.commentText}>{item.commentText}</Text>
                                 </View>
                             ))
                         )}
                     </View>
+
             </View>
 
             <View style={styles.commentInput}>
@@ -106,9 +126,9 @@ const FoodScreen = ({ route }) => {
                     onChangeText={setNewComment}
                     onSubmitEditing={handleAddComment}
                 />
-                <TouchableOpacity onPress={handleAddComment} style={styles.submitButton}>
-                    <Text style={styles.submitButtonText}>Submit</Text>
-                </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleAddComment(user)} style={styles.submitButton}>
+                <Text style={styles.submitButtonText}>Submit</Text>
+            </TouchableOpacity>
             </View>
             </View>
         </View>
@@ -200,9 +220,14 @@ const styles = StyleSheet.create({
     },
     comment: {
         marginTop: 8,
+        flexDirection: 'row',
+    },
+    username:{
+        fontWeight: 'bold',
     },
     commentText: {
         fontSize: 14,
+        marginLeft: 10,
     },
     commentInput: {
         padding: 16,

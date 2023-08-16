@@ -35,6 +35,7 @@ const DeliveryScreen = ({ navigation, route }) => {
         }
     }, [restaurants, cart]);
 
+    console.log(restaurant);
 
     const [userLocation, setUserLocation] = useState({ latitude: 21.027763, longitude: 105.83416 });
     useEffect(() => {
@@ -54,6 +55,7 @@ const DeliveryScreen = ({ navigation, route }) => {
     }, []);
 
     const handlePayment = () => {
+
         navigation.navigate('PaymentComplete');
     };
 
@@ -71,7 +73,7 @@ const DeliveryScreen = ({ navigation, route }) => {
 
             {restaurant && (
                 <View style={styles.restaurantInfoContainer}>
-                    <Image source={{ uri: restaurant.image }} style={styles.restaurantImage} />
+                    <Image source={{ uri: restaurant.photo }} style={styles.restaurantImage} />
                     <View style={styles.restaurantDetails}>
                         <Text style={styles.restaurantName}>{restaurant.name}</Text>
                         <Text style={styles.restaurantDuration}>{restaurant.duration}</Text>
