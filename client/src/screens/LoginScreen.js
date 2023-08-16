@@ -1,15 +1,26 @@
 import React from 'react';
 import axios from 'axios';
-import { View, Text, TouchableOpacity, Image, TextInput, StyleSheet, ToastAndroid, Dimensions, Platform,KeyboardAvoidingView  } from 'react-native';
+import {
+    View,
+    Text,
+    TouchableOpacity,
+    Image,
+    TextInput,
+    StyleSheet,
+    ToastAndroid,
+    Dimensions,
+    Platform,
+    KeyboardAvoidingView,
+} from 'react-native';
 import { useDispatch } from 'react-redux';
-import {  fetchUser } from '../store/apiCall';
+import { fetchUser } from '../store/apiCall';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeftIcon } from 'react-native-heroicons/solid';
 import { themeColors } from '../theme';
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { API_LINK } from '../../default-value';
-import { setItem } from '../utils/asyncStorage';
+import { setItem, getItem } from '../utils/asyncStorage';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -17,7 +28,7 @@ const windowHeight = Dimensions.get('window').height;
 export default function LoginScreen() {
     const navigation = useNavigation();
     const insets = useSafeAreaInsets();
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     const [mail, setMail] = React.useState('');
     const [password, setPassword] = React.useState('');
 
@@ -29,6 +40,10 @@ export default function LoginScreen() {
             });
             await setItem('userId', res.data?.user._id);
             await fetchUser(dispatch, res.data?.user._id);
+            let onboarded = await getItem('onboarded');
+            if (onboarded == 1) {
+                navigation.navigate('Tabs', { screen: 'Home' });
+            }
             ToastAndroid.showWithGravity(res.data.message, ToastAndroid.SHORT, ToastAndroid.CENTER);
         } catch (error) {
             ToastAndroid.showWithGravity(error.response.data.message, ToastAndroid.SHORT, ToastAndroid.CENTER);
@@ -38,7 +53,7 @@ export default function LoginScreen() {
     return (
         <KeyboardAvoidingView
             style={styles.container}
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'} 
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : -windowHeight * 0.3}
         >
             <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -52,50 +67,45 @@ export default function LoginScreen() {
                     <Image source={require('../../assets/images/bglogin.jpg')} style={styles.image} />
                 </View>
                 <View style={styles.formContainer}>
-                <View style={styles.form}>
-                    <Text style={styles.label}>Email Address</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Email"
-                        value={mail}
-                        onChangeText={setMail}
-                    />
-                    <Text style={styles.label}>Password</Text>
-                    <TextInput
-                        style={styles.input}
-                        secureTextEntry
-                        placeholder="Password"
-                        value={password}
-                        onChangeText={setPassword}
-                    />
-                    <TouchableOpacity style={styles.forgotPassword}>
-                        <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-                        <Text style={styles.loginButtonText}>Login</Text>
-                    </TouchableOpacity>
-                </View>
-                <Text style={styles.orText}>Or</Text>
-                <View style={styles.socialButtonsContainer}>
-                    <TouchableOpacity style={styles.socialButton}>
-                        <Image source={require('../../assets/icons/google.png')} style={styles.socialIcon} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.socialButton}>
-                        <Image source={require('../../assets/icons/apple.png')} style={styles.socialIcon} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.socialButton}>
-                        <Image source={require('../../assets/icons/facebook.png')} style={styles.socialIcon} />
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.signupContainer}>
-                    <Text style={styles.signupText}>Don't have an account? </Text>
-                    <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-                        <Text style={styles.signupLink}>Sign Up</Text>
-                    </TouchableOpacity>
+                    <View style={styles.form}>
+                        <Text style={styles.label}>Email Address</Text>
+                        <TextInput style={styles.input} placeholder="Email" value={mail} onChangeText={setMail} />
+                        <Text style={styles.label}>Password</Text>
+                        <TextInput
+                            style={styles.input}
+                            secureTextEntry
+                            placeholder="Password"
+                            value={password}
+                            onChangeText={setPassword}
+                        />
+                        <TouchableOpacity style={styles.forgotPassword}>
+                            <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+                            <Text style={styles.loginButtonText}>Login</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <Text style={styles.orText}>Or</Text>
+                    <View style={styles.socialButtonsContainer}>
+                        <TouchableOpacity style={styles.socialButton}>
+                            <Image source={require('../../assets/icons/google.png')} style={styles.socialIcon} />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.socialButton}>
+                            <Image source={require('../../assets/icons/apple.png')} style={styles.socialIcon} />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.socialButton}>
+                            <Image source={require('../../assets/icons/facebook.png')} style={styles.socialIcon} />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.signupContainer}>
+                        <Text style={styles.signupText}>Don't have an account? </Text>
+                        <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+                            <Text style={styles.signupLink}>Sign Up</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
-        </View>
-    </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
     );
 }
 
@@ -173,7 +183,6 @@ const styles = StyleSheet.create({
         color: '#4B5563',
         fontWeight: 'bold',
         textAlign: 'center',
-
     },
     socialButtonsContainer: {
         flexDirection: 'row',

@@ -25,13 +25,13 @@ const DeliveryScreen = ({ navigation }) => {
     const [deliveries, setDeliveries] = useState([]);
     const [restaurantLocation, setRestaurantLocation] = useState({ latitude: 21.027763, longitude: 105.83416 });
     const [restaurantId, setRestaurantId] = useState(cart.restaurantId);
-    const [restaurant, setRestaurant] = useState(restaurants);
+    const [restaurant, setRestaurant] = useState(restaurants[0]);
 
     useEffect(() => {
         const res = restaurants.filter((item) => {
             return item._id === restaurantId;
         });
-        setRestaurant(res);
+        setRestaurant(res[0]);
         setRestaurantLocation({
             latitude: parseFloat(res[0].location.latitude),
             longitude: parseFloat(res[0].location.longitude),
@@ -54,7 +54,6 @@ const DeliveryScreen = ({ navigation }) => {
             });
         })();
     }, []);
-    console.log('userLocation', userLocation);
 
     const handlePayment = () => {
         dispatch(deleteCart());
@@ -68,18 +67,18 @@ const DeliveryScreen = ({ navigation }) => {
                     <Image source={images.avatar_1} style={styles.courierAvatar} />
                     <View style={styles.deliveryText}>
                         <Text style={styles.courierName}>Amy</Text>
-                        <Text style={styles.durationText}>{deliveries?.duration}</Text>
+                        <Text style={styles.durationText}>{restaurant.duration}</Text>
                     </View>
                 </View>
             </View>
             <View style={styles.restaurantInfoContainer}>
-                <Image source={{uri: deliveries.photo}} style={styles.restaurantImage} />
+                <Image source={{uri: restaurant.photo}} style={styles.restaurantImage} />
                 <View style={styles.restaurantDetails}>
                     <Text style={styles.restaurantName}>
-                        {deliveries.length > 0 ? deliveries[0].restaurant.name : ''}
+                        {restaurant.name}
                     </Text>
                     <Text style={styles.restaurantAddress}>
-                        {deliveries.length > 0 ? deliveries[0].restaurant.address : ''}
+                        {restaurant.address}
                     </Text>
                 </View>
             </View>
@@ -103,17 +102,6 @@ const DeliveryScreen = ({ navigation }) => {
                 />
                 <Marker coordinate={currentLocation.gps} title="Người giao hàng" description="Amy" />
 
-                {/* <Polyline
-                    coordinates={[
-                        {
-                            latitude: deliveries?.location?.latitude,
-                            longitude: deliveries?.location?.longitude,
-                        },
-                        currentLocation.gps,
-                    ]}
-                    strokeWidth={3}
-                    strokeColor={COLORS.primary}
-                /> */}
             </MapView>
 
             <TouchableOpacity style={styles.confirmButton} onPress={handlePayment}>
