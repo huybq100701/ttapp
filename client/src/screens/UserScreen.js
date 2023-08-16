@@ -29,7 +29,10 @@ export default function UserScreen() {
                 </TouchableOpacity>
             </View>
             <View style={[styles.imageContainer, { height: windowHeight * 0.2 }]}>
-                <Image source={user.image ? { uri: user.image } : require('../../assets/images/bglogin.jpg')} style={styles.image} />
+                <Image
+                    source={user.image ? { uri: user.image } : require('../../assets/images/bglogin.jpg')}
+                    style={styles.image}
+                />
             </View>
             <View style={styles.usernameContainer}>
                 <Text style={[styles.username, { fontSize: windowWidth * 0.06 }]}>{user.username}</Text>
@@ -104,6 +107,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     formContainer: {
+        flex: 1,
         backgroundColor: 'white',
         borderRadius: 32,
         marginTop: 12,
