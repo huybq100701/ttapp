@@ -93,10 +93,6 @@ export default SearchScreen = () => {
                 />
             </View>
 
-            <View style={styles.popular}>
-                <Text style={styles.popularText}>Popular Restaurant</Text>
-            </View>
-
             <FlatList style={styles.contentSearch} data={restaurants} renderItem={renderItem} />
         </View>
     );

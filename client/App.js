@@ -1,3 +1,4 @@
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import AppNavigation from './src/navigation/appNavigation';
@@ -5,6 +6,7 @@ import CurrentLocationProvider from './src/utils/CurrentLocationProvider';
 import CategoryProvider from './src/utils/CategoryProvider';
 import { Provider } from 'react-redux';
 import { store } from './src/store/store';
+import { StripeProvider } from '@stripe/stripe-react-native';
 
 export default function App() {
     return (
@@ -12,7 +14,9 @@ export default function App() {
             <SafeAreaProvider>
                 <CategoryProvider>
                     <CurrentLocationProvider>
-                        <AppNavigation />
+                        <GestureHandlerRootView style={{ flex: 1 }}>
+                            <AppNavigation />
+                        </GestureHandlerRootView>
                     </CurrentLocationProvider>
                 </CategoryProvider>
             </SafeAreaProvider>
