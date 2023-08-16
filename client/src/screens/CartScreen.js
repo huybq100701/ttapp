@@ -24,7 +24,7 @@ export default function CartScreen({ navigation }) {
     }, [cart])
 
     const handleDelivery = () => {
-        navigation.navigate('Delivery', { cartData: cart });
+        navigation.navigate('Delivery');
     };
 
     return (

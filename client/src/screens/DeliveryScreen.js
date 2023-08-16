@@ -21,18 +21,19 @@ const DeliveryScreen = ({ navigation, route }) => {
     const currentLocation = useContext(currentLocationContext);
     const dispatch = useDispatch();
 
-    const { cartData } = route.params;
     const cart = useSelector((state) => state.cart);
     const restaurants = useSelector((state) => state.restaurant);
 
-    const [restaurant, setRestaurant] = useState(null);
+    const [restaurant, setRestaurant] = useState({});
+    const [restaurantLocation, setRestaurantLocation] = useState({latitude: 0, longitude: 0});
 
     useEffect(() => {
         if (restaurants && cartData.restaurantId) {
-            const selectedRestaurant = restaurants.find(r => r._id === cartData.restaurantId);
+            const selectedRestaurant = restaurants.find(r => r._id === cart.restaurantId);
             setRestaurant(selectedRestaurant);
+            setRestaurantLocation(selectedRestaurant.location)
         }
-    }, [restaurants, cartData.restaurantId]);
+    }, [restaurants, cart]);
 
 
     const [userLocation, setUserLocation] = useState({ latitude: 21.027763, longitude: 105.83416 });
@@ -64,7 +65,7 @@ const DeliveryScreen = ({ navigation, route }) => {
                     <Image source={images.avatar_1} style={styles.courierAvatar} />
                     <View style={styles.deliveryText}>
                         <Text style={styles.courierName}>Amy</Text>
-                        <Text style={styles.durationText}>{delivery.length > 0 ? delivery[0].duration : ''}</Text>
+                        <Text style={styles.durationText}>15 mins</Text>
                     </View>
                 </View>
             </View>
@@ -74,7 +75,7 @@ const DeliveryScreen = ({ navigation, route }) => {
                     <Image source={{ uri: restaurant.image }} style={styles.restaurantImage} />
                     <View style={styles.restaurantDetails}>
                         <Text style={styles.restaurantName}>{restaurant.name}</Text>
-                        <Text style={styles.restaurantDuration}>{cartData.restaurant.duration}</Text>
+                        <Text style={styles.restaurantDuration}>{restaurant.duration}</Text>
                     </View>
                 </View>
             )}
