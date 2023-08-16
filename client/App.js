@@ -1,3 +1,4 @@
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import AppNavigation from './src/navigation/appNavigation';
@@ -12,7 +13,9 @@ export default function App() {
             <SafeAreaProvider>
                 <CategoryProvider>
                     <CurrentLocationProvider>
-                        <AppNavigation />
+                        <GestureHandlerRootView style={{ flex: 1 }}>
+                            <AppNavigation />
+                        </GestureHandlerRootView>
                     </CurrentLocationProvider>
                 </CategoryProvider>
             </SafeAreaProvider>

@@ -8,13 +8,14 @@ import { StatusBar } from 'expo-status-bar';
 import { icons, SIZES, COLORS } from '../constants';
 import axios from 'axios'; 
 import { API_LINK } from '../../default-value';
+import { TextInput } from 'react-native-gesture-handler';
 
 const FoodScreen = ({ route }) => {
     const navigation = useNavigation();
     const insets = useSafeAreaInsets();
     const { menuId } = route.params;
     const _id = menuId ? menuId : null;
-
+    const [newComment, setNewComment] = useState('');
     const [comments, setComments] = useState([]);
     const [menuData, setMenuData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
@@ -39,6 +40,21 @@ const FoodScreen = ({ route }) => {
                 setIsLoading(false);
             });
     }, [_id]);
+
+    const handleAddComment = async () => {
+        if (newComment.trim() === '') {
+            return;
+        }
+        try {
+            const response = await axios.post(`${API_LINK}/comments/${menuId}`, {
+                commentText: newComment,
+            });
+            setComments([...comments, response.data.comment]);
+            setNewComment('');
+        } catch (error) {
+            console.error('Error adding comment:', error);
+        }
+    };
 
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -69,20 +85,31 @@ const FoodScreen = ({ route }) => {
                         <Image source={icons.star} style={styles.starIcon} />
                         <Text style={styles.ratingText}>{menuData.rating ? menuData.rating.toFixed(1) : 'N/A'}</Text>
                     </View>
-                </View>
+                        <View style={styles.commentSection}>
+                        <Text style={styles.commentHeader}>Comments:</Text>
+                        {isLoading ? (
+                            <Text>Loading comments...</Text>
+                        ) : (
+                            comments.map((item, index) => (
+                                <View key={index} style={styles.comment}>
+                                    <Text style={styles.commentText}>{item.commentText}</Text>
+                                </View>
+                            ))
+                        )}
+                    </View>
+            </View>
 
-                <View style={styles.commentSection}>
-                    <Text style={styles.commentHeader}>Comments:</Text>
-                    {isLoading ? (
-                        <Text>Loading comments...</Text>
-                    ) : (
-                        comments.map((item, index) => (
-                            <View key={index} style={styles.comment}>
-                                <Text style={styles.commentText}>{item.commentText}</Text>
-                            </View>
-                        ))
-                    )}
-                </View>
+            <View style={styles.commentInput}>
+                <TextInput
+                    placeholder="Add a comment..."
+                    value={newComment}
+                    onChangeText={setNewComment}
+                    onSubmitEditing={handleAddComment}
+                />
+                <TouchableOpacity onPress={handleAddComment} style={styles.submitButton}>
+                    <Text style={styles.submitButtonText}>Submit</Text>
+                </TouchableOpacity>
+            </View>
             </View>
         </View>
     );
@@ -176,6 +203,24 @@ const styles = StyleSheet.create({
     },
     commentText: {
         fontSize: 14,
+    },
+    commentInput: {
+        padding: 16,
+        borderTopWidth: 1,
+        borderTopColor: '#E2E8F0',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    submitButton: {
+        backgroundColor: COLORS.primary,
+        borderRadius: 8,
+        paddingVertical: 8,
+        paddingHorizontal: 16,
+    },
+    submitButtonText: {
+        color: COLORS.white,
+        fontWeight: 'bold',
     },
 });
 
