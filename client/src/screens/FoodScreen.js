@@ -20,8 +20,8 @@ const FoodScreen = ({ route }) => {
     const [comments, setComments] = useState([]);
     const [menuData, setMenuData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
+    const user = useSelector((state) => state.user);
    
-
     useEffect(() => {
         // Fetch menu data
         axios.get(`${API_LINK}/menu/${_id}`)
@@ -43,7 +43,6 @@ const FoodScreen = ({ route }) => {
             }); 
     }, [_id]);
 
-    const user = useSelector((state) => state.user);
     const handleAddComment = async (user) => {
             if (newComment.trim() === '') {
                 return;
@@ -67,7 +66,6 @@ const FoodScreen = ({ route }) => {
                 };
 
                 const username = user.username;
-                console.log(username)
                 setComments([...comments, { ...newCommentData, username }]);
                 setNewComment('');
             } catch (error) {

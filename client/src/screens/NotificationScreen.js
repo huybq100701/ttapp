@@ -23,7 +23,7 @@ export default NotificationScreen = () => {
     };
 
     useEffect(() => {
-        const interval = setInterval(() => setTime(Date.now()), 1000 * 60 * 3);
+        const interval = setInterval(() => setTime(Date.now()), 1000 * 60);
         return () => {
             clearInterval(interval);
         };
@@ -40,26 +40,28 @@ export default NotificationScreen = () => {
             }
         };
         fetchOrder();
-    }, []);
+    }, [time]);
 
     const renderItem = ({ item }) => {
-        let expire = Date.parse(item.createdAt) - Date.now() >= 0;
+        let expire = Date.now() - Date.parse(item.createdAt) >= 1000 * 60 * 10;
+        const date = new Date(Date.parse(item.createdAt));
+        const timeNoti = date.getHours() + ':'+ date.getMinutes() + " " + date?.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
         return (
             <>
-                {expire ? (
+                {!expire ? (
                     <TouchableOpacity style={[styles.itemNoti, styles.wait]} onPress={() => handleOrder(item)}>
                         <InformationCircleIcon size={36} color={COLORS.blue} />
                         <View style={styles.contentNoti}>
-                            <Text style={styles.textNoti}>Đơn hàng #{item._id.slice(-6)} đã được nhận</Text>
-                            <Text style={styles.timeNoti}>02:24 27/07/2023</Text>
+                            <Text style={styles.textNoti}>Đơn hàng #{item._id.slice(-7)} đã được nhận</Text>
+                            <Text style={styles.timeNoti}>{timeNoti}</Text>
                         </View>
                     </TouchableOpacity>
                 ) : (
                     <TouchableOpacity style={[styles.itemNoti, styles.success]} onPress={() => handleOrder(item)}>
                         <CheckCircleIcon size={36} color={COLORS.green} />
                         <View style={styles.contentNoti}>
-                            <Text style={styles.textNoti}>Đơn hàng #{item._id.slice(-6)} đã được giao</Text>
-                            <Text style={styles.timeNoti}>02:24 27/07/2023</Text>
+                            <Text style={styles.textNoti}>Đơn hàng #{item._id.slice(-7)} đã được giao</Text>
+                            <Text style={styles.timeNoti}>{timeNoti}</Text>
                         </View>
                     </TouchableOpacity>
                 )}
