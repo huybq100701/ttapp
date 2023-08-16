@@ -22,13 +22,13 @@ const DeliveryScreen = ({ navigation, route }) => {
     const restaurants = useSelector((state) => state.restaurant);
 
     const [restaurant, setRestaurant] = useState({});
-    const [restaurantLocation, setRestaurantLocation] = useState({latitude: 0, longitude: 0});
+    const [restaurantLocation, setRestaurantLocation] = useState({ latitude: 0, longitude: 0 });
 
     useEffect(() => {
         if (restaurants && cart.restaurantId) {
-            const selectedRestaurant = restaurants.find(r => r._id === cart.restaurantId);
+            const selectedRestaurant = restaurants.find((r) => r._id === cart.restaurantId);
             setRestaurant(selectedRestaurant);
-            setRestaurantLocation(selectedRestaurant.location)
+            setRestaurantLocation(selectedRestaurant.location);
         }
     }, [restaurants, cart]);
 
@@ -118,6 +118,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.lightGray4,
     },
     map: {
+        flex: 1,
         width: width,
         height: height * 0.7,
     },
