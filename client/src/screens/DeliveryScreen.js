@@ -28,7 +28,7 @@ const DeliveryScreen = ({ navigation, route }) => {
     const [restaurantLocation, setRestaurantLocation] = useState({latitude: 0, longitude: 0});
 
     useEffect(() => {
-        if (restaurants && cartData.restaurantId) {
+        if (restaurants && cart.restaurantId) {
             const selectedRestaurant = restaurants.find(r => r._id === cart.restaurantId);
             setRestaurant(selectedRestaurant);
             setRestaurantLocation(selectedRestaurant.location)
