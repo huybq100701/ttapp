@@ -3,16 +3,13 @@ import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image, Dimensions }
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
-import axios from 'axios';
-import API_LINK from '../../default-value';
 import * as Location from 'expo-location';
 
 import { icons, images, SIZES, COLORS } from '../constants';
 import { GOOGLE_API_KEY } from '../constants';
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteCart } from '../store/slice/cartSlice';
 import { currentLocationContext } from '../utils/Context';
-import { user } from '../constants/icons';
+import { saveOrder } from '../store/apiCall';
 
 const { width, height } = Dimensions.get('window');
 
@@ -25,17 +22,15 @@ const DeliveryScreen = ({ navigation, route }) => {
     const restaurants = useSelector((state) => state.restaurant);
 
     const [restaurant, setRestaurant] = useState({});
-    const [restaurantLocation, setRestaurantLocation] = useState({latitude: 0, longitude: 0});
+    const [restaurantLocation, setRestaurantLocation] = useState({ latitude: 0, longitude: 0 });
 
     useEffect(() => {
         if (restaurants && cart.restaurantId) {
-            const selectedRestaurant = restaurants.find(r => r._id === cart.restaurantId);
+            const selectedRestaurant = restaurants.find((r) => r._id === cart.restaurantId);
             setRestaurant(selectedRestaurant);
-            setRestaurantLocation(selectedRestaurant.location)
+            setRestaurantLocation(selectedRestaurant.location);
         }
     }, [restaurants, cart]);
-
-    console.log(restaurant);
 
     const [userLocation, setUserLocation] = useState({ latitude: 21.027763, longitude: 105.83416 });
     useEffect(() => {
@@ -54,8 +49,8 @@ const DeliveryScreen = ({ navigation, route }) => {
         })();
     }, []);
 
-    const handlePayment = () => {
 
+    const handlePayment = () => {
         navigation.navigate('PaymentComplete');
     };
 
@@ -123,6 +118,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.lightGray4,
     },
     map: {
+        flex: 1,
         width: width,
         height: height * 0.7,
     },

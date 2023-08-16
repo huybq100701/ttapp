@@ -27,7 +27,6 @@ const HomeScreen = ({ navigation }) => {
                     await fetchRestaurantList(dispatch);
                     await fetchCart(dispatch, userId);
                     await fetchCartForLocal(userId);
-                  
                 }
             } catch (error) {
                 console.log('Error o HomeScreen', error);
