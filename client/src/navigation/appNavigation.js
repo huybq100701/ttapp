@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useDispatch, useSelector } from 'react-redux';
-import {  fetchUser } from '../store/apiCall';
+import { fetchUser } from '../store/apiCall';
 import Tabs from './tabs';
 import SettingScreen from '../screens/SettingScreen';
 import OnboardingScreen from '../screens/OnboardingScreen.js';
@@ -17,6 +17,7 @@ import DeliveryScreen from '../screens/DeliveryScreen';
 import PaymentCompleteScreen from '../screens/PaymentCompleteScreen';
 
 import { getItem } from '../utils/asyncStorage.js';
+import OrderScreen from '../screens/OrderScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -62,6 +63,7 @@ export default function AppNavigation() {
                     <Stack.Screen name="SignUp" options={{ headerShown: false }} component={SignUpScreen} />
                     <Stack.Screen name="Tabs" options={{ headerShown: false }} component={Tabs} />
                     <Stack.Screen name="Cart" options={{ headerShown: false }} component={CartScreen} />
+                    <Stack.Screen name="Order" options={{ headerShown: false }} component={OrderScreen} />
                     <Stack.Screen name="ChangeInfo" options={{ headerShown: false }} component={ChangeInfoScreen} />
                     <Stack.Screen name="Camera" options={{ headerShown: false }} component={CameraScreen} />
                     <Stack.Screen name="Restaurant" options={{ headerShown: false }} component={RestaurantScreen} />
@@ -102,6 +104,7 @@ export default function AppNavigation() {
                                 options={{ headerShown: false }}
                                 component={PaymentCompleteScreen}
                             />
+                            <Stack.Screen name="Order" options={{ headerShown: false }} component={OrderScreen} />
                         </>
                     ) : (
                         <>
