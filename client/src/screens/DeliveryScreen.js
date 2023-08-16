@@ -3,16 +3,13 @@ import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image, Dimensions }
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
-import axios from 'axios';
-import API_LINK from '../../default-value';
 import * as Location from 'expo-location';
 
 import { icons, images, SIZES, COLORS } from '../constants';
 import { GOOGLE_API_KEY } from '../constants';
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteCart } from '../store/slice/cartSlice';
 import { currentLocationContext } from '../utils/Context';
-import { user } from '../constants/icons';
+import { saveOrder } from '../store/apiCall';
 
 const { width, height } = Dimensions.get('window');
 
@@ -35,7 +32,6 @@ const DeliveryScreen = ({ navigation, route }) => {
         }
     }, [restaurants, cart]);
 
-
     const [userLocation, setUserLocation] = useState({ latitude: 21.027763, longitude: 105.83416 });
     useEffect(() => {
         (async () => {
@@ -53,7 +49,8 @@ const DeliveryScreen = ({ navigation, route }) => {
         })();
     }, []);
 
-    const handlePayment = () => {
+    const handlePayment = async () => {
+        await saveOrder(dispatch, cart);
         navigation.navigate('PaymentComplete');
     };
 
@@ -71,7 +68,7 @@ const DeliveryScreen = ({ navigation, route }) => {
 
             {restaurant && (
                 <View style={styles.restaurantInfoContainer}>
-                    <Image source={{ uri: restaurant.image }} style={styles.restaurantImage} />
+                    <Image source={{ uri: restaurant.photo }} style={styles.restaurantImage} />
                     <View style={styles.restaurantDetails}>
                         <Text style={styles.restaurantName}>{restaurant.name}</Text>
                         <Text style={styles.restaurantDuration}>{restaurant.duration}</Text>
