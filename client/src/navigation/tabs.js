@@ -17,7 +17,7 @@ const TabBarCustomButton = ({ accessibilityState, children, onPress }) => {
 
     if (isSelected) {
         return (
-            <View style={{ flex: 1, alignItems: 'center'}}>
+            <View style={{ flex: 1, alignItems: 'center' }}>
                 <View style={{ flexDirection: 'row', position: 'absolute', top: 0 }}>
                     <View style={{ flex: 1, backgroundColor: COLORS.white }}></View>
                     <Svg width={70} height={61} viewBox="0 0 75 61">
@@ -79,11 +79,10 @@ const Tabs = () => {
                     borderTopWidth: 0,
                     backgroundColor: 'transparent',
                     elevation: 0,
-                    marginBottom: 5,                    
+                    marginBottom: 5,
                 },
                 headerShown: false,
             }}
-            
             tabBar={(props) => <CustomTabBar props={props} />}
         >
             <Tab.Screen
@@ -128,9 +127,9 @@ const Tabs = () => {
                 name="Notification"
                 component={NotificationScreen}
                 options={{
-                    tabBarIcon: ({ focused }) => (
+                    tabBarIcon: ({ focused, size }) => (
                         <Image
-                            source={icons.like}
+                            source={icons.notification}
                             resizeMode="contain"
                             style={{
                                 width: 25,

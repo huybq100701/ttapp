@@ -1,4 +1,14 @@
-import { View, Text, StyleSheet, Modal, TouchableOpacity, Image, TextInput, ToastAndroid ,Dimensions} from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    Modal,
+    TouchableOpacity,
+    Image,
+    TextInput,
+    ToastAndroid,
+    Dimensions,
+} from 'react-native';
 import React, { useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeftIcon, CheckIcon, XMarkIcon } from 'react-native-heroicons/solid';
@@ -8,7 +18,7 @@ import { themeColors } from '../theme';
 import { updateUserById } from '../store/apiCall';
 import * as ImagePicker from 'expo-image-picker';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import DateTimePicker, { DateTimePickerEvent }  from '@react-native-community/datetimepicker';
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { storage } from '../firebase/config';
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -18,7 +28,7 @@ export default function ChangeInfoScreen({ navigation }) {
 
     const user = useSelector((state) => state.user);
     const dispatch = useDispatch();
-    
+
     const [isUpdatePicture, setIsUpdatePicture] = useState(false);
     const [isSave, setIsSave] = useState(false);
     const [isEditable, setIsEditable] = useState(false);
@@ -110,11 +120,11 @@ export default function ChangeInfoScreen({ navigation }) {
         setShow(Platform.OS === 'ios');
         setDate(currentDate);
         let tempDate = new Date(currentDate);
-        const day = tempDate.getDay() < 10 ? `0${tempDate.getDate() + 1}`: `${tempDate.getDate()}`
-        const month = (tempDate.getMonth() + 1) < 10 ? `0${tempDate.getMonth() + 1}`: `${tempDate.getMonth()}`
+        const day = tempDate.getDay() < 10 ? `0${tempDate.getDate() + 1}` : `${tempDate.getDate()}`;
+        const month = tempDate.getMonth() + 1 < 10 ? `0${tempDate.getMonth() + 1}` : `${tempDate.getMonth()}`;
         setBirth(day + '/' + month + '/' + tempDate.getFullYear());
-        setShow(false)
-    }
+        setShow(false);
+    };
 
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -134,15 +144,7 @@ export default function ChangeInfoScreen({ navigation }) {
                     </View>
                 </View>
             </Modal>
-            {show && (
-                <DateTimePicker
-                    value={date}
-                    mode='date'
-                    display='default'
-                    is24Hour={true}
-                    onChange={onChange}
-                />
-            )}
+            {show && <DateTimePicker value={date} mode="date" display="default" is24Hour={true} onChange={onChange} />}
             <View style={styles.header}>
                 <View style={styles.safeArea}>
                     <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
@@ -287,8 +289,10 @@ const styles = StyleSheet.create({
         flex: 1,
         marginLeft: 0.03 * screenWidth,
     },
+    changeInfo: {
+        marginVertical: 20,
+    },
     textChangeInfo: {
-        
         fontSize: 20,
         color: '#F59E0B',
     },
