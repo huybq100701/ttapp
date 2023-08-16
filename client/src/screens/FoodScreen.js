@@ -54,7 +54,7 @@ const FoodScreen = ({ route }) => {
                     menuId: _id,
                     commentText: newComment,
                 });
-
+                
                 const newCommentData = {
                     _id: response.data.comment._id,
                     menuId: _id,
@@ -67,6 +67,7 @@ const FoodScreen = ({ route }) => {
                 };
 
                 const username = user.username;
+                console.log(username)
                 setComments([...comments, { ...newCommentData, username }]);
                 setNewComment('');
             } catch (error) {
