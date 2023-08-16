@@ -84,10 +84,10 @@ export const saveCart = async (dispatch, userId, cartId, restaurantId, items) =>
 
 export const saveOrder = async (dispatch, cart) => {
     try {
-        const url = `${API_LINK}/order/`;
+        const url = `${API_LINK}/order`;
         const url2 = `${API_LINK}/cart/${cart._id}`;
         const res = await axios.post(url, cart);
-        const res2 = await axios.put(url, {
+        const res2 = await axios.put(url2, {
             userId: cart.userId,
             restaurantId: '',
             items: [],
@@ -95,7 +95,7 @@ export const saveOrder = async (dispatch, cart) => {
         await AsyncStorage.removeItem('orderItems');
         dispatch(update(res2.data.cart));
     } catch (error) {
-        console.error('Error saving cart ', error);
+        console.error('Error saving order ', error);
     }
 };
 
