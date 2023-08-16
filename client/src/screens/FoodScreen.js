@@ -1,13 +1,13 @@
-import React, { useEffect, useState} from 'react';
-import { useSelector } from 'react-redux'; 
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { View, Text, TouchableOpacity, Image, StyleSheet, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeftIcon } from 'react-native-heroicons/solid';
 import { themeColors } from '../theme';
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { icons, SIZES, COLORS } from '../constants';
-import axios from 'axios'; 
+import axios from 'axios';
 import { API_LINK } from '../../default-value';
 import { TextInput } from 'react-native-gesture-handler';
 
@@ -16,65 +16,65 @@ const FoodScreen = ({ route }) => {
     const insets = useSafeAreaInsets();
     const { menuId } = route.params;
     const _id = menuId ? menuId : null;
+    const user = useSelector((state) => state.user);
     const [newComment, setNewComment] = useState('');
     const [comments, setComments] = useState([]);
     const [menuData, setMenuData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
-   
 
     useEffect(() => {
         // Fetch menu data
-        axios.get(`${API_LINK}/menu/${_id}`)
-            .then(response => {
+        axios
+            .get(`${API_LINK}/menu/${_id}`)
+            .then((response) => {
                 setMenuData(response.data.menu);
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error('Error fetching menu:', error);
             });
         // Fetch comments data
-        axios.get(`${API_LINK}/comments/${_id}`)
-            .then(response => {
+        axios
+            .get(`${API_LINK}/comments/${_id}`)
+            .then((response) => {
                 setComments(response.data.comment);
                 setIsLoading(false);
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error('Error fetching comments:', error);
                 setIsLoading(false);
-            }); 
+            });
     }, [_id]);
 
-    const user = useSelector((state) => state.user);
     const handleAddComment = async (user) => {
-            if (newComment.trim() === '') {
-                return;
-            }
-            try {
-                const response = await axios.post(`${API_LINK}/comments/${_id}`, {
-                    userId: user._id,
-                    menuId: _id,
-                    commentText: newComment,
-                });
-                
-                const newCommentData = {
-                    _id: response.data.comment._id,
-                    menuId: _id,
-                    userId: user._id,
-                    commentText: newComment,
-                    createdAt: response.data.comment.createdAt,
-                    updatedAt: response.data.comment.updatedAt,
-                    __v: 0,
-                    user: [user]
-                };
+        if (newComment.trim() === '') {
+            return;
+        }
+        try {
+            const response = await axios.post(`${API_LINK}/comments/${_id}`, {
+                userId: user._id,
+                menuId: _id,
+                commentText: newComment,
+            });
 
-                const username = user.username;
-                console.log(username)
-                setComments([...comments, { ...newCommentData, username }]);
-                setNewComment('');
-            } catch (error) {
-                console.error('Error adding comment:', error);
-            }
-        };  
-    
+            const newCommentData = {
+                _id: response.data.comment._id,
+                menuId: _id,
+                userId: user._id,
+                commentText: newComment,
+                createdAt: response.data.comment.createdAt,
+                updatedAt: response.data.comment.updatedAt,
+                __v: 0,
+                user: [user],
+            };
+
+            const username = user.username;
+            setComments([...comments, { ...newCommentData, username }]);
+            setNewComment('');
+        } catch (error) {
+            console.error('Error adding comment:', error);
+        }
+    };
+
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>
             <StatusBar style={{ backgroundColor: themeColors.bg }} />
@@ -104,7 +104,7 @@ const FoodScreen = ({ route }) => {
                         <Image source={icons.star} style={styles.starIcon} />
                         <Text style={styles.ratingText}>{menuData.rating ? menuData.rating.toFixed(1) : 'N/A'}</Text>
                     </View>
-                    <View style={styles.commentSection}>
+                    <ScrollView style={styles.commentSection}>
                         <Text style={styles.commentHeader}>Comments:</Text>
                         {isLoading ? (
                             <Text>Loading comments...</Text>
@@ -116,26 +116,25 @@ const FoodScreen = ({ route }) => {
                                 </View>
                             ))
                         )}
-                    </View>
+                    </ScrollView>
+                </View>
 
-            </View>
-
-            <View style={styles.commentInput}>
-                <TextInput
-                    placeholder="Add a comment..."
-                    value={newComment}
-                    onChangeText={setNewComment}
-                    onSubmitEditing={handleAddComment}
-                />
-              <TouchableOpacity onPress={() => handleAddComment(user)} style={styles.submitButton}>
-                <Text style={styles.submitButtonText}>Submit</Text>
-            </TouchableOpacity>
-            </View>
+                <View style={styles.commentInput}>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Add a comment..."
+                        value={newComment}
+                        onChangeText={setNewComment}
+                        onSubmitEditing={handleAddComment}
+                    />
+                    <TouchableOpacity onPress={() => handleAddComment(user)} style={styles.submitButton}>
+                        <Text style={styles.submitButtonText}>Submit</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
     );
-}
-
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -197,22 +196,23 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     ratingContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginTop: 8,
-  },
-  starIcon: {
-      width: 20,
-      height: 20,
-      tintColor: COLORS.primary,
-      marginRight: 4,
-  },
-  ratingText: {
-      fontSize: 16,
-      color: COLORS.primary,
-      fontWeight: 'bold',
-  },
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 8,
+    },
+    starIcon: {
+        width: 20,
+        height: 20,
+        tintColor: COLORS.primary,
+        marginRight: 4,
+    },
+    ratingText: {
+        fontSize: 16,
+        color: COLORS.primary,
+        fontWeight: 'bold',
+    },
     commentSection: {
+        height: 220,
         marginTop: 16,
     },
     commentHeader: {
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
         marginTop: 8,
         flexDirection: 'row',
     },
-    username:{
+    username: {
         fontWeight: 'bold',
     },
     commentText: {
@@ -231,12 +231,22 @@ const styles = StyleSheet.create({
         marginLeft: 10,
     },
     commentInput: {
+        display: 'flex',
+        alignItems: 'space-between',
+        width: '100%',
         padding: 16,
         borderTopWidth: 1,
         borderTopColor: '#E2E8F0',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        position: 'absolute',
+        bottom: 0,
+        backgroundColor: '#fff',
+    },
+    input: {
+        paddingVertical: 5,
+        flex: 1,
     },
     submitButton: {
         backgroundColor: COLORS.primary,
@@ -251,4 +261,3 @@ const styles = StyleSheet.create({
 });
 
 export default FoodScreen;
-
