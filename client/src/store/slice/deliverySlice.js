@@ -1,18 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
-    deliveries: [],
-};
-
 export const deliverySlice = createSlice({
     name: 'delivery',
-    initialState,
+    initialState: [],
+
     reducers: {
         getDelivery: (state, action) => {
             return action.payload;
         },
         deleteDelivery: (state) => {
-            state.deliveries = [];
+            return [];
         },
     },
 });

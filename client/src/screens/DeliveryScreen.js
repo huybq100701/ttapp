@@ -16,29 +16,24 @@ import { user } from '../constants/icons';
 
 const { width, height } = Dimensions.get('window');
 
-const DeliveryScreen = ({ navigation }) => {
+const DeliveryScreen = ({ navigation, route }) => {
     const insets = useSafeAreaInsets();
     const currentLocation = useContext(currentLocationContext);
     const dispatch = useDispatch();
 
-    const restaurants = useSelector((state) => state.restaurant);
+    const { cartData } = route.params;
     const cart = useSelector((state) => state.cart);
+    const restaurants = useSelector((state) => state.restaurant);
 
-    const [deliveries, setDeliveries] = useState([]);
-    const [restaurantLocation, setRestaurantLocation] = useState({ latitude: 0, longitude: 0 });
-    const [restaurantId, setRestaurantId] = useState(cart.restaurantId);
-    const [restaurant, setRestaurant] = useState(restaurants);
+    const [restaurant, setRestaurant] = useState(null);
 
     useEffect(() => {
-        const res = restaurants.filter((item) => {
-            return item._id === restaurantId;
-        });
-        setRestaurant(res);
-        setRestaurantLocation({
-            latitude: parseFloat(res[0].location.latitude),
-            longitude: parseFloat(res[0].location.longitude),
-        });
-    }, [restaurants]);
+        if (restaurants && cartData.restaurantId) {
+            const selectedRestaurant = restaurants.find(r => r._id === cartData.restaurantId);
+            setRestaurant(selectedRestaurant);
+        }
+    }, [restaurants, cartData.restaurantId]);
+
 
     const [userLocation, setUserLocation] = useState({ latitude: 21.027763, longitude: 105.83416 });
     useEffect(() => {
@@ -69,17 +64,20 @@ const DeliveryScreen = ({ navigation }) => {
                     <Image source={images.avatar_1} style={styles.courierAvatar} />
                     <View style={styles.deliveryText}>
                         <Text style={styles.courierName}>Amy</Text>
-                        <Text style={styles.durationText}>{deliveries.length > 0 ? deliveries[0].duration : ''}</Text>
+                        <Text style={styles.durationText}>{delivery.length > 0 ? delivery[0].duration : ''}</Text>
                     </View>
                 </View>
             </View>
-            <View style={styles.restaurantInfoContainer}>
-                <Image source={images.burger_restaurant_1} style={styles.restaurantImage} />
-                <View style={styles.restaurantDetails}>
-                    <Text style={styles.restaurantName}>{restaurant[0].name}</Text>
-                    <Text style={styles.restaurantDuration}>{restaurant[0].duration}</Text>
+
+            {restaurant && (
+                <View style={styles.restaurantInfoContainer}>
+                    <Image source={{ uri: restaurant.image }} style={styles.restaurantImage} />
+                    <View style={styles.restaurantDetails}>
+                        <Text style={styles.restaurantName}>{restaurant.name}</Text>
+                        <Text style={styles.restaurantDuration}>{cartData.restaurant.duration}</Text>
+                    </View>
                 </View>
-            </View>
+            )}
 
             <MapView
                 style={styles.map}

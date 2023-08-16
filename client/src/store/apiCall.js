@@ -84,12 +84,13 @@ export const saveCart = async (dispatch, userId, cartId, restaurantId, items) =>
 
 export const saveDelivery = async (dispatch, userId, cartId, deliveryData) => {
     try {
-        const url = `${API_LINK}/delivery`;
         const requestData = {
             userId,
             cartId,
             ...deliveryData
         };
+
+        const url = `${API_LINK}/delivery/${deliveryData}`;
         const res = await axios.post(url, requestData);
         dispatch(getDelivery(res.data.delivery));
     } catch (error) {

@@ -1,3 +1,4 @@
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import AppNavigation from './src/navigation/appNavigation';
@@ -9,16 +10,16 @@ import { StripeProvider } from '@stripe/stripe-react-native';
 
 export default function App() {
     return (
-        <StripeProvider publishableKey='pk_test_51NfCJkBTNMQmQeonzS1LT7QN7KsJ3K2T7xOdvTS6N6krKXoO8vp1rNyR3j0rJ4xARPDir4IoYHPaC0A08FzjRu5s006z4ucj8X'>
-            <Provider store={store}>
-                <SafeAreaProvider>
-                    <CategoryProvider>
-                        <CurrentLocationProvider>
+        <Provider store={store}>
+            <SafeAreaProvider>
+                <CategoryProvider>
+                    <CurrentLocationProvider>
+                        <GestureHandlerRootView style={{ flex: 1 }}>
                             <AppNavigation />
-                        </CurrentLocationProvider>
-                    </CategoryProvider>
-                </SafeAreaProvider>
-            </Provider>
-        </StripeProvider>
+                        </GestureHandlerRootView>
+                    </CurrentLocationProvider>
+                </CategoryProvider>
+            </SafeAreaProvider>
+        </Provider>
     );
 }
