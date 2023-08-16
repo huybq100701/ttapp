@@ -8,11 +8,6 @@ export const cartSlice = createSlice({
             return action.payload[0]
         },
 
-        deleteCart: (state) => {
-            state.restaurantId = '';
-            state.items.splice(0, state.length);
-        },
-
         update: (state, action) => {
             return action.payload;
         },

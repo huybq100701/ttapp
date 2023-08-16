@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { API_LINK } from '../../default-value';
 import { getRestaurantList } from './slice/restaurantSlice';
-import { getCart, update } from './slice/cartSlice';
+import { deleteCart, getCart, update } from './slice/cartSlice';
 import { getMenuList } from './slice/menuSlice';
 import { getUser, updateUser } from './slice/userSlice';
 import { getDelivery } from './slice/deliverySlice';
@@ -82,19 +82,20 @@ export const saveCart = async (dispatch, userId, cartId, restaurantId, items) =>
     }
 };
 
-export const saveDelivery = async (dispatch, userId, cartId, deliveryData) => {
+export const saveOrder = async (dispatch, cart) => {
     try {
-        const requestData = {
-            userId,
-            cartId,
-            ...deliveryData
-        };
-
-        const url = `${API_LINK}/delivery/${deliveryData}`;
-        const res = await axios.post(url, requestData);
-        dispatch(getDelivery(res.data.delivery));
+        const url = `${API_LINK}/order/`;
+        const url2 = `${API_LINK}/cart/${cart._id}`;
+        const res = await axios.post(url, cart);
+        const res2 = await axios.put(url, {
+            userId: cart.userId,
+            restaurantId: '',
+            items: [],
+        });
+        await AsyncStorage.removeItem('orderItems');
+        dispatch(update(res2.data.cart));
     } catch (error) {
-        console.error('Error saving delivery:', error);
+        console.error('Error saving cart ', error);
     }
 };
 
@@ -107,3 +108,4 @@ export const fetchDelivery = async (dispatch, userId) => {
         console.log('Error fetching delivery data:', error);
     }
 };
+

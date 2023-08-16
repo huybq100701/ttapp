@@ -8,6 +8,9 @@ const orderSchema = new Schema(
             ref: 'User',
             required: true,
         },
+        restaurantId: {
+            type: String,
+        },
         items: [
             {
                 menu: {
@@ -16,9 +19,9 @@ const orderSchema = new Schema(
                     required: true,
                 },
                 quantity: { type: Number, default: 1 },
+                total: { type: Number, default: 0 },
             },
         ],
-        total: { type: Number, default: 0 },
         status: {
             type: Boolean,
             default: false,

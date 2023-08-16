@@ -4,13 +4,11 @@ const mongoose = require("mongoose");
 const OrderController = {
     createOrder: async (req, res) => {
         try {
-            const { userId, items, total, status } = req.body;
+            const order = req.body;
 
             const newOrder = await Order.create({
-                userId,
-                items,
-                total,
-                status,
+                ...order,
+                status: false,
             });
             return res.status(200).json({
                 message: "Created order successfully",

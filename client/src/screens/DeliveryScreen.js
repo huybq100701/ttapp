@@ -54,7 +54,6 @@ const DeliveryScreen = ({ navigation, route }) => {
     }, []);
 
     const handlePayment = () => {
-        dispatch(deleteCart());
         navigation.navigate('PaymentComplete');
     };
 
