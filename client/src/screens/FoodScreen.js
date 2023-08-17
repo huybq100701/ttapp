@@ -217,7 +217,6 @@ const styles = StyleSheet.create({
     },
     commentSection: {
         maxHeight: 120,
-        maxWidth: 200,
     },
     commentHeader: {
         fontSize: 16,
