@@ -1,6 +1,6 @@
 import React, { useEffect, useState} from 'react';
 import { useSelector } from 'react-redux'; 
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Image, StyleSheet, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeftIcon } from 'react-native-heroicons/solid';
 import { themeColors } from '../theme';
@@ -20,7 +20,7 @@ const FoodScreen = ({ route }) => {
     const [comments, setComments] = useState([]);
     const [menuData, setMenuData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
-   
+    const user = useSelector((state) => state.user);
 
     useEffect(() => {
         // Fetch menu data
@@ -43,7 +43,7 @@ const FoodScreen = ({ route }) => {
             }); 
     }, [_id]);
 
-    const user = useSelector((state) => state.user);
+
     const handleAddComment = async (user) => {
             if (newComment.trim() === '') {
                 return;
@@ -104,8 +104,10 @@ const FoodScreen = ({ route }) => {
                         <Image source={icons.star} style={styles.starIcon} />
                         <Text style={styles.ratingText}>{menuData.rating ? menuData.rating.toFixed(1) : 'N/A'}</Text>
                     </View>
-                    <View style={styles.commentSection}>
-                        <Text style={styles.commentHeader}>Comments:</Text>
+                    <Text style={styles.commentHeader}>Comments:</Text>
+                    <ScrollView
+                        showsVerticalScrollIndicator= {false}
+                     style={styles.commentSection}>
                         {isLoading ? (
                             <Text>Loading comments...</Text>
                         ) : (
@@ -116,7 +118,7 @@ const FoodScreen = ({ route }) => {
                                 </View>
                             ))
                         )}
-                    </View>
+                    </ScrollView>
 
             </View>
 
@@ -213,7 +215,7 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
   },
     commentSection: {
-        marginTop: 16,
+        maxHeight: 120,
     },
     commentHeader: {
         fontSize: 16,
