@@ -108,6 +108,7 @@ const FoodScreen = ({ route }) => {
                      <Text style={styles.commentHeader}>Comments:</Text>
                     <ScrollView 
                     showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
                     style={styles.commentSection}>
                         {isLoading ? (
                             <Text>Loading comments...</Text>
@@ -216,6 +217,7 @@ const styles = StyleSheet.create({
     },
     commentSection: {
         maxHeight: 120,
+        maxWidth: 200,
     },
     commentHeader: {
         fontSize: 16,
