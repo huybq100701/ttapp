@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState} from 'react';
+import { useSelector } from 'react-redux'; 
+
 import { View, Text, TouchableOpacity, Image, StyleSheet, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeftIcon } from 'react-native-heroicons/solid';
@@ -21,7 +22,7 @@ const FoodScreen = ({ route }) => {
     const [comments, setComments] = useState([]);
     const [menuData, setMenuData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
-   
+    const user = useSelector((state) => state.user);
 
     useEffect(() => {
         // Fetch menu data
@@ -75,7 +76,7 @@ const FoodScreen = ({ route }) => {
                 console.error('Error adding comment:', error);
             }
         };  
-    
+ 
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>
             <StatusBar style={{ backgroundColor: themeColors.bg }} />
@@ -213,8 +214,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     commentSection: {
-        height: 220,
-        marginTop: 16,
+        maxHeight: 120,
     },
     commentHeader: {
         fontSize: 16,
