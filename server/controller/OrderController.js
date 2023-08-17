@@ -49,7 +49,7 @@ const OrderController = {
     getOrdersByUser: async (req, res) => {
         try {
             const id = req.params.id;
-            const orders = await Order.find({ userId: id }).populate('items.menu');
+            const orders = await Order.find({ userId: id }).populate('items.menu').sort({ createdAt: -1 });
             if (orders.length == 0) {
                 return res.status(404).json({
                     message: 'Không tìm thấy order nào',
