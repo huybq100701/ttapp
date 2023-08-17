@@ -7,9 +7,13 @@ export const restaurantSlice = createSlice({
         getRestaurantList: (state, action) => {
             state.splice(0, state.length, ...action.payload);
         },
+
+        addRestaurantList: (state, action) => {
+            state.push(action.payload)
+        }
     },
 });
 
-export const { getRestaurantList } = restaurantSlice.actions;
+export const { getRestaurantList, addRestaurantList } = restaurantSlice.actions;
 
 export default restaurantSlice.reducer;

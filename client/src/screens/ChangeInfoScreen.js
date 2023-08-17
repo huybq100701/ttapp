@@ -18,7 +18,7 @@ import { themeColors } from '../theme';
 import { updateUserById } from '../store/apiCall';
 import * as ImagePicker from 'expo-image-picker';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { storage } from '../firebase/config';
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;

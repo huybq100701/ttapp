@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { themeColors } from '../theme';
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
-import { ArrowLeftIcon, ArrowRightOnRectangleIcon, UserIcon } from 'react-native-heroicons/solid';
+import { ArrowLeftIcon, ArrowRightOnRectangleIcon, UserIcon, BuildingStorefrontIcon } from 'react-native-heroicons/solid';
 import { removeItem } from '../utils/asyncStorage.js';
 import { useDispatch } from 'react-redux';
 import { deleteUser } from '../store/slice/userSlice';
@@ -38,6 +38,10 @@ export default function SettingScreen() {
                 <TouchableOpacity style={styles.itemSetting} onPress={() => navigation.navigate('ChangeInfo')}>
                     <UserIcon size={20} color="black" />
                     <Text style={styles.itemText}>Change Infomation</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.itemSetting} onPress={() => navigation.navigate('AddRestaurant')}>
+                    <BuildingStorefrontIcon size={20} color="black" />
+                    <Text style={styles.itemText}>Add Restaurant</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.itemSetting} onPress={handleLogout}>
                     <ArrowRightOnRectangleIcon size={20} color="black" />

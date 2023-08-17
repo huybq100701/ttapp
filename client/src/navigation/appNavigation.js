@@ -18,6 +18,7 @@ import PaymentCompleteScreen from '../screens/PaymentCompleteScreen';
 
 import { getItem } from '../utils/asyncStorage.js';
 import OrderScreen from '../screens/OrderScreen';
+import AddRestaurantScreen from '../screens/AddRestaurantScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -74,6 +75,7 @@ export default function AppNavigation() {
                         options={{ headerShown: false }}
                         component={PaymentCompleteScreen}
                     />
+                    <Stack.Screen name="AddRestaurant" options={{ headerShown: false }} component={AddRestaurantScreen} />
                 </Stack.Navigator>
             </NavigationContainer>
         );
@@ -105,6 +107,11 @@ export default function AppNavigation() {
                                 component={PaymentCompleteScreen}
                             />
                             <Stack.Screen name="Order" options={{ headerShown: false }} component={OrderScreen} />
+                            <Stack.Screen
+                                name="AddRestaurant"
+                                options={{ headerShown: false }}
+                                component={AddRestaurantScreen}
+                            />
                         </>
                     ) : (
                         <>

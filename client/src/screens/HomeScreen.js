@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, Image, FlatList } from 'react-native';
-import { icons, images, SIZES, COLORS } from '../constants';
+import { icons, SIZES, COLORS } from '../constants';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import { currentLocationContext, categoryContext } from '../utils/Context';
-import { fetchCart, fetchCartForLocal, fetchDelivery, fetchRestaurantList, fetchUser } from '../store/apiCall';
+import { fetchCart, fetchCartForLocal, fetchRestaurantList } from '../store/apiCall';
 import { getItem } from '../utils/asyncStorage.js';
 
 const HomeScreen = ({ navigation }) => {
