@@ -105,8 +105,10 @@ const FoodScreen = ({ route }) => {
                         <Image source={icons.star} style={styles.starIcon} />
                         <Text style={styles.ratingText}>{menuData.rating ? menuData.rating.toFixed(1) : 'N/A'}</Text>
                     </View>
-                    <ScrollView style={styles.commentSection}>
-                        <Text style={styles.commentHeader}>Comments:</Text>
+                     <Text style={styles.commentHeader}>Comments:</Text>
+                    <ScrollView 
+                    showsVerticalScrollIndicator={false}
+                    style={styles.commentSection}>
                         {isLoading ? (
                             <Text>Loading comments...</Text>
                         ) : (
