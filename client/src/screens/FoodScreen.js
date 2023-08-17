@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState} from 'react';
+import { useSelector } from 'react-redux'; 
+
 import { View, Text, TouchableOpacity, Image, StyleSheet, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeftIcon } from 'react-native-heroicons/solid';
@@ -21,7 +22,6 @@ const FoodScreen = ({ route }) => {
     const [comments, setComments] = useState([]);
     const [menuData, setMenuData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
-   
 
     useEffect(() => {
         // Fetch menu data
@@ -75,7 +75,7 @@ const FoodScreen = ({ route }) => {
                 console.error('Error adding comment:', error);
             }
         };  
-    
+ 
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>
             <StatusBar style={{ backgroundColor: themeColors.bg }} />
@@ -105,8 +105,11 @@ const FoodScreen = ({ route }) => {
                         <Image source={icons.star} style={styles.starIcon} />
                         <Text style={styles.ratingText}>{menuData.rating ? menuData.rating.toFixed(1) : 'N/A'}</Text>
                     </View>
-                    <ScrollView style={styles.commentSection}>
-                        <Text style={styles.commentHeader}>Comments:</Text>
+                     <Text style={styles.commentHeader}>Comments:</Text>
+                    <ScrollView 
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                    style={styles.commentSection}>
                         {isLoading ? (
                             <Text>Loading comments...</Text>
                         ) : (
@@ -213,8 +216,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     commentSection: {
-        height: 220,
-        marginTop: 16,
+        maxHeight: 120,
     },
     commentHeader: {
         fontSize: 16,
