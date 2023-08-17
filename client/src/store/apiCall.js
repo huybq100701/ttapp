@@ -1,10 +1,9 @@
 import axios from 'axios';
 import { API_LINK } from '../../default-value';
-import { getRestaurantList } from './slice/restaurantSlice';
-import { deleteCart, getCart, update } from './slice/cartSlice';
+import { addRestaurantList, getRestaurantList } from './slice/restaurantSlice';
+import { getCart, update } from './slice/cartSlice';
 import { getMenuList } from './slice/menuSlice';
 import { getUser, updateUser } from './slice/userSlice';
-import { getDelivery } from './slice/deliverySlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const fetchRestaurantList = async (dispatch) => {
@@ -16,6 +15,16 @@ export const fetchRestaurantList = async (dispatch) => {
         console.log('Error fetching RestaurantList data:', error);
     }
 };
+
+export const addRestaurant = async (dispatch, data) => {
+    try {
+        const url = `${API_LINK}/restaurants`;
+        const res = await axios.post(url, data);
+        dispatch(addRestaurantList(res.data.restaurant))
+    } catch (error) {
+        console.log('Error o add Restaurant', error)
+    }
+}
 
 export const fetchCart = async (dispatch, userId) => {
     try {

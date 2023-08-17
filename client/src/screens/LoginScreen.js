@@ -44,9 +44,9 @@ export default function LoginScreen() {
             if (onboarded == 1) {
                 navigation.navigate('Tabs', { screen: 'Home' });
             }
-            ToastAndroid.showWithGravity(res.data.message, ToastAndroid.SHORT, ToastAndroid.CENTER);
+            ToastAndroid.showWithGravity(res.data.message, ToastAndroid.SHORT);
         } catch (error) {
-            ToastAndroid.showWithGravity(error.response.data.message, ToastAndroid.SHORT, ToastAndroid.CENTER);
+            ToastAndroid.showWithGravity(error.response.data.message, ToastAndroid.SHORT);
         }
     };
 
