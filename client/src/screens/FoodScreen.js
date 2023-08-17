@@ -22,7 +22,6 @@ const FoodScreen = ({ route }) => {
     const [comments, setComments] = useState([]);
     const [menuData, setMenuData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
-    const user = useSelector((state) => state.user);
 
     useEffect(() => {
         // Fetch menu data
